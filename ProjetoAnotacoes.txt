@@ -1,0 +1,82 @@
+-------------------MVP----------------------------
+
+Truck (CRUD)
+	- Name
+	- Service_type
+	- Logo
+	- is_24h
+	- status (available, transit, unavailable)
+	- leaving_in
+
+User (CRU)
+	- Name
+	- Email
+	- Hometown
+	- Type
+	- Age
+	- Avatar (link)
+	- Preferences (json array)
+	- Enabled (for trucker registration)
+	- Banned
+	- Created_at
+	- Updated_at
+
+Location (CRU)
+	- user_id
+	- latitude
+	- longitude
+	- Created_at
+
+Promotion (CRU)
+	- truck_id
+	- radius
+	- notification text
+	- image
+	- valid_until
+
+Promotion Ticket (CRUD)
+	- user_id
+	- promotion_id
+	- qr_code
+	- nfc_code
+	- hash_code
+
+
+------------------EXTRA MVP (SOME MORE)-------------------------
+
+Reviews
+    - user_id
+    - review
+    - stars
+
+User
+	- Facebook_token
+	- Facebook_profile
+	- Google_token
+	- Google_profile
+
+Order
+	- truck_id
+	- user_id
+	- total_price
+	- payment_method
+	- arrival_minutes
+
+Order Item
+	- order_id
+	- menu_item
+	- item_name
+	- price
+
+Menu
+	- name
+	- available_dates (saturday night, monday morning...)
+
+Menu Item
+	- name
+	- type (drinks, food)
+	- price
+	- description
+	- subtitle
+	- photo url
+	- status (available, unavailable)
