@@ -203,6 +203,9 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
+        //CRIAR TOKEN DA API
+        $token = $user->createToken('Token Name')->accessToken;
+
 
         $this->guard()->login($user);
 

@@ -67,6 +67,13 @@
 @include('home.partials.search_overlay')
 <!-- END OVERLAY -->
 <!-- BEGIN VENDOR JS -->
+<script>
+    paceOptions = {
+        ajax: true, // disabled
+        document: true, // enabled
+        eventLag: false, // disabled
+    };
+</script>
 <script src="{!! asset('/plugins/pace/pace.min.js') !!}" type="text/javascript"></script>
 <script src="{!! asset('/plugins/jquery/jquery-1.11.1.min.js') !!}" type="text/javascript"></script>
 <script src="{!! asset('/plugins/modernizr.custom.js') !!}" type="text/javascript"></script>

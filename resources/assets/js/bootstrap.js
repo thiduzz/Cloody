@@ -28,7 +28,6 @@ require('jquery-mask-plugin');
 
 Vue.http.interceptors.push((request, next) => {
     request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
-
     next();
 });
 

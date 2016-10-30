@@ -168,6 +168,7 @@ return [
         Spatie\Analytics\AnalyticsServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
+        App\Providers\TrackingServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -232,6 +233,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Tracking' => App\Classes\Facades\Tracking::class
 
     ],
 

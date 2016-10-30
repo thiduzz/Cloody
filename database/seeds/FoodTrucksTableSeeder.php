@@ -1,6 +1,7 @@
 <?php
 
 use App\ServiceType;
+use App\User;
 use Faker\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
@@ -39,6 +40,11 @@ class FoodTrucksTableSeeder extends Seeder
 			        $truck->service_type_id = ServiceType::all()->random()->id;
 			        $truck->save();
         			$truck->users()->attach(1);
+					$user = User::all()->random(1)->first();
+					if($user->id != 1)
+					{
+						$truck->users()->attach($user->id);
+					}
         }
 
 

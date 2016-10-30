@@ -28,7 +28,7 @@ class TruckController extends Controller
         $lg = $request->input('lg',0);
         $lt = $request->input('lt',0);
         $geoforce = $request->input('geoforce',0);
-        if($id <= 0)
+        if(!is_numeric($id) || $id <= 0)
         {
             if(($lg == 0 && $lt == 0) && $geoforce == 0)
             {
@@ -57,7 +57,7 @@ class TruckController extends Controller
             }
         }else{
             //single
-            $trucks = Truck::with('service_type')->enabled()->where('id',$id)->lookFor($query)->get();
+            $trucks = Truck::with('service_type','latestLocation')->enabled()->where('id',$id)->first();
             return $trucks;
         }
     }
@@ -79,35 +79,50 @@ class TruckController extends Controller
 
 
     /*****************ADMIN ***********************************/
+    public function admin_delete(Request $request, $id = 0)
+    {
+        $truck = Truck::findOrFail($id);
+        if($truck)
+        {
+            $truck->delete();
+            return new JsonResponse(['success'=>true,'message'=> 'Truck was successfully deleted!'],200);
+        }
+        return new JsonResponse(['success'=>false,'message'=> 'Truck was not found!'],404);
+    }
+
     public function admin_approval(Request $request)
     {
         $type =  $request->get('type');
         $id =  $request->get('truck_id');
         $truck = Truck::with('users')->find($id);
-        if($type == 'deny')
+        if($truck)
         {
-            $truck->status = 'denied';
-            $truck->save();
-            $message =  $request->get('message','Unfortunately, your foodtruck application did not fill the required parameters, please contact us in case of doubt!');
+            if($type == 'deny')
+            {
+                $truck->status = 'denied';
+                $truck->save();
+                $message =  $request->get('message','Unfortunately, your foodtruck application did not fill the required parameters, please contact us in case of doubt!');
 
-            if(env('APP_ENV') == 'local')
-            {
-                Mail::to('thiago.mello@vizad.com.br')->send(new TruckDenied($truck, $message));
-            }else{
-                Mail::to($truck->users[0]->email)->send(new TruckDenied($truck, $message));
+                if(env('APP_ENV') == 'local')
+                {
+                    Mail::to('thiago.mello@vizad.com.br')->send(new TruckDenied($truck, $message));
+                }else{
+                    Mail::to($truck->users[0]->email)->send(new TruckDenied($truck, $message));
+                }
+                return new JsonResponse(['success'=>true,'message'=> $truck->name .' was denied!'],200);
+            }else if($type == 'approve'){
+                $truck->enabled = 1;
+                $truck->save();
+                if(env('APP_ENV') == 'local')
+                {
+                    Mail::to('thiago.mello@vizad.com.br')->send(new TruckAccepted($truck));
+                }else{
+                    Mail::to($truck->users[0]->email)->send(new TruckAccepted($truck));
+                }
+                return new JsonResponse(['success'=>true,'message'=> $truck->name .' was accepted!'],200);
             }
-            return new JsonResponse(['success'=>true,'message'=> $truck->name .' was denied!'],200);
-        }else if($type == 'approve'){
-            $truck->enabled = 1;
-            $truck->save();
-            if(env('APP_ENV') == 'local')
-            {
-                Mail::to('thiago.mello@vizad.com.br')->send(new TruckAccepted($truck));
-            }else{
-                Mail::to($truck->users[0]->email)->send(new TruckAccepted($truck));
-            }
-            return new JsonResponse(['success'=>true,'message'=> $truck->name .' was accepted!'],200);
         }
+        return new JsonResponse(['success'=>false,'message'=> 'Truck was not found!'],404);
     }
 
     public function admin_export_trucks(ExportResourceRequest $request, $type)
@@ -169,6 +184,7 @@ class TruckController extends Controller
         //$db = DB::table('trucks')->where('enabled', false)->where('status','!=','denied');
         $db = Truck::with('users','service_type')->where('enabled', true);
         $count = $db->count();
+        $totalPages = ($limit > 0 ? ceil($count/$limit) : 0);
         $data =   $db;
         $filtered = false;
         if($byColumn == 1){
@@ -199,7 +215,9 @@ class TruckController extends Controller
         }
         $results = $data->get();
         return ['data'=>$results,
-            'count'=>$count];
+            'count'=>$count,
+            'page'=>$page,
+            'totalPages'=>$totalPages];
     }
 
     public function admin_paginate_pending(Request $request) {
@@ -211,6 +229,7 @@ class TruckController extends Controller
         //$db = DB::table('trucks')->where('enabled', false)->where('status','!=','denied');
         $db = Truck::with('users','service_type')->where('enabled', false)->where('status','!=','denied');
         $count = $db->count();
+        $totalPages = ($limit > 0 ? ceil($count/$limit) : 0);
         $data =   $db;
         $filtered = false;
         if($byColumn == 1){
@@ -241,7 +260,9 @@ class TruckController extends Controller
         }
         $results = $data->get();
         return ['data'=>$results,
-            'count'=>$count];
+            'count'=>$count,
+            'page'=>$page,
+            'totalPages'=>$totalPages];
     }
 
     public function filterByColumn($data, $query) {

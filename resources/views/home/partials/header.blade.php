@@ -164,11 +164,7 @@
             <!-- END NOTIFICATIONS LIST -->
             <a href="#" class="search-link" data-toggle="search"><i class="pg-search"></i>Type anywhere to <span class="bold">search</span></a> </div>
     </div>
-    <div class=" pull-right">
-        <div class="header-inner">
-            <a href="#" class="btn-link icon-set menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview"></a>
-        </div>
-    </div>
+    @yield('quickview-shortcut')
     <div class=" pull-right">
         <!-- START User Info-->
         <div class="visible-lg visible-md m-t-10">

@@ -35,7 +35,7 @@
             </div>
 
             <div class="panel-body">
-                <div id="pending_trucks">
+                <div id="current_trucks">
                     <v-server-table url="/api/admin-current-trucks" :columns="trucks_current_columns" :options="trucks_current_options" v-ref:currenttable></v-server-table>
                 </div>
             </div>
@@ -121,7 +121,10 @@
         },
         data() {
             return {
-
+                totalPages: 0,
+                page: 0,
+                paginationStart: 0,
+                pages: [],
                 export_filter:{
                   end:moment().format('YYYY-MM-DD'),
                   start:moment().subtract(1, 'months').format('YYYY-MM-DD')
@@ -165,9 +168,9 @@
                         users: function(row) {
                             return '<a href="/profile/'+row.users[0].slug+'">'+row.users[0].name+'</a>';
                           } ,
-                        actions: "<div class='btn-group'><a @click='$parent.truckApproval({id},\"approve\")' class='btn btn-success'>"+
+                        actions: "<div class='btn-group'><a href='javascript:;' @click='$parent.truckApproval({id},\"approve\")' class='btn btn-success'>"+
                         "<i class='fa fa-check' data-toggle='tooltip' data-original-title='Approve'></i>"+
-                        "</a><a href='#' @click='$parent.truckApproval({id},\"deny\")' class='btn btn-danger'>"+
+                        "</a><a href='javascript:;' @click='$parent.truckApproval({id},\"deny\")' class='btn btn-danger'>"+
                         "<i data-toggle='tooltip' data-original-title='Deny' class='fa fa-ban'></i></a></div>"
                     },
                     customFilters: [{
@@ -218,9 +221,9 @@
                         users: function(row) {
                             return '<a href="/profile/'+row.users[0].slug+'">'+row.users[0].name+'</a>';
                           } ,
-                        actions: "<div class='btn-group'><a href='/appointments/{id}/edit'  class='btn btn-success'>"+
+                        actions: "<div class='btn-group'><a href='/admin_trucks/{id}/edit'  class='btn btn-success'>"+
                         "<i class='fa fa-edit' data-toggle='tooltip' data-original-title='Edit'></i>"+
-                        "</a><a href='#' @click='$parent.deleteMe({id})' class='btn btn-success'>"+
+                        "</a><a href='javascript:;' @click='$parent.destroy({id})' class='btn btn-danger'>"+
                         "<i data-toggle='tooltip' data-original-title='Cancel' class='fa fa-trash-o'></i></a></div>"
                     },
                     customFilters: [{
@@ -308,26 +311,30 @@
                 }else  if(type == 'deny'){
                     swal({
                         title: "Why?",
-                        text: 'Write the user a reason (blank for default message):',
-                        input: 'textarea',
+                        type: "input",
+                        animation: "slide-from-top",
+                        inputPlaceholder: "Tell us a reason...",
                         showCancelButton: true,
                         closeOnConfirm: true,
-                        animation: "slide-from-top",
                         timer: null,
-                    }).then(function(result) {
-                        that.patch(id,type,message) ;
+                    },function(message){
+                        if (message === false) return false;
+                        that.patch(id, type, message) ;
                     });
                 }
             },
 
-            patch(id,type, user_message)
+            patch(id, type, user_message)
             {
 
                 var that = this;
-                this.$http.post('/api/truck-approval', {truck_id:id,type:type,message:user_message})
+                Pace.track(function(){
+                that.$http.post('/api/truck-approval', {truck_id:id,type:type,message:user_message})
                     .then(function(response) {
                         that.$refs.currenttable.refresh();
                         that.$refs.pendingtable.refresh();
+
+
                         $('body').pgNotification({
                             style: 'circle',
                             title: 'Sucesso!',
@@ -360,72 +367,55 @@
                                 type: "danger"
                             }).show();
                         }
-                    });
-            },
-            /**
-             * Create a new OAuth client for the user.
-             */
-            store() {
-                this.persistClient(
-                    'post', '/oauth/clients',
-                    this.createForm, '#modal-create-client'
-                );
-            },
-
-            /**
-             * Edit the given client.
-             */
-            edit(client) {
-                this.editForm.id = client.id;
-                this.editForm.name = client.name;
-                this.editForm.redirect = client.redirect;
-
-                $('#modal-edit-client').modal('show');
-            },
-
-            /**
-             * Update the client being edited.
-             */
-            update() {
-                this.persistClient(
-                    'put', '/oauth/clients/' + this.editForm.id,
-                    this.editForm, '#modal-edit-client'
-                );
-            },
-
-            /**
-             * Persist the client to storage using the given form.
-             */
-            persistClient(method, uri, form, modal) {
-                form.errors = [];
-
-                this.$http[method](uri, form)
-                    .then(response => {
-                        this.getClients();
-
-                        form.name = '';
-                        form.redirect = '';
-                        form.errors = [];
-
-                        $(modal).modal('hide');
                     })
-                    .catch(response => {
-                        if (typeof response.data === 'object') {
-                            form.errors = _.flatten(_.toArray(response.data));
-                        } else {
-                            form.errors = ['Something went wrong. Please try again.'];
-                        }
-                    });
-            },
+                    .bind(that);
 
+                });
+            },
             /**
              * Destroy the given client.
              */
-            destroy(client) {
-                this.$http.delete('/oauth/clients/' + client.id)
-                        .then(response => {
-                            this.getClients();
-                        });
+            destroy(id) {
+                var that = this;
+                Pace.track(function(){
+                    that.$http.delete('/api/truck/' + id)
+                            .then(response => {
+                                that.$refs.currenttable.refresh();
+                                $('body').pgNotification({
+                                    style: 'circle',
+                                    title: 'Sucesso!',
+                                    message: response.data.message,
+                                    position: "top-right",
+                                    timeout: 5000,
+                                    type: "success"
+                                }).show();
+                            })
+                            .catch(function(response) {
+                                $('body').circularProgress({value:100});
+                                if (typeof response.data === 'object') {
+                                    var errors = _.flatten(_.toArray(response.data));
+                                    $(errors).each(function( index, error ) {
+                                        $('body').pgNotification({
+                                            style: 'circle',
+                                            title: 'Error!',
+                                            message: error,
+                                            position: "top-right",
+                                            timeout: 5000,
+                                            type: "danger"
+                                        }).show();
+                                    });
+                                } else {
+                                    $('body').pgNotification({
+                                        style: 'circle',
+                                        title: 'Error!',
+                                        message: 'Something went wrong. Please try again.',
+                                        position: "top-right",
+                                        timeout: 5000,
+                                        type: "danger"
+                                    }).show();
+                                }
+                            }).bind(that);
+                });
             }
         }
     }

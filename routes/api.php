@@ -22,6 +22,9 @@ No postman colocar sempre no HEADER os params:
 Authorization => Bearer TOKEN
 Accepts => application/json
 
+///EM PRODUCAO
+php artisan passport:client --password
+
 */
 
 Route::get('/user', function (Request $request) {
@@ -38,11 +41,19 @@ Route::post('/truck', 'TruckController@store')->middleware(['auth:api']);
 //remove truck
 Route::delete('/truck', 'TruckController@destroy')->middleware(['auth:api']);
 
+/**** LOCATIONS */
+//get all, get queried
+Route::get('/truck/{id}/location', 'LocationController@index_trucks')->middleware(['auth:api']);
+//get all, get queried
+Route::get('/user/{id}/location', 'LocationController@index_users')->middleware(['auth:api']);
+//update truck position
+Route::post('/truck/{id}/location', 'LocationController@store_trucks')->middleware(['auth:api']);
+//get all, get queried
+Route::post('/user/{id}/location', 'LocationController@store_users')->middleware(['auth:api']);
+
 /**** USERS  ****/
 //get single
 Route::get('/user/{id}', 'UserController@show')->middleware(['auth:api']);
-//create new user
-Route::post('/user', 'UserController@store')->middleware(['auth:api']);
 //update personal info
 Route::put('/user/{id}', 'UserController@update')->middleware(['auth:api']);
 
@@ -51,3 +62,4 @@ Route::get('/admin-pending-trucks', 'TruckController@admin_paginate_pending')->m
 Route::get('/admin-current-trucks', 'TruckController@admin_paginate_current')->middleware(['auth:api'])->middleware('admin');
 Route::get('/admin-trucks/export/{type}', 'TruckController@admin_export')->middleware(['auth:api'])->middleware('admin');
 Route::post('/truck-approval', 'TruckController@admin_approval')->middleware(['auth:api'])->middleware('admin');
+Route::delete('/truck/{id}', 'TruckController@admin_delete')->middleware(['auth:api'])->middleware('admin');

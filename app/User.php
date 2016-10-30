@@ -47,7 +47,7 @@ class User extends Authenticatable
     }
 
 
-    public function department()
+    public function trucks()
     {
         return $this->belongsToMany('App\Truck');
     }
@@ -88,5 +88,16 @@ class User extends Authenticatable
     public function isImpersonating()
     {
         return Session::has('impersonate');
+    }
+
+    public function isTruckMember($id)
+    {
+        foreach ($this->trucks as $truck)
+        {
+            if ($truck->id == $id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

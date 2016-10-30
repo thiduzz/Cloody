@@ -11,6 +11,8 @@
 |
 */
 
+use App\Classes\Facades\Tracking;
+
 Route::get('/', function () {
     return view('public.pages.main');
 });
@@ -31,5 +33,7 @@ Route::get('/admin_trucks', ['middleware'=>'admin','uses'=>'HomeController@admin
 Route::get('/admin_trucks/export/{type}',['middleware'=>['admin'], 'uses' =>  'TruckController@admin_export_trucks']);
 
 Route::get('/test',function(){
-
+    $truck = \App\Truck::find(1);
+    $track = Tracking::registerTrack($truck, 'approved');
+    return $track->translated;
 });

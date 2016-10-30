@@ -29,6 +29,7 @@ class CreateTrucksTable extends Migration
             $table->boolean('delivery_motorcycle');
             $table->boolean('lets_negotiate');
             $table->string('slug')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
         Schema::create('service_types',function(Blueprint $table){

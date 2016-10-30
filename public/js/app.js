@@ -51885,7 +51885,6 @@ require('jquery-mask-plugin');
 
 Vue.http.interceptors.push(function (request, next) {
   request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
-
   next();
 });
 
@@ -52125,14 +52124,14 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-13dbefbc", module.exports)
+    hotAPI.createRecord("_v-791c7ffc", module.exports)
   } else {
-    hotAPI.update("_v-13dbefbc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-791c7ffc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75}],84:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-99369f82] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-99369f82] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-11331f02] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-11331f02] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52204,7 +52203,10 @@ exports.default = {
     },
     data: function data() {
         return {
-
+            totalPages: 0,
+            page: 0,
+            paginationStart: 0,
+            pages: [],
             export_filter: {
                 end: moment().format('YYYY-MM-DD'),
                 start: moment().subtract(1, 'months').format('YYYY-MM-DD')
@@ -52248,7 +52250,7 @@ exports.default = {
                     users: function users(row) {
                         return '<a href="/profile/' + row.users[0].slug + '">' + row.users[0].name + '</a>';
                     },
-                    actions: "<div class='btn-group'><a @click='$parent.truckApproval({id},\"approve\")' class='btn btn-success'>" + "<i class='fa fa-check' data-toggle='tooltip' data-original-title='Approve'></i>" + "</a><a href='#' @click='$parent.truckApproval({id},\"deny\")' class='btn btn-danger'>" + "<i data-toggle='tooltip' data-original-title='Deny' class='fa fa-ban'></i></a></div>"
+                    actions: "<div class='btn-group'><a href='javascript:;' @click='$parent.truckApproval({id},\"approve\")' class='btn btn-success'>" + "<i class='fa fa-check' data-toggle='tooltip' data-original-title='Approve'></i>" + "</a><a href='javascript:;' @click='$parent.truckApproval({id},\"deny\")' class='btn btn-danger'>" + "<i data-toggle='tooltip' data-original-title='Deny' class='fa fa-ban'></i></a></div>"
                 },
                 customFilters: [{
                     name: 'alphabet',
@@ -52298,7 +52300,7 @@ exports.default = {
                     users: function users(row) {
                         return '<a href="/profile/' + row.users[0].slug + '">' + row.users[0].name + '</a>';
                     },
-                    actions: "<div class='btn-group'><a href='/appointments/{id}/edit'  class='btn btn-success'>" + "<i class='fa fa-edit' data-toggle='tooltip' data-original-title='Edit'></i>" + "</a><a href='#' @click='$parent.deleteMe({id})' class='btn btn-success'>" + "<i data-toggle='tooltip' data-original-title='Cancel' class='fa fa-trash-o'></i></a></div>"
+                    actions: "<div class='btn-group'><a href='/admin_trucks/{id}/edit'  class='btn btn-success'>" + "<i class='fa fa-edit' data-toggle='tooltip' data-original-title='Edit'></i>" + "</a><a href='javascript:;' @click='$parent.destroy({id})' class='btn btn-danger'>" + "<i data-toggle='tooltip' data-original-title='Cancel' class='fa fa-trash-o'></i></a></div>"
                 },
                 customFilters: [{
                     name: 'alphabet',
@@ -52361,13 +52363,14 @@ exports.default = {
             } else if (type == 'deny') {
                 swal({
                     title: "Why?",
-                    text: 'Write the user a reason (blank for default message):',
-                    input: 'textarea',
+                    type: "input",
+                    animation: "slide-from-top",
+                    inputPlaceholder: "Tell us a reason...",
                     showCancelButton: true,
                     closeOnConfirm: true,
-                    animation: "slide-from-top",
                     timer: null
-                }).then(function (result) {
+                }, function (message) {
+                    if (message === false) return false;
                     that.patch(id, type, message);
                 });
             }
@@ -52375,128 +52378,110 @@ exports.default = {
         patch: function patch(id, type, user_message) {
 
             var that = this;
-            this.$http.post('/api/truck-approval', { truck_id: id, type: type, message: user_message }).then(function (response) {
-                that.$refs.currenttable.refresh();
-                that.$refs.pendingtable.refresh();
-                $('body').pgNotification({
-                    style: 'circle',
-                    title: 'Sucesso!',
-                    message: response.data.message,
-                    position: "top-right",
-                    timeout: 5000,
-                    type: "success"
-                }).show();
-            }).catch(function (response) {
-                if ((0, _typeof3.default)(response.data) === 'object') {
-                    var errors = _.flatten(_.toArray(response.data));
-                    $(errors).each(function (index, error) {
+            Pace.track(function () {
+                that.$http.post('/api/truck-approval', { truck_id: id, type: type, message: user_message }).then(function (response) {
+                    that.$refs.currenttable.refresh();
+                    that.$refs.pendingtable.refresh();
+
+                    $('body').pgNotification({
+                        style: 'circle',
+                        title: 'Sucesso!',
+                        message: response.data.message,
+                        position: "top-right",
+                        timeout: 5000,
+                        type: "success"
+                    }).show();
+                }).catch(function (response) {
+                    if ((0, _typeof3.default)(response.data) === 'object') {
+                        var errors = _.flatten(_.toArray(response.data));
+                        $(errors).each(function (index, error) {
+                            $('body').pgNotification({
+                                style: 'circle',
+                                title: 'Error!',
+                                message: error,
+                                position: "top-right",
+                                timeout: 5000,
+                                type: "danger"
+                            }).show();
+                        });
+                    } else {
                         $('body').pgNotification({
                             style: 'circle',
                             title: 'Error!',
-                            message: error,
+                            message: 'Something went wrong. Please try again.',
                             position: "top-right",
                             timeout: 5000,
                             type: "danger"
                         }).show();
-                    });
-                } else {
-                    $('body').pgNotification({
-                        style: 'circle',
-                        title: 'Error!',
-                        message: 'Something went wrong. Please try again.',
-                        position: "top-right",
-                        timeout: 5000,
-                        type: "danger"
-                    }).show();
-                }
+                    }
+                }).bind(that);
             });
         },
-
-        /**
-         * Create a new OAuth client for the user.
-         */
-        store: function store() {
-            this.persistClient('post', '/oauth/clients', this.createForm, '#modal-create-client');
-        },
-
-
-        /**
-         * Edit the given client.
-         */
-        edit: function edit(client) {
-            this.editForm.id = client.id;
-            this.editForm.name = client.name;
-            this.editForm.redirect = client.redirect;
-
-            $('#modal-edit-client').modal('show');
-        },
-
-
-        /**
-         * Update the client being edited.
-         */
-        update: function update() {
-            this.persistClient('put', '/oauth/clients/' + this.editForm.id, this.editForm, '#modal-edit-client');
-        },
-
-
-        /**
-         * Persist the client to storage using the given form.
-         */
-        persistClient: function persistClient(method, uri, form, modal) {
-            var _this = this;
-
-            form.errors = [];
-
-            this.$http[method](uri, form).then(function (response) {
-                _this.getClients();
-
-                form.name = '';
-                form.redirect = '';
-                form.errors = [];
-
-                $(modal).modal('hide');
-            }).catch(function (response) {
-                if ((0, _typeof3.default)(response.data) === 'object') {
-                    form.errors = _.flatten(_.toArray(response.data));
-                } else {
-                    form.errors = ['Something went wrong. Please try again.'];
-                }
-            });
-        },
-
 
         /**
          * Destroy the given client.
          */
-        destroy: function destroy(client) {
-            var _this2 = this;
-
-            this.$http.delete('/oauth/clients/' + client.id).then(function (response) {
-                _this2.getClients();
+        destroy: function destroy(id) {
+            var that = this;
+            Pace.track(function () {
+                that.$http.delete('/api/truck/' + id).then(function (response) {
+                    that.$refs.currenttable.refresh();
+                    $('body').pgNotification({
+                        style: 'circle',
+                        title: 'Sucesso!',
+                        message: response.data.message,
+                        position: "top-right",
+                        timeout: 5000,
+                        type: "success"
+                    }).show();
+                }).catch(function (response) {
+                    $('body').circularProgress({ value: 100 });
+                    if ((0, _typeof3.default)(response.data) === 'object') {
+                        var errors = _.flatten(_.toArray(response.data));
+                        $(errors).each(function (index, error) {
+                            $('body').pgNotification({
+                                style: 'circle',
+                                title: 'Error!',
+                                message: error,
+                                position: "top-right",
+                                timeout: 5000,
+                                type: "danger"
+                            }).show();
+                        });
+                    } else {
+                        $('body').pgNotification({
+                            style: 'circle',
+                            title: 'Error!',
+                            message: 'Something went wrong. Please try again.',
+                            position: "top-right",
+                            timeout: 5000,
+                            type: "danger"
+                        }).show();
+                    }
+                }).bind(that);
             });
         }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-99369f82=\"\">\n    <div class=\"panel panel-default\" _v-99369f82=\"\">\n        <div class=\"panel-heading\" _v-99369f82=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-99369f82=\"\">\n                <span _v-99369f82=\"\">\n                    Waiting Approval Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-99369f82=\"\">\n            <div id=\"pending_trucks\" _v-99369f82=\"\">\n                <v-server-table url=\"/api/admin-pending-trucks\" :columns=\"trucks_pending_columns\" :options=\"trucks_pending_options\" v-ref:pendingtable=\"\" _v-99369f82=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" _v-99369f82=\"\">\n        <div class=\"panel-heading\" _v-99369f82=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-99369f82=\"\">\n                <span _v-99369f82=\"\">\n                    Current Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-99369f82=\"\">\n            <div id=\"pending_trucks\" _v-99369f82=\"\">\n                <v-server-table url=\"/api/admin-current-trucks\" :columns=\"trucks_current_columns\" :options=\"trucks_current_options\" v-ref:currenttable=\"\" _v-99369f82=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n</div>\n    <div class=\"row form-horizontal\" _v-99369f82=\"\">\n\n        <div class=\"col-sm-12 col-lg-6\" _v-99369f82=\"\">\n\n            <div class=\"form-group\" style=\"padding-top: 0;\" _v-99369f82=\"\">\n                <label for=\"filter\" class=\"col-sm-5 control-label\" style=\"text-align:right;\" _v-99369f82=\"\">Export</label>\n                <div class=\"col-sm-7\" _v-99369f82=\"\">\n                    <input type=\"text\" class=\"form-control\" name=\"filter\" id=\"filter\" readonly=\"true\" style=\"background-color:white !important;\" _v-99369f82=\"\">\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 col-lg-3\" v-show=\"export_filter.start != '0000-00-00' &amp;&amp; export_filter.end != '0000-00-00'\" _v-99369f82=\"\">\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xls&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XLS\" _v-99369f82=\"\"><i class=\"fa fa-file-excel-o\" _v-99369f82=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=csv&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} CSV\" _v-99369f82=\"\"><i class=\"fa fa-file-text-o\" _v-99369f82=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xml&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XML\" _v-99369f82=\"\"><i class=\"fa fa-file-code-o\" _v-99369f82=\"\"></i></a>\n        </div>\n    </div>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-11331f02=\"\">\n    <div class=\"panel panel-default\" _v-11331f02=\"\">\n        <div class=\"panel-heading\" _v-11331f02=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-11331f02=\"\">\n                <span _v-11331f02=\"\">\n                    Waiting Approval Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-11331f02=\"\">\n            <div id=\"pending_trucks\" _v-11331f02=\"\">\n                <v-server-table url=\"/api/admin-pending-trucks\" :columns=\"trucks_pending_columns\" :options=\"trucks_pending_options\" v-ref:pendingtable=\"\" _v-11331f02=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" _v-11331f02=\"\">\n        <div class=\"panel-heading\" _v-11331f02=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-11331f02=\"\">\n                <span _v-11331f02=\"\">\n                    Current Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-11331f02=\"\">\n            <div id=\"current_trucks\" _v-11331f02=\"\">\n                <v-server-table url=\"/api/admin-current-trucks\" :columns=\"trucks_current_columns\" :options=\"trucks_current_options\" v-ref:currenttable=\"\" _v-11331f02=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n</div>\n    <div class=\"row form-horizontal\" _v-11331f02=\"\">\n\n        <div class=\"col-sm-12 col-lg-6\" _v-11331f02=\"\">\n\n            <div class=\"form-group\" style=\"padding-top: 0;\" _v-11331f02=\"\">\n                <label for=\"filter\" class=\"col-sm-5 control-label\" style=\"text-align:right;\" _v-11331f02=\"\">Export</label>\n                <div class=\"col-sm-7\" _v-11331f02=\"\">\n                    <input type=\"text\" class=\"form-control\" name=\"filter\" id=\"filter\" readonly=\"true\" style=\"background-color:white !important;\" _v-11331f02=\"\">\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 col-lg-3\" v-show=\"export_filter.start != '0000-00-00' &amp;&amp; export_filter.end != '0000-00-00'\" _v-11331f02=\"\">\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xls&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XLS\" _v-11331f02=\"\"><i class=\"fa fa-file-excel-o\" _v-11331f02=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=csv&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} CSV\" _v-11331f02=\"\"><i class=\"fa fa-file-text-o\" _v-11331f02=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xml&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XML\" _v-11331f02=\"\"><i class=\"fa fa-file-code-o\" _v-11331f02=\"\"></i></a>\n        </div>\n    </div>\n\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-99369f82] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-99369f82] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-11331f02] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-11331f02] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-99369f82", module.exports)
+    hotAPI.createRecord("_v-11331f02", module.exports)
   } else {
-    hotAPI.update("_v-99369f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-11331f02", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],85:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7062ad91] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7062ad91] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7a324551] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7a324551] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52547,24 +52532,24 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-7062ad91=\"\">\n    <div v-if=\"tokens.length > 0\" _v-7062ad91=\"\">\n        <div class=\"panel panel-default\" _v-7062ad91=\"\">\n            <div class=\"panel-heading\" _v-7062ad91=\"\">Authorized Applications</div>\n\n            <div class=\"panel-body\" _v-7062ad91=\"\">\n                <!-- Authorized Tokens -->\n                <table class=\"table table-borderless m-b-none\" _v-7062ad91=\"\">\n                    <thead _v-7062ad91=\"\">\n                        <tr _v-7062ad91=\"\">\n                            <th _v-7062ad91=\"\">Name</th>\n                            <th _v-7062ad91=\"\">Scopes</th>\n                            <th _v-7062ad91=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-7062ad91=\"\">\n                        <tr v-for=\"token in tokens\" _v-7062ad91=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-7062ad91=\"\">\n                                {{ token.client.name }}\n                            </td>\n\n                            <!-- Scopes -->\n                            <td style=\"vertical-align: middle;\" _v-7062ad91=\"\">\n                                <span v-if=\"token.scopes.length > 0\" _v-7062ad91=\"\">\n                                    {{ token.scopes.join(', ') }}\n                                </span>\n                            </td>\n\n                            <!-- Revoke Button -->\n                            <td style=\"vertical-align: middle;\" _v-7062ad91=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-7062ad91=\"\">\n                                    Revoke\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-7a324551=\"\">\n    <div v-if=\"tokens.length > 0\" _v-7a324551=\"\">\n        <div class=\"panel panel-default\" _v-7a324551=\"\">\n            <div class=\"panel-heading\" _v-7a324551=\"\">Authorized Applications</div>\n\n            <div class=\"panel-body\" _v-7a324551=\"\">\n                <!-- Authorized Tokens -->\n                <table class=\"table table-borderless m-b-none\" _v-7a324551=\"\">\n                    <thead _v-7a324551=\"\">\n                        <tr _v-7a324551=\"\">\n                            <th _v-7a324551=\"\">Name</th>\n                            <th _v-7a324551=\"\">Scopes</th>\n                            <th _v-7a324551=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-7a324551=\"\">\n                        <tr v-for=\"token in tokens\" _v-7a324551=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-7a324551=\"\">\n                                {{ token.client.name }}\n                            </td>\n\n                            <!-- Scopes -->\n                            <td style=\"vertical-align: middle;\" _v-7a324551=\"\">\n                                <span v-if=\"token.scopes.length > 0\" _v-7a324551=\"\">\n                                    {{ token.scopes.join(', ') }}\n                                </span>\n                            </td>\n\n                            <!-- Revoke Button -->\n                            <td style=\"vertical-align: middle;\" _v-7a324551=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-7a324551=\"\">\n                                    Revoke\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-7062ad91] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7062ad91] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-7a324551] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7a324551] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7062ad91", module.exports)
+    hotAPI.createRecord("_v-7a324551", module.exports)
   } else {
-    hotAPI.update("_v-7062ad91", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7a324551", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],86:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7ce5392c] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7ce5392c] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-8dc8fe28] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-8dc8fe28] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52704,24 +52689,24 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-7ce5392c=\"\">\n    <div class=\"panel panel-default\" _v-7ce5392c=\"\">\n        <div class=\"panel-heading\" _v-7ce5392c=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-7ce5392c=\"\">\n                <span _v-7ce5392c=\"\">\n                    OAuth Clients\n                </span>\n\n                <a class=\"action-link\" @click=\"showCreateClientForm\" _v-7ce5392c=\"\">\n                    Create New Client\n                </a>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-7ce5392c=\"\">\n            <!-- Current Clients -->\n            <p class=\"m-b-none\" v-if=\"clients.length === 0\" _v-7ce5392c=\"\">\n                You have not created any OAuth clients.\n            </p>\n\n            <table class=\"table table-borderless m-b-none\" v-if=\"clients.length > 0\" _v-7ce5392c=\"\">\n                <thead _v-7ce5392c=\"\">\n                    <tr _v-7ce5392c=\"\">\n                        <th _v-7ce5392c=\"\">Client ID</th>\n                        <th _v-7ce5392c=\"\">Name</th>\n                        <th _v-7ce5392c=\"\">Secret</th>\n                        <th _v-7ce5392c=\"\"></th>\n                        <th _v-7ce5392c=\"\"></th>\n                    </tr>\n                </thead>\n\n                <tbody _v-7ce5392c=\"\">\n                    <tr v-for=\"client in clients\" _v-7ce5392c=\"\">\n                        <!-- ID -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            {{ client.id }}\n                        </td>\n\n                        <!-- Name -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            {{ client.name }}\n                        </td>\n\n                        <!-- Secret -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            <code _v-7ce5392c=\"\">{{ client.secret }}</code>\n                        </td>\n\n                        <!-- Edit Button -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            <a class=\"action-link\" @click=\"edit(client)\" _v-7ce5392c=\"\">\n                                Edit\n                            </a>\n                        </td>\n\n                        <!-- Delete Button -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            <a class=\"action-link text-danger\" @click=\"destroy(client)\" _v-7ce5392c=\"\">\n                                Delete\n                            </a>\n                        </td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    </div>\n\n    <!-- Create Client Modal -->\n    <div class=\"modal fade\" id=\"modal-create-client\" tabindex=\"-1\" role=\"dialog\" _v-7ce5392c=\"\">\n        <div class=\"modal-dialog\" _v-7ce5392c=\"\">\n            <div class=\"modal-content\" _v-7ce5392c=\"\">\n                <div class=\"modal-header\" _v-7ce5392c=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-7ce5392c=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-7ce5392c=\"\">\n                        Create Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-7ce5392c=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"createForm.errors.length > 0\" _v-7ce5392c=\"\">\n                        <p _v-7ce5392c=\"\"><strong _v-7ce5392c=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-7ce5392c=\"\">\n                        <ul _v-7ce5392c=\"\">\n                            <li v-for=\"error in createForm.errors\" _v-7ce5392c=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-7ce5392c=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input id=\"create-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"store\" v-model=\"createForm.name\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"store\" v-model=\"createForm.redirect\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-7ce5392c=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-7ce5392c=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-7ce5392c=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Edit Client Modal -->\n    <div class=\"modal fade\" id=\"modal-edit-client\" tabindex=\"-1\" role=\"dialog\" _v-7ce5392c=\"\">\n        <div class=\"modal-dialog\" _v-7ce5392c=\"\">\n            <div class=\"modal-content\" _v-7ce5392c=\"\">\n                <div class=\"modal-header\" _v-7ce5392c=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-7ce5392c=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-7ce5392c=\"\">\n                        Edit Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-7ce5392c=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"editForm.errors.length > 0\" _v-7ce5392c=\"\">\n                        <p _v-7ce5392c=\"\"><strong _v-7ce5392c=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-7ce5392c=\"\">\n                        <ul _v-7ce5392c=\"\">\n                            <li v-for=\"error in editForm.errors\" _v-7ce5392c=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Edit Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-7ce5392c=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input id=\"edit-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"update\" v-model=\"editForm.name\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"update\" v-model=\"editForm.redirect\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-7ce5392c=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-7ce5392c=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"update\" _v-7ce5392c=\"\">\n                        Save Changes\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-8dc8fe28=\"\">\n    <div class=\"panel panel-default\" _v-8dc8fe28=\"\">\n        <div class=\"panel-heading\" _v-8dc8fe28=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-8dc8fe28=\"\">\n                <span _v-8dc8fe28=\"\">\n                    OAuth Clients\n                </span>\n\n                <a class=\"action-link\" @click=\"showCreateClientForm\" _v-8dc8fe28=\"\">\n                    Create New Client\n                </a>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-8dc8fe28=\"\">\n            <!-- Current Clients -->\n            <p class=\"m-b-none\" v-if=\"clients.length === 0\" _v-8dc8fe28=\"\">\n                You have not created any OAuth clients.\n            </p>\n\n            <table class=\"table table-borderless m-b-none\" v-if=\"clients.length > 0\" _v-8dc8fe28=\"\">\n                <thead _v-8dc8fe28=\"\">\n                    <tr _v-8dc8fe28=\"\">\n                        <th _v-8dc8fe28=\"\">Client ID</th>\n                        <th _v-8dc8fe28=\"\">Name</th>\n                        <th _v-8dc8fe28=\"\">Secret</th>\n                        <th _v-8dc8fe28=\"\"></th>\n                        <th _v-8dc8fe28=\"\"></th>\n                    </tr>\n                </thead>\n\n                <tbody _v-8dc8fe28=\"\">\n                    <tr v-for=\"client in clients\" _v-8dc8fe28=\"\">\n                        <!-- ID -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            {{ client.id }}\n                        </td>\n\n                        <!-- Name -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            {{ client.name }}\n                        </td>\n\n                        <!-- Secret -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            <code _v-8dc8fe28=\"\">{{ client.secret }}</code>\n                        </td>\n\n                        <!-- Edit Button -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            <a class=\"action-link\" @click=\"edit(client)\" _v-8dc8fe28=\"\">\n                                Edit\n                            </a>\n                        </td>\n\n                        <!-- Delete Button -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            <a class=\"action-link text-danger\" @click=\"destroy(client)\" _v-8dc8fe28=\"\">\n                                Delete\n                            </a>\n                        </td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    </div>\n\n    <!-- Create Client Modal -->\n    <div class=\"modal fade\" id=\"modal-create-client\" tabindex=\"-1\" role=\"dialog\" _v-8dc8fe28=\"\">\n        <div class=\"modal-dialog\" _v-8dc8fe28=\"\">\n            <div class=\"modal-content\" _v-8dc8fe28=\"\">\n                <div class=\"modal-header\" _v-8dc8fe28=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-8dc8fe28=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-8dc8fe28=\"\">\n                        Create Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-8dc8fe28=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"createForm.errors.length > 0\" _v-8dc8fe28=\"\">\n                        <p _v-8dc8fe28=\"\"><strong _v-8dc8fe28=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-8dc8fe28=\"\">\n                        <ul _v-8dc8fe28=\"\">\n                            <li v-for=\"error in createForm.errors\" _v-8dc8fe28=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-8dc8fe28=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input id=\"create-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"store\" v-model=\"createForm.name\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"store\" v-model=\"createForm.redirect\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-8dc8fe28=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-8dc8fe28=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-8dc8fe28=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Edit Client Modal -->\n    <div class=\"modal fade\" id=\"modal-edit-client\" tabindex=\"-1\" role=\"dialog\" _v-8dc8fe28=\"\">\n        <div class=\"modal-dialog\" _v-8dc8fe28=\"\">\n            <div class=\"modal-content\" _v-8dc8fe28=\"\">\n                <div class=\"modal-header\" _v-8dc8fe28=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-8dc8fe28=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-8dc8fe28=\"\">\n                        Edit Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-8dc8fe28=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"editForm.errors.length > 0\" _v-8dc8fe28=\"\">\n                        <p _v-8dc8fe28=\"\"><strong _v-8dc8fe28=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-8dc8fe28=\"\">\n                        <ul _v-8dc8fe28=\"\">\n                            <li v-for=\"error in editForm.errors\" _v-8dc8fe28=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Edit Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-8dc8fe28=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input id=\"edit-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"update\" v-model=\"editForm.name\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"update\" v-model=\"editForm.redirect\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-8dc8fe28=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-8dc8fe28=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"update\" _v-8dc8fe28=\"\">\n                        Save Changes\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-7ce5392c] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7ce5392c] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-8dc8fe28] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-8dc8fe28] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7ce5392c", module.exports)
+    hotAPI.createRecord("_v-8dc8fe28", module.exports)
   } else {
-    hotAPI.update("_v-7ce5392c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8dc8fe28", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],87:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-93752dec] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-93752dec] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-6b11b94a] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-6b11b94a] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52875,19 +52860,19 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-93752dec=\"\">\n    <div _v-93752dec=\"\">\n        <div class=\"panel panel-default\" _v-93752dec=\"\">\n            <div class=\"panel-heading\" _v-93752dec=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-93752dec=\"\">\n                    <span _v-93752dec=\"\">\n                        Personal Access Tokens\n                    </span>\n\n                    <a class=\"action-link\" @click=\"showCreateTokenForm\" _v-93752dec=\"\">\n                        Create New Token\n                    </a>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-93752dec=\"\">\n                <!-- No Tokens Notice -->\n                <p class=\"m-b-none\" v-if=\"tokens.length === 0\" _v-93752dec=\"\">\n                    You have not created any personal access tokens.\n                </p>\n\n                <!-- Personal Access Tokens -->\n                <table class=\"table table-borderless m-b-none\" v-if=\"tokens.length > 0\" _v-93752dec=\"\">\n                    <thead _v-93752dec=\"\">\n                        <tr _v-93752dec=\"\">\n                            <th _v-93752dec=\"\">Name</th>\n                            <th _v-93752dec=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-93752dec=\"\">\n                        <tr v-for=\"token in tokens\" _v-93752dec=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-93752dec=\"\">\n                                {{ token.name }}\n                            </td>\n\n                            <!-- Delete Button -->\n                            <td style=\"vertical-align: middle;\" _v-93752dec=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-93752dec=\"\">\n                                    Delete\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n\n    <!-- Create Token Modal -->\n    <div class=\"modal fade\" id=\"modal-create-token\" tabindex=\"-1\" role=\"dialog\" _v-93752dec=\"\">\n        <div class=\"modal-dialog\" _v-93752dec=\"\">\n            <div class=\"modal-content\" _v-93752dec=\"\">\n                <div class=\"modal-header\" _v-93752dec=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-93752dec=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-93752dec=\"\">\n                        Create Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-93752dec=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"form.errors.length > 0\" _v-93752dec=\"\">\n                        <p _v-93752dec=\"\"><strong _v-93752dec=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-93752dec=\"\">\n                        <ul _v-93752dec=\"\">\n                            <li v-for=\"error in form.errors\" _v-93752dec=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Token Form -->\n                    <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"store\" _v-93752dec=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-93752dec=\"\">\n                            <label class=\"col-md-4 control-label\" _v-93752dec=\"\">Name</label>\n\n                            <div class=\"col-md-6\" _v-93752dec=\"\">\n                                <input id=\"create-token-name\" type=\"text\" class=\"form-control\" name=\"name\" v-model=\"form.name\" _v-93752dec=\"\">\n                            </div>\n                        </div>\n\n                        <!-- Scopes -->\n                        <div class=\"form-group\" v-if=\"scopes.length > 0\" _v-93752dec=\"\">\n                            <label class=\"col-md-4 control-label\" _v-93752dec=\"\">Scopes</label>\n\n                            <div class=\"col-md-6\" _v-93752dec=\"\">\n                                <div v-for=\"scope in scopes\" _v-93752dec=\"\">\n                                    <div class=\"checkbox\" _v-93752dec=\"\">\n                                        <label _v-93752dec=\"\">\n                                            <input type=\"checkbox\" @click=\"toggleScope(scope.id)\" :checked=\"scopeIsAssigned(scope.id)\" _v-93752dec=\"\">\n\n                                                {{ scope.id }}\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-93752dec=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-93752dec=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-93752dec=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Access Token Modal -->\n    <div class=\"modal fade\" id=\"modal-access-token\" tabindex=\"-1\" role=\"dialog\" _v-93752dec=\"\">\n        <div class=\"modal-dialog\" _v-93752dec=\"\">\n            <div class=\"modal-content\" _v-93752dec=\"\">\n                <div class=\"modal-header\" _v-93752dec=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-93752dec=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-93752dec=\"\">\n                        Personal Access Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-93752dec=\"\">\n                    <p _v-93752dec=\"\">\n                        Here is your new personal access token. This is the only time it will be shown so don't lose it!\n                        You may now use this token to make API requests.\n                    </p>\n\n                    <pre _v-93752dec=\"\"><code _v-93752dec=\"\">{{ accessToken }}</code></pre>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-93752dec=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-93752dec=\"\">Close</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-6b11b94a=\"\">\n    <div _v-6b11b94a=\"\">\n        <div class=\"panel panel-default\" _v-6b11b94a=\"\">\n            <div class=\"panel-heading\" _v-6b11b94a=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-6b11b94a=\"\">\n                    <span _v-6b11b94a=\"\">\n                        Personal Access Tokens\n                    </span>\n\n                    <a class=\"action-link\" @click=\"showCreateTokenForm\" _v-6b11b94a=\"\">\n                        Create New Token\n                    </a>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-6b11b94a=\"\">\n                <!-- No Tokens Notice -->\n                <p class=\"m-b-none\" v-if=\"tokens.length === 0\" _v-6b11b94a=\"\">\n                    You have not created any personal access tokens.\n                </p>\n\n                <!-- Personal Access Tokens -->\n                <table class=\"table table-borderless m-b-none\" v-if=\"tokens.length > 0\" _v-6b11b94a=\"\">\n                    <thead _v-6b11b94a=\"\">\n                        <tr _v-6b11b94a=\"\">\n                            <th _v-6b11b94a=\"\">Name</th>\n                            <th _v-6b11b94a=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-6b11b94a=\"\">\n                        <tr v-for=\"token in tokens\" _v-6b11b94a=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-6b11b94a=\"\">\n                                {{ token.name }}\n                            </td>\n\n                            <!-- Delete Button -->\n                            <td style=\"vertical-align: middle;\" _v-6b11b94a=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-6b11b94a=\"\">\n                                    Delete\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n\n    <!-- Create Token Modal -->\n    <div class=\"modal fade\" id=\"modal-create-token\" tabindex=\"-1\" role=\"dialog\" _v-6b11b94a=\"\">\n        <div class=\"modal-dialog\" _v-6b11b94a=\"\">\n            <div class=\"modal-content\" _v-6b11b94a=\"\">\n                <div class=\"modal-header\" _v-6b11b94a=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-6b11b94a=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-6b11b94a=\"\">\n                        Create Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-6b11b94a=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"form.errors.length > 0\" _v-6b11b94a=\"\">\n                        <p _v-6b11b94a=\"\"><strong _v-6b11b94a=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-6b11b94a=\"\">\n                        <ul _v-6b11b94a=\"\">\n                            <li v-for=\"error in form.errors\" _v-6b11b94a=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Token Form -->\n                    <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"store\" _v-6b11b94a=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-6b11b94a=\"\">\n                            <label class=\"col-md-4 control-label\" _v-6b11b94a=\"\">Name</label>\n\n                            <div class=\"col-md-6\" _v-6b11b94a=\"\">\n                                <input id=\"create-token-name\" type=\"text\" class=\"form-control\" name=\"name\" v-model=\"form.name\" _v-6b11b94a=\"\">\n                            </div>\n                        </div>\n\n                        <!-- Scopes -->\n                        <div class=\"form-group\" v-if=\"scopes.length > 0\" _v-6b11b94a=\"\">\n                            <label class=\"col-md-4 control-label\" _v-6b11b94a=\"\">Scopes</label>\n\n                            <div class=\"col-md-6\" _v-6b11b94a=\"\">\n                                <div v-for=\"scope in scopes\" _v-6b11b94a=\"\">\n                                    <div class=\"checkbox\" _v-6b11b94a=\"\">\n                                        <label _v-6b11b94a=\"\">\n                                            <input type=\"checkbox\" @click=\"toggleScope(scope.id)\" :checked=\"scopeIsAssigned(scope.id)\" _v-6b11b94a=\"\">\n\n                                                {{ scope.id }}\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-6b11b94a=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-6b11b94a=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-6b11b94a=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Access Token Modal -->\n    <div class=\"modal fade\" id=\"modal-access-token\" tabindex=\"-1\" role=\"dialog\" _v-6b11b94a=\"\">\n        <div class=\"modal-dialog\" _v-6b11b94a=\"\">\n            <div class=\"modal-content\" _v-6b11b94a=\"\">\n                <div class=\"modal-header\" _v-6b11b94a=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-6b11b94a=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-6b11b94a=\"\">\n                        Personal Access Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-6b11b94a=\"\">\n                    <p _v-6b11b94a=\"\">\n                        Here is your new personal access token. This is the only time it will be shown so don't lose it!\n                        You may now use this token to make API requests.\n                    </p>\n\n                    <pre _v-6b11b94a=\"\"><code _v-6b11b94a=\"\">{{ accessToken }}</code></pre>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-6b11b94a=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-6b11b94a=\"\">Close</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-93752dec] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-93752dec] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-6b11b94a] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-6b11b94a] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-93752dec", module.exports)
+    hotAPI.createRecord("_v-6b11b94a", module.exports)
   } else {
-    hotAPI.update("_v-93752dec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6b11b94a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}]},{},[81]);
