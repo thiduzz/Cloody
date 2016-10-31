@@ -57,6 +57,9 @@ Route::get('/user/{id}', 'UserController@show')->middleware(['auth:api']);
 //update personal info
 Route::put('/user/{id}', 'UserController@update')->middleware(['auth:api']);
 
+/** TRACKING **/
+Route::get('/tracking/{type}/{id?}', 'HomeController@paginate_tracking')->middleware(['auth:api'])->middleware('admin');
+
 /**** ADMIN  ****/
 Route::get('/admin-pending-trucks', 'TruckController@admin_paginate_pending')->middleware(['auth:api'])->middleware('admin');
 Route::get('/admin-current-trucks', 'TruckController@admin_paginate_current')->middleware(['auth:api'])->middleware('admin');

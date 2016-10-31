@@ -23,13 +23,13 @@ class Tracking {
                 switch($type)
                 {
                     case 'updated':
-                        return json_encode(['trans_item'=>'track_upd_trucks','param'=>['name'=>$model->name]]);
+                        return json_encode(['trans_item'=>'track_updated_truck','param'=>['name'=>$model->name]]);
                         break;
                     case 'approved':
-                        return json_encode(['trans_item'=>'track_app_trucks','param'=>['name'=>$model->name]]);
+                        return json_encode(['trans_item'=>'track_approved_truck','param'=>['name'=>$model->name]]);
                         break;
                     case 'denied':
-                        return json_encode(['trans_item'=>'track_den_trucks','param'=>['name'=>$model->name]]);
+                        return json_encode(['trans_item'=>'track_denied_truck','param'=>['name'=>$model->name]]);
                         break;
                 }
                 break;

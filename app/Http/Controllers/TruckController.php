@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Facades\Tracking;
 use App\Http\Requests\ExportResourceRequest;
 use App\Mail\TruckAccepted;
 use App\Mail\TruckDenied;
@@ -101,6 +102,7 @@ class TruckController extends Controller
             {
                 $truck->status = 'denied';
                 $truck->save();
+                Tracking::registerTrack($truck, 'denied');
                 $message =  $request->get('message','Unfortunately, your foodtruck application did not fill the required parameters, please contact us in case of doubt!');
 
                 if(env('APP_ENV') == 'local')
@@ -113,6 +115,7 @@ class TruckController extends Controller
             }else if($type == 'approve'){
                 $truck->enabled = 1;
                 $truck->save();
+                Tracking::registerTrack($truck, 'approved');
                 if(env('APP_ENV') == 'local')
                 {
                     Mail::to('thiago.mello@vizad.com.br')->send(new TruckAccepted($truck));

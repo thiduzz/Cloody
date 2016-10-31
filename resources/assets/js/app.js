@@ -24,8 +24,8 @@ Vue.component(
     require('./components/FoodTruckRegistration.vue')
 );
 Vue.component(
-    'foodtruck-register',
-    require('./components/FoodTruckRegistration.vue')
+    'tracking-tab',
+    require('./components/TrackingTab.vue')
 );
 
 Vue.component(

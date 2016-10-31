@@ -51828,7 +51828,7 @@ Vue.component('passport-authorized-clients', require('./components/passport/Auth
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue'));
 
 Vue.component('foodtruck-register', require('./components/FoodTruckRegistration.vue'));
-Vue.component('foodtruck-register', require('./components/FoodTruckRegistration.vue'));
+Vue.component('tracking-tab', require('./components/TrackingTab.vue'));
 
 Vue.component('foodtrucks-admin', require('./components/FoodTrucksAdmin.vue'));
 
@@ -51853,7 +51853,7 @@ var app = new Vue({
     el: 'body'
 });
 
-},{"./bootstrap":82,"./components/FoodTruckRegistration.vue":83,"./components/FoodTrucksAdmin.vue":84,"./components/passport/AuthorizedClients.vue":85,"./components/passport/Clients.vue":86,"./components/passport/PersonalAccessTokens.vue":87,"vue-i18n":76,"vue-moment":77}],82:[function(require,module,exports){
+},{"./bootstrap":82,"./components/FoodTruckRegistration.vue":83,"./components/FoodTrucksAdmin.vue":84,"./components/TrackingTab.vue":85,"./components/passport/AuthorizedClients.vue":86,"./components/passport/Clients.vue":87,"./components/passport/PersonalAccessTokens.vue":88,"vue-i18n":76,"vue-moment":77}],82:[function(require,module,exports){
 'use strict';
 
 window._ = require('lodash');
@@ -52481,6 +52481,77 @@ if (module.hot) {(function () {  module.hot.accept()
 })()}
 },{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],85:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['type', 'subject'],
+    data: function data() {
+        return {
+            tracks: [],
+            current_page: 0,
+            requesting: false,
+            error: false
+        };
+    },
+    ready: function ready() {
+        this.loadPage('');
+    },
+
+    methods: {
+        loadPage: function loadPage(direction) {
+            var that = this;
+            this.requesting = true;
+            this.error = false;
+            this.$http.get(this.getCurrentUrl(direction)).then(function (response) {
+
+                that.requesting = false;
+                that.tracks = null;
+                that.tracks = response.data.tracks;
+            }).catch(function (response) {
+                that.requesting = false;
+                that.error = true;
+                console.log('Tracking-tab:' + response);
+            }).bind(this);
+        },
+        getCurrentUrl: function getCurrentUrl(direction) {
+            var url = '';
+            if (direction == '') {
+                if (this.subject != undefined) {
+                    url = '/api/tracking/' + this.type + '/' + this.subject;
+                } else {
+                    url = '/api/tracking/' + this.type;
+                }
+            } else if (direction == 'previous') {
+                url = this.tracks.prev_page_url;
+            } else if (direction == 'next') {
+                url = this.tracks.next_page_url;
+            }
+            return url;
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tab-pane fade no-padding\" id=\"quickview-alerts\">\n    <div class=\"view-port clearfix\" id=\"alerts\">\n        <div class=\"view bg-white\">\n            <div class=\"navbar navbar-default navbar-sm\">\n                <div class=\"navbar-inner\">\n                    <div class=\"view-heading\">\n                        Notifications\n                    </div>\n                </div>\n            </div>\n            <div data-init-list-view=\"ioslist\" class=\"list-view boreded no-top-border\">\n                <div class=\"list-view-group-container\">\n                    <div class=\"list-view-group-header text-uppercase\">\n                        Latest\n                    </div>\n\n                    <p v-if=\"error == true\">\n                        An error happened, try again clicking <a href=\"javascript:;\" @click=\"loadPage('')\">here</a>\n                    </p>\n                    <p v-if=\"tracks == undefined &amp;&amp; error == false\">\n                        No activities were tracked\n                    </p>\n                    <div v-if=\"tracks.data != undefined &amp;&amp; error == false\">\n                        <ul v-if=\"tracks.data.length > 0\">\n                            <li class=\"alert-list\" v-for=\"track in tracks.data\">\n                                <a href=\"javascript:;\" class=\"\" data-navigate=\"view\" data-view-port=\"#chat\" data-view-animation=\"push-parrallax\">\n                                    <p class=\"col-xs-height col-middle\">\n                                        <span class=\"text-warning fs-10\"><i class=\"fa fa-circle\"></i></span>\n                                    </p>\n                                    <p class=\"p-l-10 col-xs-height col-middle col-xs-9 overflow-ellipsis fs-12\">\n                                        <span class=\"text-master\" v-text=\"track.translated\"></span>\n                                        <span style=\"display:block;font-size:10px;text-align:right;\" class=\"text-master link\" v-text=\"track.created_at | moment 'DD/MM/YYYY HH:mm'\"></span>\n                                    </p>\n                                    <p class=\"p-r-10 col-xs-height col-middle fs-12 text-right\">\n                                    </p>\n                                </a>\n                            </li>\n                        </ul>\n                    </div>\n                    <div>\n\n                        <div class=\"row\" v-show=\"requesting == false\" style=\"padding:30px;\">\n                            <div class=\"col-lg-6\"><span class=\"link-style\" v-if=\"tracks.prev_page_url != null\" @click=\"loadPage('previous')\"> <i class=\"fa fa-arrow-left\"></i> </span> </div>\n                            <div class=\"col-lg-6\" style=\"text-align: right;\"> <span class=\"link-style\" v-if=\"tracks.next_page_url != null\" @click=\"loadPage('next')\"> <i class=\"fa fa-arrow-right\"></i> </span> </div>\n                        </div>\n                        <div class=\"row\" v-show=\"requesting == true\" style=\"padding:30px;\">\n                            <div class=\"col-lg-12\" style=\"text-align: center\"><i class=\"fa fa-cog fa-spin\"></i>&nbsp;&nbsp;Loading...</div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-18467440", module.exports)
+  } else {
+    hotAPI.update("_v-18467440", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],86:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7a324551] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7a324551] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
@@ -52547,7 +52618,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7a324551", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],86:[function(require,module,exports){
+},{"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],87:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-8dc8fe28] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-8dc8fe28] {\n    margin-bottom: 0;\n}\n")
 'use strict';
@@ -52704,7 +52775,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8dc8fe28", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],87:[function(require,module,exports){
+},{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],88:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-6b11b94a] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-6b11b94a] {\n    margin-bottom: 0;\n}\n")
 'use strict';

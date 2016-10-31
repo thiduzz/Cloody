@@ -18,7 +18,7 @@ class CreateTracksTable extends Migration
             $table->integer('subject_id')->index();
             $table->string('subject_type')->index();
             $table->string('name')->default('');
-            $table->integer('user_id')->index();
+            $table->integer('user_id')->unsigned()->index();
             $table->string('description')->default('');
             $table->timestamps();
         });

@@ -24,7 +24,7 @@ class Track extends Model
 	{
 		try{
 			$array = parent::toArray();
-			$array['track_translated'] = $this->getTranslatedAttribute();
+			$array['translated'] = $this->getTranslatedAttribute();
 			//Carbon::setLocale('pt_BR');
 			//$array['created_at'] = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d/m/Y H:i');
 			return $array;
@@ -36,8 +36,12 @@ class Track extends Model
 
 	protected function getTranslatedAttribute()
 	{
-		$trans_temp = json_decode($this->description);
-		return trans('messages.'.$trans_temp->trans_item,(array) $trans_temp->param);
+		if($this->description != '')
+		{
+			$trans_temp = json_decode($this->description);
+			return trans('messages.'.$trans_temp->trans_item,(array) $trans_temp->param);
+		}
+		return null;
 	}
 
 }
