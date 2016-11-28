@@ -1,8 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/json/stringify"), __esModule: true };
+},{"core-js/library/fn/json/stringify":5}],2:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/symbol"), __esModule: true };
-},{"core-js/library/fn/symbol":4}],2:[function(require,module,exports){
+},{"core-js/library/fn/symbol":6}],3:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/symbol/iterator"), __esModule: true };
-},{"core-js/library/fn/symbol/iterator":5}],3:[function(require,module,exports){
+},{"core-js/library/fn/symbol/iterator":7}],4:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -24,30 +26,36 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 } : function (obj) {
   return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
-},{"../core-js/symbol":1,"../core-js/symbol/iterator":2}],4:[function(require,module,exports){
+},{"../core-js/symbol":2,"../core-js/symbol/iterator":3}],5:[function(require,module,exports){
+var core  = require('../../modules/_core')
+  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+},{"../../modules/_core":13}],6:[function(require,module,exports){
 require('../../modules/es6.symbol');
 require('../../modules/es6.object.to-string');
 require('../../modules/es7.symbol.async-iterator');
 require('../../modules/es7.symbol.observable');
 module.exports = require('../../modules/_core').Symbol;
-},{"../../modules/_core":11,"../../modules/es6.object.to-string":63,"../../modules/es6.symbol":65,"../../modules/es7.symbol.async-iterator":66,"../../modules/es7.symbol.observable":67}],5:[function(require,module,exports){
+},{"../../modules/_core":13,"../../modules/es6.object.to-string":65,"../../modules/es6.symbol":67,"../../modules/es7.symbol.async-iterator":68,"../../modules/es7.symbol.observable":69}],7:[function(require,module,exports){
 require('../../modules/es6.string.iterator');
 require('../../modules/web.dom.iterable');
 module.exports = require('../../modules/_wks-ext').f('iterator');
-},{"../../modules/_wks-ext":60,"../../modules/es6.string.iterator":64,"../../modules/web.dom.iterable":68}],6:[function(require,module,exports){
+},{"../../modules/_wks-ext":62,"../../modules/es6.string.iterator":66,"../../modules/web.dom.iterable":70}],8:[function(require,module,exports){
 module.exports = function(it){
   if(typeof it != 'function')throw TypeError(it + ' is not a function!');
   return it;
 };
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = function(){ /* empty */ };
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var isObject = require('./_is-object');
 module.exports = function(it){
   if(!isObject(it))throw TypeError(it + ' is not an object!');
   return it;
 };
-},{"./_is-object":27}],9:[function(require,module,exports){
+},{"./_is-object":29}],11:[function(require,module,exports){
 // false -> Array#indexOf
 // true  -> Array#includes
 var toIObject = require('./_to-iobject')
@@ -69,16 +77,16 @@ module.exports = function(IS_INCLUDES){
     } return !IS_INCLUDES && -1;
   };
 };
-},{"./_to-index":52,"./_to-iobject":54,"./_to-length":55}],10:[function(require,module,exports){
+},{"./_to-index":54,"./_to-iobject":56,"./_to-length":57}],12:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = function(it){
   return toString.call(it).slice(8, -1);
 };
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var core = module.exports = {version: '2.4.0'};
 if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // optional / simple context binding
 var aFunction = require('./_a-function');
 module.exports = function(fn, that, length){
@@ -99,18 +107,18 @@ module.exports = function(fn, that, length){
     return fn.apply(that, arguments);
   };
 };
-},{"./_a-function":6}],13:[function(require,module,exports){
+},{"./_a-function":8}],15:[function(require,module,exports){
 // 7.2.1 RequireObjectCoercible(argument)
 module.exports = function(it){
   if(it == undefined)throw TypeError("Can't call method on  " + it);
   return it;
 };
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 // Thank's IE8 for his funny defineProperty
 module.exports = !require('./_fails')(function(){
   return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 });
-},{"./_fails":19}],15:[function(require,module,exports){
+},{"./_fails":21}],17:[function(require,module,exports){
 var isObject = require('./_is-object')
   , document = require('./_global').document
   // in old IE typeof document.createElement is 'object'
@@ -118,12 +126,12 @@ var isObject = require('./_is-object')
 module.exports = function(it){
   return is ? document.createElement(it) : {};
 };
-},{"./_global":20,"./_is-object":27}],16:[function(require,module,exports){
+},{"./_global":22,"./_is-object":29}],18:[function(require,module,exports){
 // IE 8- don't enum bug keys
 module.exports = (
   'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
 ).split(',');
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 // all enumerable object keys, includes symbols
 var getKeys = require('./_object-keys')
   , gOPS    = require('./_object-gops')
@@ -139,7 +147,7 @@ module.exports = function(it){
     while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
   } return result;
 };
-},{"./_object-gops":41,"./_object-keys":44,"./_object-pie":45}],18:[function(require,module,exports){
+},{"./_object-gops":43,"./_object-keys":46,"./_object-pie":47}],20:[function(require,module,exports){
 var global    = require('./_global')
   , core      = require('./_core')
   , ctx       = require('./_ctx')
@@ -201,7 +209,7 @@ $export.W = 32;  // wrap
 $export.U = 64;  // safe
 $export.R = 128; // real proto method for `library` 
 module.exports = $export;
-},{"./_core":11,"./_ctx":12,"./_global":20,"./_hide":22}],19:[function(require,module,exports){
+},{"./_core":13,"./_ctx":14,"./_global":22,"./_hide":24}],21:[function(require,module,exports){
 module.exports = function(exec){
   try {
     return !!exec();
@@ -209,17 +217,17 @@ module.exports = function(exec){
     return true;
   }
 };
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
   ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
 if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var hasOwnProperty = {}.hasOwnProperty;
 module.exports = function(it, key){
   return hasOwnProperty.call(it, key);
 };
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var dP         = require('./_object-dp')
   , createDesc = require('./_property-desc');
 module.exports = require('./_descriptors') ? function(object, key, value){
@@ -228,29 +236,29 @@ module.exports = require('./_descriptors') ? function(object, key, value){
   object[key] = value;
   return object;
 };
-},{"./_descriptors":14,"./_object-dp":36,"./_property-desc":46}],23:[function(require,module,exports){
+},{"./_descriptors":16,"./_object-dp":38,"./_property-desc":48}],25:[function(require,module,exports){
 module.exports = require('./_global').document && document.documentElement;
-},{"./_global":20}],24:[function(require,module,exports){
+},{"./_global":22}],26:[function(require,module,exports){
 module.exports = !require('./_descriptors') && !require('./_fails')(function(){
   return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
 });
-},{"./_descriptors":14,"./_dom-create":15,"./_fails":19}],25:[function(require,module,exports){
+},{"./_descriptors":16,"./_dom-create":17,"./_fails":21}],27:[function(require,module,exports){
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
 var cof = require('./_cof');
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
-},{"./_cof":10}],26:[function(require,module,exports){
+},{"./_cof":12}],28:[function(require,module,exports){
 // 7.2.2 IsArray(argument)
 var cof = require('./_cof');
 module.exports = Array.isArray || function isArray(arg){
   return cof(arg) == 'Array';
 };
-},{"./_cof":10}],27:[function(require,module,exports){
+},{"./_cof":12}],29:[function(require,module,exports){
 module.exports = function(it){
   return typeof it === 'object' ? it !== null : typeof it === 'function';
 };
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 var create         = require('./_object-create')
   , descriptor     = require('./_property-desc')
@@ -264,7 +272,7 @@ module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
   setToStringTag(Constructor, NAME + ' Iterator');
 };
-},{"./_hide":22,"./_object-create":35,"./_property-desc":46,"./_set-to-string-tag":48,"./_wks":61}],29:[function(require,module,exports){
+},{"./_hide":24,"./_object-create":37,"./_property-desc":48,"./_set-to-string-tag":50,"./_wks":63}],31:[function(require,module,exports){
 'use strict';
 var LIBRARY        = require('./_library')
   , $export        = require('./_export')
@@ -335,13 +343,13 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
   }
   return methods;
 };
-},{"./_export":18,"./_has":21,"./_hide":22,"./_iter-create":28,"./_iterators":31,"./_library":33,"./_object-gpo":42,"./_redefine":47,"./_set-to-string-tag":48,"./_wks":61}],30:[function(require,module,exports){
+},{"./_export":20,"./_has":23,"./_hide":24,"./_iter-create":30,"./_iterators":33,"./_library":35,"./_object-gpo":44,"./_redefine":49,"./_set-to-string-tag":50,"./_wks":63}],32:[function(require,module,exports){
 module.exports = function(done, value){
   return {value: value, done: !!done};
 };
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 module.exports = {};
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var getKeys   = require('./_object-keys')
   , toIObject = require('./_to-iobject');
 module.exports = function(object, el){
@@ -352,9 +360,9 @@ module.exports = function(object, el){
     , key;
   while(length > index)if(O[key = keys[index++]] === el)return key;
 };
-},{"./_object-keys":44,"./_to-iobject":54}],33:[function(require,module,exports){
+},{"./_object-keys":46,"./_to-iobject":56}],35:[function(require,module,exports){
 module.exports = true;
-},{}],34:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 var META     = require('./_uid')('meta')
   , isObject = require('./_is-object')
   , has      = require('./_has')
@@ -408,7 +416,7 @@ var meta = module.exports = {
   getWeak:  getWeak,
   onFreeze: onFreeze
 };
-},{"./_fails":19,"./_has":21,"./_is-object":27,"./_object-dp":36,"./_uid":58}],35:[function(require,module,exports){
+},{"./_fails":21,"./_has":23,"./_is-object":29,"./_object-dp":38,"./_uid":60}],37:[function(require,module,exports){
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject    = require('./_an-object')
   , dPs         = require('./_object-dps')
@@ -451,7 +459,7 @@ module.exports = Object.create || function create(O, Properties){
   return Properties === undefined ? result : dPs(result, Properties);
 };
 
-},{"./_an-object":8,"./_dom-create":15,"./_enum-bug-keys":16,"./_html":23,"./_object-dps":37,"./_shared-key":49}],36:[function(require,module,exports){
+},{"./_an-object":10,"./_dom-create":17,"./_enum-bug-keys":18,"./_html":25,"./_object-dps":39,"./_shared-key":51}],38:[function(require,module,exports){
 var anObject       = require('./_an-object')
   , IE8_DOM_DEFINE = require('./_ie8-dom-define')
   , toPrimitive    = require('./_to-primitive')
@@ -468,7 +476,7 @@ exports.f = require('./_descriptors') ? Object.defineProperty : function defineP
   if('value' in Attributes)O[P] = Attributes.value;
   return O;
 };
-},{"./_an-object":8,"./_descriptors":14,"./_ie8-dom-define":24,"./_to-primitive":57}],37:[function(require,module,exports){
+},{"./_an-object":10,"./_descriptors":16,"./_ie8-dom-define":26,"./_to-primitive":59}],39:[function(require,module,exports){
 var dP       = require('./_object-dp')
   , anObject = require('./_an-object')
   , getKeys  = require('./_object-keys');
@@ -482,7 +490,7 @@ module.exports = require('./_descriptors') ? Object.defineProperties : function 
   while(length > i)dP.f(O, P = keys[i++], Properties[P]);
   return O;
 };
-},{"./_an-object":8,"./_descriptors":14,"./_object-dp":36,"./_object-keys":44}],38:[function(require,module,exports){
+},{"./_an-object":10,"./_descriptors":16,"./_object-dp":38,"./_object-keys":46}],40:[function(require,module,exports){
 var pIE            = require('./_object-pie')
   , createDesc     = require('./_property-desc')
   , toIObject      = require('./_to-iobject')
@@ -499,7 +507,7 @@ exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor
   } catch(e){ /* empty */ }
   if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
 };
-},{"./_descriptors":14,"./_has":21,"./_ie8-dom-define":24,"./_object-pie":45,"./_property-desc":46,"./_to-iobject":54,"./_to-primitive":57}],39:[function(require,module,exports){
+},{"./_descriptors":16,"./_has":23,"./_ie8-dom-define":26,"./_object-pie":47,"./_property-desc":48,"./_to-iobject":56,"./_to-primitive":59}],41:[function(require,module,exports){
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = require('./_to-iobject')
   , gOPN      = require('./_object-gopn').f
@@ -520,7 +528,7 @@ module.exports.f = function getOwnPropertyNames(it){
   return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
 };
 
-},{"./_object-gopn":40,"./_to-iobject":54}],40:[function(require,module,exports){
+},{"./_object-gopn":42,"./_to-iobject":56}],42:[function(require,module,exports){
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
 var $keys      = require('./_object-keys-internal')
   , hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
@@ -528,9 +536,9 @@ var $keys      = require('./_object-keys-internal')
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
   return $keys(O, hiddenKeys);
 };
-},{"./_enum-bug-keys":16,"./_object-keys-internal":43}],41:[function(require,module,exports){
+},{"./_enum-bug-keys":18,"./_object-keys-internal":45}],43:[function(require,module,exports){
 exports.f = Object.getOwnPropertySymbols;
-},{}],42:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 var has         = require('./_has')
   , toObject    = require('./_to-object')
@@ -544,7 +552,7 @@ module.exports = Object.getPrototypeOf || function(O){
     return O.constructor.prototype;
   } return O instanceof Object ? ObjectProto : null;
 };
-},{"./_has":21,"./_shared-key":49,"./_to-object":56}],43:[function(require,module,exports){
+},{"./_has":23,"./_shared-key":51,"./_to-object":58}],45:[function(require,module,exports){
 var has          = require('./_has')
   , toIObject    = require('./_to-iobject')
   , arrayIndexOf = require('./_array-includes')(false)
@@ -562,7 +570,7 @@ module.exports = function(object, names){
   }
   return result;
 };
-},{"./_array-includes":9,"./_has":21,"./_shared-key":49,"./_to-iobject":54}],44:[function(require,module,exports){
+},{"./_array-includes":11,"./_has":23,"./_shared-key":51,"./_to-iobject":56}],46:[function(require,module,exports){
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
 var $keys       = require('./_object-keys-internal')
   , enumBugKeys = require('./_enum-bug-keys');
@@ -570,9 +578,9 @@ var $keys       = require('./_object-keys-internal')
 module.exports = Object.keys || function keys(O){
   return $keys(O, enumBugKeys);
 };
-},{"./_enum-bug-keys":16,"./_object-keys-internal":43}],45:[function(require,module,exports){
+},{"./_enum-bug-keys":18,"./_object-keys-internal":45}],47:[function(require,module,exports){
 exports.f = {}.propertyIsEnumerable;
-},{}],46:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 module.exports = function(bitmap, value){
   return {
     enumerable  : !(bitmap & 1),
@@ -581,9 +589,9 @@ module.exports = function(bitmap, value){
     value       : value
   };
 };
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 module.exports = require('./_hide');
-},{"./_hide":22}],48:[function(require,module,exports){
+},{"./_hide":24}],50:[function(require,module,exports){
 var def = require('./_object-dp').f
   , has = require('./_has')
   , TAG = require('./_wks')('toStringTag');
@@ -591,20 +599,20 @@ var def = require('./_object-dp').f
 module.exports = function(it, tag, stat){
   if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
 };
-},{"./_has":21,"./_object-dp":36,"./_wks":61}],49:[function(require,module,exports){
+},{"./_has":23,"./_object-dp":38,"./_wks":63}],51:[function(require,module,exports){
 var shared = require('./_shared')('keys')
   , uid    = require('./_uid');
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
 };
-},{"./_shared":50,"./_uid":58}],50:[function(require,module,exports){
+},{"./_shared":52,"./_uid":60}],52:[function(require,module,exports){
 var global = require('./_global')
   , SHARED = '__core-js_shared__'
   , store  = global[SHARED] || (global[SHARED] = {});
 module.exports = function(key){
   return store[key] || (store[key] = {});
 };
-},{"./_global":20}],51:[function(require,module,exports){
+},{"./_global":22}],53:[function(require,module,exports){
 var toInteger = require('./_to-integer')
   , defined   = require('./_defined');
 // true  -> String#at
@@ -622,7 +630,7 @@ module.exports = function(TO_STRING){
       : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./_defined":13,"./_to-integer":53}],52:[function(require,module,exports){
+},{"./_defined":15,"./_to-integer":55}],54:[function(require,module,exports){
 var toInteger = require('./_to-integer')
   , max       = Math.max
   , min       = Math.min;
@@ -630,34 +638,34 @@ module.exports = function(index, length){
   index = toInteger(index);
   return index < 0 ? max(index + length, 0) : min(index, length);
 };
-},{"./_to-integer":53}],53:[function(require,module,exports){
+},{"./_to-integer":55}],55:[function(require,module,exports){
 // 7.1.4 ToInteger
 var ceil  = Math.ceil
   , floor = Math.floor;
 module.exports = function(it){
   return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 };
-},{}],54:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 // to indexed object, toObject with fallback for non-array-like ES3 strings
 var IObject = require('./_iobject')
   , defined = require('./_defined');
 module.exports = function(it){
   return IObject(defined(it));
 };
-},{"./_defined":13,"./_iobject":25}],55:[function(require,module,exports){
+},{"./_defined":15,"./_iobject":27}],57:[function(require,module,exports){
 // 7.1.15 ToLength
 var toInteger = require('./_to-integer')
   , min       = Math.min;
 module.exports = function(it){
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 };
-},{"./_to-integer":53}],56:[function(require,module,exports){
+},{"./_to-integer":55}],58:[function(require,module,exports){
 // 7.1.13 ToObject(argument)
 var defined = require('./_defined');
 module.exports = function(it){
   return Object(defined(it));
 };
-},{"./_defined":13}],57:[function(require,module,exports){
+},{"./_defined":15}],59:[function(require,module,exports){
 // 7.1.1 ToPrimitive(input [, PreferredType])
 var isObject = require('./_is-object');
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
@@ -670,13 +678,13 @@ module.exports = function(it, S){
   if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
   throw TypeError("Can't convert object to primitive value");
 };
-},{"./_is-object":27}],58:[function(require,module,exports){
+},{"./_is-object":29}],60:[function(require,module,exports){
 var id = 0
   , px = Math.random();
 module.exports = function(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 };
-},{}],59:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 var global         = require('./_global')
   , core           = require('./_core')
   , LIBRARY        = require('./_library')
@@ -686,9 +694,9 @@ module.exports = function(name){
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
   if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
 };
-},{"./_core":11,"./_global":20,"./_library":33,"./_object-dp":36,"./_wks-ext":60}],60:[function(require,module,exports){
+},{"./_core":13,"./_global":22,"./_library":35,"./_object-dp":38,"./_wks-ext":62}],62:[function(require,module,exports){
 exports.f = require('./_wks');
-},{"./_wks":61}],61:[function(require,module,exports){
+},{"./_wks":63}],63:[function(require,module,exports){
 var store      = require('./_shared')('wks')
   , uid        = require('./_uid')
   , Symbol     = require('./_global').Symbol
@@ -700,7 +708,7 @@ var $exports = module.exports = function(name){
 };
 
 $exports.store = store;
-},{"./_global":20,"./_shared":50,"./_uid":58}],62:[function(require,module,exports){
+},{"./_global":22,"./_shared":52,"./_uid":60}],64:[function(require,module,exports){
 'use strict';
 var addToUnscopables = require('./_add-to-unscopables')
   , step             = require('./_iter-step')
@@ -735,9 +743,9 @@ Iterators.Arguments = Iterators.Array;
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
-},{"./_add-to-unscopables":7,"./_iter-define":29,"./_iter-step":30,"./_iterators":31,"./_to-iobject":54}],63:[function(require,module,exports){
+},{"./_add-to-unscopables":9,"./_iter-define":31,"./_iter-step":32,"./_iterators":33,"./_to-iobject":56}],65:[function(require,module,exports){
 
-},{}],64:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 'use strict';
 var $at  = require('./_string-at')(true);
 
@@ -755,7 +763,7 @@ require('./_iter-define')(String, 'String', function(iterated){
   this._i += point.length;
   return {value: point, done: false};
 });
-},{"./_iter-define":29,"./_string-at":51}],65:[function(require,module,exports){
+},{"./_iter-define":31,"./_string-at":53}],67:[function(require,module,exports){
 'use strict';
 // ECMAScript 6 symbols shim
 var global         = require('./_global')
@@ -991,11 +999,11 @@ setToStringTag($Symbol, 'Symbol');
 setToStringTag(Math, 'Math', true);
 // 24.3.3 JSON[@@toStringTag]
 setToStringTag(global.JSON, 'JSON', true);
-},{"./_an-object":8,"./_descriptors":14,"./_enum-keys":17,"./_export":18,"./_fails":19,"./_global":20,"./_has":21,"./_hide":22,"./_is-array":26,"./_keyof":32,"./_library":33,"./_meta":34,"./_object-create":35,"./_object-dp":36,"./_object-gopd":38,"./_object-gopn":40,"./_object-gopn-ext":39,"./_object-gops":41,"./_object-keys":44,"./_object-pie":45,"./_property-desc":46,"./_redefine":47,"./_set-to-string-tag":48,"./_shared":50,"./_to-iobject":54,"./_to-primitive":57,"./_uid":58,"./_wks":61,"./_wks-define":59,"./_wks-ext":60}],66:[function(require,module,exports){
+},{"./_an-object":10,"./_descriptors":16,"./_enum-keys":19,"./_export":20,"./_fails":21,"./_global":22,"./_has":23,"./_hide":24,"./_is-array":28,"./_keyof":34,"./_library":35,"./_meta":36,"./_object-create":37,"./_object-dp":38,"./_object-gopd":40,"./_object-gopn":42,"./_object-gopn-ext":41,"./_object-gops":43,"./_object-keys":46,"./_object-pie":47,"./_property-desc":48,"./_redefine":49,"./_set-to-string-tag":50,"./_shared":52,"./_to-iobject":56,"./_to-primitive":59,"./_uid":60,"./_wks":63,"./_wks-define":61,"./_wks-ext":62}],68:[function(require,module,exports){
 require('./_wks-define')('asyncIterator');
-},{"./_wks-define":59}],67:[function(require,module,exports){
+},{"./_wks-define":61}],69:[function(require,module,exports){
 require('./_wks-define')('observable');
-},{"./_wks-define":59}],68:[function(require,module,exports){
+},{"./_wks-define":61}],70:[function(require,module,exports){
 require('./es6.array.iterator');
 var global        = require('./_global')
   , hide          = require('./_hide')
@@ -1009,7 +1017,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
   if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
   Iterators[NAME] = Iterators.Array;
 }
-},{"./_global":20,"./_hide":22,"./_iterators":31,"./_wks":61,"./es6.array.iterator":62}],69:[function(require,module,exports){
+},{"./_global":22,"./_hide":24,"./_iterators":33,"./_wks":63,"./es6.array.iterator":64}],71:[function(require,module,exports){
 /**
  * jquery.mask.js
  * @version: v1.14.0
@@ -1533,7 +1541,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
     }, globals.watchInterval);
 }));
 
-},{"jquery":70}],70:[function(require,module,exports){
+},{"jquery":72}],72:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.1.1
  * https://jquery.com/
@@ -11755,7 +11763,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{}],71:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -28654,7 +28662,7 @@ return jQuery;
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],72:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 //! moment.js
 //! version : 2.15.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -32889,7 +32897,7 @@ return jQuery;
     return _moment;
 
 }));
-},{}],73:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -33071,7 +33079,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],74:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /*!
  * Select2 4.0.3
  * https://select2.github.io
@@ -38798,7 +38806,7 @@ S2.define('jquery.select2',[
   return select2;
 }));
 
-},{"jquery":70}],75:[function(require,module,exports){
+},{"jquery":72}],77:[function(require,module,exports){
 var Vue // late bind
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
 var installed = false
@@ -38924,7 +38932,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],76:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 (function (process){
 /*!
  * vue-i18n v4.6.0
@@ -39892,7 +39900,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 module.exports = plugin;
 }).call(this,require('_process'))
-},{"_process":73}],77:[function(require,module,exports){
+},{"_process":75}],79:[function(require,module,exports){
 var moment = require('moment');
 
 module.exports = {
@@ -40033,7 +40041,7 @@ module.exports = {
 	},
 };
 
-},{"moment":72}],78:[function(require,module,exports){
+},{"moment":74}],80:[function(require,module,exports){
 /*!
  * vue-resource v1.0.3
  * https://github.com/vuejs/vue-resource
@@ -41552,7 +41560,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],79:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function (process){
 /*!
  * Vue.js v1.0.28
@@ -51793,7 +51801,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":73}],80:[function(require,module,exports){
+},{"_process":75}],82:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -51813,7 +51821,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],81:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 'use strict';
 
 require('./bootstrap');
@@ -51821,16 +51829,28 @@ require('./bootstrap');
 var moment = require('vue-moment');
 Vue.use(require('vue-moment'));
 
+//OAuth Functionality
+
 Vue.component('passport-clients', require('./components/passport/Clients.vue'));
 
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue'));
 
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue'));
 
+//General Functionality
+
 Vue.component('foodtruck-register', require('./components/FoodTruckRegistration.vue'));
 Vue.component('tracking-tab', require('./components/TrackingTab.vue'));
 
+Vue.component('breadcrumb-action', require('./components/BreadcrumbAction.vue'));
+
+//Admin Functionality
+
 Vue.component('foodtrucks-admin', require('./components/FoodTrucksAdmin.vue'));
+
+Vue.component('foodtrucks-admin-edit', require('./components/FoodTrucksAdminEdit.vue'));
+
+Vue.component('foodtrucks-admin-stats', require('./components/FoodTrucksAdminStats.vue'));
 
 Vue.config.devtools = true;
 Vue.config.debug = true;
@@ -51850,10 +51870,19 @@ Vue.use(VueTables.server, {
 });
 
 var app = new Vue({
-    el: 'body'
+    el: 'body',
+    ready: function ready() {
+        this.$on('breadcrumbSave', function (param) {
+            this.$broadcast('breadcrumbSave', param);
+        });
+
+        this.$on('breadcrumbToggleProgress', function (param) {
+            this.$broadcast('breadcrumbToggleProgress', param);
+        });
+    }
 });
 
-},{"./bootstrap":82,"./components/FoodTruckRegistration.vue":83,"./components/FoodTrucksAdmin.vue":84,"./components/TrackingTab.vue":85,"./components/passport/AuthorizedClients.vue":86,"./components/passport/Clients.vue":87,"./components/passport/PersonalAccessTokens.vue":88,"vue-i18n":76,"vue-moment":77}],82:[function(require,module,exports){
+},{"./bootstrap":84,"./components/BreadcrumbAction.vue":85,"./components/FoodTruckRegistration.vue":86,"./components/FoodTrucksAdmin.vue":87,"./components/FoodTrucksAdminEdit.vue":88,"./components/FoodTrucksAdminStats.vue":89,"./components/TrackingTab.vue":90,"./components/passport/AuthorizedClients.vue":91,"./components/passport/Clients.vue":92,"./components/passport/PersonalAccessTokens.vue":93,"vue-i18n":78,"vue-moment":79}],84:[function(require,module,exports){
 'use strict';
 
 window._ = require('lodash');
@@ -51901,7 +51930,50 @@ Vue.http.interceptors.push(function (request, next) {
 //     key: 'your-pusher-key'
 // });
 
-},{"jquery-mask-plugin":69,"lodash":71,"select2":74,"vue":79,"vue-resource":78}],83:[function(require,module,exports){
+},{"jquery-mask-plugin":71,"lodash":73,"select2":76,"vue":81,"vue-resource":80}],85:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    ready: function ready() {
+        var that = this;
+        this.$on('breadcrumbToggleProgress', function (param) {
+            that.progress = !that.progress;
+        });
+    },
+
+    props: ['action'],
+    data: function data() {
+        return {
+            progress: false
+        };
+    },
+
+    methods: {
+        send: function send() {
+            switch (this.action) {
+                case 'admin-edit-truck':
+                    this.$dispatch('breadcrumbSave', {});
+                    break;
+            }
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<li class=\"pull-right upper-action\" v-if=\"this.action == 'admin-edit-truck'\">\n    <button class=\"btn btn-sm btn-rounded btn-primary\" @click=\"send\" v-bind:class=\"{ 'disabled': progress }\">\n            <span><i class=\"pg-save\"></i>\n            </span>\n    </button>\n</li>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-4d09abc7", module.exports)
+  } else {
+    hotAPI.update("_v-4d09abc7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":81,"vue-hot-reload-api":77}],86:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52124,14 +52196,14 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-791c7ffc", module.exports)
+    hotAPI.createRecord("_v-13dbefbc", module.exports)
   } else {
-    hotAPI.update("_v-791c7ffc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-13dbefbc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75}],84:[function(require,module,exports){
+},{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77}],87:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-11331f02] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-11331f02] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-99369f82] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-99369f82] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52300,7 +52372,7 @@ exports.default = {
                     users: function users(row) {
                         return '<a href="/profile/' + row.users[0].slug + '">' + row.users[0].name + '</a>';
                     },
-                    actions: "<div class='btn-group'><a href='/admin_trucks/{id}/edit'  class='btn btn-success'>" + "<i class='fa fa-edit' data-toggle='tooltip' data-original-title='Edit'></i>" + "</a><a href='javascript:;' @click='$parent.destroy({id})' class='btn btn-danger'>" + "<i data-toggle='tooltip' data-original-title='Cancel' class='fa fa-trash-o'></i></a></div>"
+                    actions: "<div class='btn-group'><a href='/admin_trucks/edit/{id}'  class='btn btn-success'>" + "<i class='fa fa-edit' data-toggle='tooltip' data-original-title='Edit'></i>" + "</a><a href='javascript:;' @click='$parent.destroy({id})' class='btn btn-danger'>" + "<i data-toggle='tooltip' data-original-title='Cancel' class='fa fa-trash-o'></i></a></div>"
                 },
                 customFilters: [{
                     name: 'alphabet',
@@ -52384,7 +52456,7 @@ exports.default = {
                     that.$refs.pendingtable.refresh();
 
                     $('body').pgNotification({
-                        style: 'circle',
+                        style: 'flip',
                         title: 'Sucesso!',
                         message: response.data.message,
                         position: "top-right",
@@ -52396,7 +52468,7 @@ exports.default = {
                         var errors = _.flatten(_.toArray(response.data));
                         $(errors).each(function (index, error) {
                             $('body').pgNotification({
-                                style: 'circle',
+                                style: 'flip',
                                 title: 'Error!',
                                 message: error,
                                 position: "top-right",
@@ -52406,7 +52478,7 @@ exports.default = {
                         });
                     } else {
                         $('body').pgNotification({
-                            style: 'circle',
+                            style: 'flip',
                             title: 'Error!',
                             message: 'Something went wrong. Please try again.',
                             position: "top-right",
@@ -52464,22 +52536,507 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-11331f02=\"\">\n    <div class=\"panel panel-default\" _v-11331f02=\"\">\n        <div class=\"panel-heading\" _v-11331f02=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-11331f02=\"\">\n                <span _v-11331f02=\"\">\n                    Waiting Approval Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-11331f02=\"\">\n            <div id=\"pending_trucks\" _v-11331f02=\"\">\n                <v-server-table url=\"/api/admin-pending-trucks\" :columns=\"trucks_pending_columns\" :options=\"trucks_pending_options\" v-ref:pendingtable=\"\" _v-11331f02=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" _v-11331f02=\"\">\n        <div class=\"panel-heading\" _v-11331f02=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-11331f02=\"\">\n                <span _v-11331f02=\"\">\n                    Current Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-11331f02=\"\">\n            <div id=\"current_trucks\" _v-11331f02=\"\">\n                <v-server-table url=\"/api/admin-current-trucks\" :columns=\"trucks_current_columns\" :options=\"trucks_current_options\" v-ref:currenttable=\"\" _v-11331f02=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n</div>\n    <div class=\"row form-horizontal\" _v-11331f02=\"\">\n\n        <div class=\"col-sm-12 col-lg-6\" _v-11331f02=\"\">\n\n            <div class=\"form-group\" style=\"padding-top: 0;\" _v-11331f02=\"\">\n                <label for=\"filter\" class=\"col-sm-5 control-label\" style=\"text-align:right;\" _v-11331f02=\"\">Export</label>\n                <div class=\"col-sm-7\" _v-11331f02=\"\">\n                    <input type=\"text\" class=\"form-control\" name=\"filter\" id=\"filter\" readonly=\"true\" style=\"background-color:white !important;\" _v-11331f02=\"\">\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 col-lg-3\" v-show=\"export_filter.start != '0000-00-00' &amp;&amp; export_filter.end != '0000-00-00'\" _v-11331f02=\"\">\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xls&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XLS\" _v-11331f02=\"\"><i class=\"fa fa-file-excel-o\" _v-11331f02=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=csv&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} CSV\" _v-11331f02=\"\"><i class=\"fa fa-file-text-o\" _v-11331f02=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xml&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XML\" _v-11331f02=\"\"><i class=\"fa fa-file-code-o\" _v-11331f02=\"\"></i></a>\n        </div>\n    </div>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-99369f82=\"\">\n    <div class=\"panel panel-default\" _v-99369f82=\"\">\n        <div class=\"panel-heading\" _v-99369f82=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-99369f82=\"\">\n                <span _v-99369f82=\"\">\n                    Waiting Approval Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-99369f82=\"\">\n            <div id=\"pending_trucks\" _v-99369f82=\"\">\n                <v-server-table url=\"/api/admin-pending-trucks\" :columns=\"trucks_pending_columns\" :options=\"trucks_pending_options\" v-ref:pendingtable=\"\" _v-99369f82=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" _v-99369f82=\"\">\n        <div class=\"panel-heading\" _v-99369f82=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-99369f82=\"\">\n                <span _v-99369f82=\"\">\n                    Current Trucks\n                </span>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-99369f82=\"\">\n            <div id=\"current_trucks\" _v-99369f82=\"\">\n                <v-server-table url=\"/api/admin-current-trucks\" :columns=\"trucks_current_columns\" :options=\"trucks_current_options\" v-ref:currenttable=\"\" _v-99369f82=\"\"></v-server-table>\n            </div>\n        </div>\n    </div>\n</div>\n    <div class=\"row form-horizontal\" _v-99369f82=\"\">\n\n        <div class=\"col-sm-12 col-lg-6\" _v-99369f82=\"\">\n\n            <div class=\"form-group\" style=\"padding-top: 0;\" _v-99369f82=\"\">\n                <label for=\"filter\" class=\"col-sm-5 control-label\" style=\"text-align:right;\" _v-99369f82=\"\">Export</label>\n                <div class=\"col-sm-7\" _v-99369f82=\"\">\n                    <input type=\"text\" class=\"form-control\" name=\"filter\" id=\"filter\" readonly=\"true\" style=\"background-color:white !important;\" _v-99369f82=\"\">\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 col-lg-3\" v-show=\"export_filter.start != '0000-00-00' &amp;&amp; export_filter.end != '0000-00-00'\" _v-99369f82=\"\">\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xls&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XLS\" _v-99369f82=\"\"><i class=\"fa fa-file-excel-o\" _v-99369f82=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=csv&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} CSV\" _v-99369f82=\"\"><i class=\"fa fa-file-text-o\" _v-99369f82=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xml&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XML\" _v-99369f82=\"\"><i class=\"fa fa-file-code-o\" _v-99369f82=\"\"></i></a>\n        </div>\n    </div>\n\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-11331f02] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-11331f02] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-99369f82] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-99369f82] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-11331f02", module.exports)
+    hotAPI.createRecord("_v-99369f82", module.exports)
   } else {
-    hotAPI.update("_v-11331f02", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-99369f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],85:[function(require,module,exports){
+},{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],88:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-c3017c2e] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-c3017c2e] {\n    margin-bottom: 0;\n} \n\n.alert ul li[_v-c3017c2e]{\n    list-style: none;\n}\nbutton i[_v-c3017c2e]{\n    top: 0 !important;\n}\nbutton span[_v-c3017c2e]{\n    padding-left: 10px;\n}\n.highlighted_holderImage[_v-c3017c2e]{\n    height: 100%;\n    position:relative;\n    background-size: cover;\n    background-position: center;\n    background-repeat: no-repeat;\n    text-align: center;\n}\n\n.highlighted_holder_sm[_v-c3017c2e]{\n    width: 100%;\n    height: 180px;\n    min-height: 180px;\n    min-width: 180px;\n    max-width: 180px;\n    position: relative;\n}\n.switch-detail[_v-c3017c2e]{\n\n    line-height: 1.2;\n    font-size: 13px;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    /*
+     * The component's data.
+     */
+    locales: {
+        //that.$t('p_category_e')
+        //Vue.t('messages.fatal_title')
+        //{{{ $t('title') }}}
+        //{{{ $t('messages.hello') }}}
+        en: {
+            export_tooltip: 'Export',
+            cal_week_su: 'Su',
+            cal_week_mo: 'Mo',
+            cal_week_tu: 'Tu',
+            cal_week_we: 'We',
+            cal_week_th: 'Th',
+            cal_week_fr: 'Fr',
+            cal_week_sa: 'Sa',
+            cal_month_ja: 'January',
+            cal_month_fe: 'February',
+            cal_month_ma: 'March',
+            cal_month_ap: 'April',
+            cal_month_may: 'May',
+            cal_month_jun: 'June',
+            cal_month_jul: 'July',
+            cal_month_au: 'August',
+            cal_month_se: 'September',
+            cal_month_oc: 'October',
+            cal_month_no: 'November',
+            cal_month_de: 'December',
+            cal_format: "DD/MM/YYYY"
+        },
+        pt_BR: {
+            export_tooltip: 'Exportar',
+            cal_week_su: 'Dom',
+            cal_week_mo: 'Seg',
+            cal_week_tu: 'Ter',
+            cal_week_we: 'Qua',
+            cal_week_th: 'Qui',
+            cal_week_fr: 'Sex',
+            cal_week_sa: 'Sab',
+            cal_month_ja: 'Janeiro',
+            cal_month_fe: 'Fevereiro',
+            cal_month_ma: 'Março',
+            cal_month_ap: 'Abril',
+            cal_month_may: 'Maio',
+            cal_month_jun: 'Junho',
+            cal_month_jul: 'Julho',
+            cal_month_au: 'Agosto',
+            cal_month_se: 'Setembro',
+            cal_month_oc: 'Outubro',
+            cal_month_no: 'Novembro',
+            cal_month_de: 'Dezembro',
+            cal_format: "DD/MM/YYYY"
+        }
+
+    },
+    data: function data() {
+        return {
+            truck: Cloody.truck,
+            status: Cloody.truck.status,
+            progress: false,
+            avatar_name: '',
+            previous_avatar: '',
+            service_types: [],
+            totalPages: 0,
+            page: 0,
+            paginationStart: 0,
+            pages: [],
+            export_filter: {
+                end: moment().format('YYYY-MM-DD'),
+                start: moment().subtract(1, 'months').format('YYYY-MM-DD')
+            },
+            userstable_columns: ['id', 'name', 'created_at'],
+            userstable_options: {
+                perPage: 5,
+                dateColumns: ['created_at'],
+                perPageValues: [5, 10, 20, 30, 40, 50, 100],
+                texts: {
+                    count: '{count} Users',
+                    filter: 'Filter by:',
+                    filterPlaceholder: 'Term',
+                    limit: 'Max. records:',
+                    noResults: 'No users were found',
+                    page: 'Page:', // for dropdown pagination,
+                    filterBy: 'Filter', // Placeholder for search fields when filtering by column
+                    loading: 'Loading...', // First request to server
+                    defaultOption: 'Select {column}' // default option for list filters
+                },
+                headings: {
+                    id: 'ID',
+                    created_at: 'Created At',
+                    name: 'Name',
+                    actions: 'Actions'
+                },
+                filterable: ['id', 'name'],
+                sortable: ['id', 'name', 'created_at'],
+                onRowClick: function onRowClick(row) {
+                    console.debug(row);
+                },
+                templates: {
+                    created_at: function created_at(row) {
+                        return moment(row.created_at).format('DD/MM/YYYY H:m');
+                    }
+                }
+            },
+
+            trucks_current_columns: ['id', 'name', 'type', 'users', 'created_at'],
+            trucks_current_options: {
+                perPage: 10,
+                dateColumns: ['created_at'],
+                perPageValues: [5, 10, 20, 30, 40, 50, 100],
+                texts: {
+                    count: '{count} Trucks',
+                    filter: 'Filter by:',
+                    filterPlaceholder: 'Term',
+                    limit: 'Max. records:',
+                    noResults: 'No foodtrucks were found',
+                    page: 'Page:', // for dropdown pagination,
+                    filterBy: 'Filter', // Placeholder for search fields when filtering by column
+                    loading: 'Loading...', // First request to server
+                    defaultOption: 'Select {column}' // default option for list filters
+                },
+                headings: {
+                    id: 'ID',
+                    created_at: 'Created At',
+                    name: 'Truck',
+                    type: 'Service Type',
+                    users: 'Owner',
+                    actions: 'Actions'
+                },
+                filterable: ['id', 'name', 'created_at'],
+                sortable: ['id', 'name', 'created_at'],
+                onRowClick: function onRowClick(row) {
+                    console.debug(row);
+                },
+                templates: {
+
+                    created_at: function created_at(row) {
+                        return moment(row.created_at).format('DD/MM/YYYY H:m');
+                    },
+                    type: function type(row) {
+                        return row.service_type.name;
+                    },
+                    users: function users(row) {
+                        return '<a href="/profile/' + row.users[0].slug + '">' + row.users[0].name + '</a>';
+                    },
+                    actions: "<div class='btn-group'><a href='/admin_trucks/{id}/edit'  class='btn btn-success'>" + "<i class='fa fa-edit' data-toggle='tooltip' data-original-title='Edit'></i>" + "</a><a href='javascript:;' @click='$parent.destroy({id})' class='btn btn-danger'>" + "<i data-toggle='tooltip' data-original-title='Cancel' class='fa fa-trash-o'></i></a></div>"
+                },
+                customFilters: [{
+                    name: 'alphabet',
+                    callback: function callback(row, query) {
+                        return row.name[0] == query;
+                    }
+                }]
+            }
+        };
+    },
+    ready: function ready() {
+        var _this = this;
+
+        var that = this;
+
+        this.$refs.userstable.url = "/api/truck/" + this.truck.id + "/users";
+        this.$refs.userstable.refresh();
+        this.$on('breadcrumbSave', function (param) {
+            that.patch();
+        });
+
+        $('#status-select').select2({
+            placeholder: 'Select a status',
+            minimumResultsForSearch: $(this).attr('data-disable-search') == 'true' ? -1 : 1
+        }).on('select2-opening', function () {
+            $.fn.scrollbar && $('.select2-results').scrollbar({
+                ignoreMobile: false
+            });
+        });
+
+        $('#type-select').select2({
+            minimumResultsForSearch: $(this).attr('data-disable-search') == 'true' ? -1 : 1
+        }).on('select2-opening', function () {
+            $.fn.scrollbar && $('.select2-results').scrollbar({
+                ignoreMobile: false
+            });
+        }).on('select2-selected', function (evt) {
+
+            var selected = that.service_types.filter(function (item) {
+                return item.slug == evt.val;
+            });
+            if (selected.length > 0) {
+                that.truck.service_type = selected[0];
+                that.truck.service_type_di = selected[0].id;
+            }
+            return true;
+        });
+
+        this.$http.get('/api/service-type').then(function (response) {
+            _this.service_types = response.data;
+            $("#type-select").select2().select2('data', { id: that.truck.service_type.slug, text: that.truck.service_type.name });
+        }).catch(function (response) {
+            console.log("Could not load service types. It is recommended to reload the page");
+        });
+
+        $('#filter').daterangepicker({
+            "singleDatePicker": false,
+            "showDropdowns": true,
+            "drops": "up",
+            "startDate": moment().subtract(1, 'months').format('DD/MM/YYYY'),
+            "endDate": moment().format('DD/MM/YYYY'),
+            "minDate": moment().subtract(5, 'years').format('DD/MM/YYYY'),
+            "locale": {
+                "format": that.$t('cal_format'),
+                "daysOfWeek": [that.$t('cal_week_su'), that.$t('cal_week_mo'), that.$t('cal_week_tu'), that.$t('cal_week_we'), that.$t('cal_week_th'), that.$t('cal_week_fr'), that.$t('cal_week_sa')],
+                "monthNames": [that.$t('cal_month_ja'), that.$t('cal_month_fe'), that.$t('cal_month_ma'), that.$t('cal_month_ap'), that.$t('cal_month_may'), that.$t('cal_month_jun'), that.$t('cal_month_jul'), that.$t('cal_month_au'), that.$t('cal_month_se'), that.$t('cal_month_oc'), that.$t('cal_month_no'), that.$t('cal_month_de')]
+            }
+        }, function (start, end, label) {
+            Vue.set(that.export_filter, 'start', start.format('YYYY-MM-DD'));
+            Vue.set(that.export_filter, 'end', end.format('YYYY-MM-DD'));
+        });
+    },
+
+
+    methods: {
+        avatarUpload: function avatarUpload() {
+            this.$els.fileinput.click();
+        },
+        avatarChanged: function avatarChanged() {
+            if (this.$els.fileinput.files != null) {
+                if (this.$els.fileinput.files.length > 0) {
+                    if (this.$els.fileinput.files[0].type == 'image/png' || this.$els.fileinput.files[0].type == 'image/x-png' || this.$els.fileinput.files[0].type == 'image/gif' || this.$els.fileinput.files[0].type == 'image/jpeg') {
+                        this.avatar_name = this.$els.fileinput.files[0].name;
+                        var reader = new FileReader();
+                        var that = this;
+                        reader.onload = function (e) {
+                            that.previous_avatar = JSON.parse((0, _stringify2.default)(that.truck.logo_url));
+                            that.truck.logo_url = e.target.result;
+                        };
+                        reader.readAsDataURL(this.$els.fileinput.files[0]);
+                    } else {
+                        this.avatar_name = '';
+                        this.truck.logo_url = '';
+                        this.truck.logo = '';
+                        $('body').pgNotification({
+                            style: 'flip',
+                            title: 'Error!',
+                            message: 'Invalid logo format, please try again with a different file.',
+                            position: "top-right",
+                            timeout: 5000,
+                            type: "danger"
+                        }).show();
+                    }
+                } else {
+                    this.avatar_name = '';
+                    this.truck.logo_url = '';
+                    this.truck.logo = '';
+                }
+            } else {
+                this.avatar_name = '';
+                this.truck.logo_url = '';
+                this.truck.logo = '';
+            }
+        },
+        removeAvatar: function removeAvatar() {
+            this.avatar_name = '';
+            this.truck.logo_url = '';
+            this.truck.logo = '';
+        },
+        patch: function patch() {
+            var that = this;
+            var data = new FormData();
+            if (this.$els.fileinput.files != null) {
+                if (this.$els.fileinput.files.length > 0) {
+                    if (this.$els.fileinput.files[0].type == 'image/png' || this.$els.fileinput.files[0].type == 'image/x-png' || this.$els.fileinput.files[0].type == 'image/gif' || this.$els.fileinput.files[0].type == 'image/jpeg') {
+                        data.append('foodtruck_new_logo', this.$els.fileinput.files[0]);
+                    } else {
+                        $('body').pgNotification({
+                            style: 'flip',
+                            title: 'Error!',
+                            message: 'The image format is invalid!',
+                            position: "top-right",
+                            timeout: 5000,
+                            type: "danger"
+                        }).show();
+                    }
+                }
+            }
+            for (var key in this.truck) {
+                if ((0, _typeof3.default)(this.truck[key]) == 'object' || typeof this.truck[key] == 'Array') {
+                    for (var sub_key in this.truck[key]) {
+                        data.append('foodtruck_' + key + '.' + sub_key, this.truck[key][sub_key]);
+                    }
+                } else {
+                    data.append('foodtruck_' + key, this.truck[key]);
+                }
+            }
+            Pace.track(function () {
+                that.progress = true;
+                that.$dispatch('breadcrumbToggleProgress', {});
+                that.$http.post('/api/admin/truck/' + that.truck.id, data).then(function (response) {
+                    that.$dispatch('breadcrumbToggleProgress', {});
+                    that.progress = false;
+                    //that.$refs.currenttable.refresh();
+                    //that.$refs.pendingtable.refresh();
+                    $('body').pgNotification({
+                        style: 'flip',
+                        title: 'Sucesso!',
+                        message: response.data.message,
+                        position: "top-right",
+                        timeout: 5000,
+                        type: "success"
+                    }).show();
+                }).catch(function (response) {
+                    that.$dispatch('breadcrumbToggleProgress', {});
+                    that.progress = false;
+                    if ((0, _typeof3.default)(response.data) === 'object') {
+                        var errors = _.flatten(_.toArray(response.data));
+                        $(errors).each(function (index, error) {
+                            $('body').pgNotification({
+                                style: 'flip',
+                                title: 'Error!',
+                                message: error,
+                                position: "top-right",
+                                timeout: 5000,
+                                type: "danger"
+                            }).show();
+                        });
+                    } else {
+                        $('body').pgNotification({
+                            style: 'flip',
+                            title: 'Error!',
+                            message: 'Something went wrong. Please try again.',
+                            position: "top-right",
+                            timeout: 5000,
+                            type: "danger"
+                        }).show();
+                    }
+                }).bind(that);
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" _v-c3017c2e=\"\">\n    <div class=\"col-md-6\" _v-c3017c2e=\"\">\n        <!-- START PANEL -->\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n          <div class=\"panel-heading\" _v-c3017c2e=\"\">\n            <div class=\"panel-title\" _v-c3017c2e=\"\">\n              Company Info\n            </div>\n          </div>\n          <div class=\"panel-body\" _v-c3017c2e=\"\">\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Formal Name</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"truck.formal_name\" _v-c3017c2e=\"\">\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n                <div class=\"col-sm-6\" _v-c3017c2e=\"\">\n                  <div class=\"form-group\" _v-c3017c2e=\"\">\n                    <label _v-c3017c2e=\"\">Identification</label>\n                    <span class=\"help\" _v-c3017c2e=\"\">For the invoice</span>\n                    <input type=\"text\" class=\"form-control\" v-model=\"truck.identification\" _v-c3017c2e=\"\">\n                  </div>\n                </div>\n                <div class=\"col-sm-6\" _v-c3017c2e=\"\">\n                  <div class=\"form-group\" _v-c3017c2e=\"\">\n                    <label _v-c3017c2e=\"\">Phone</label>\n                    <span class=\"help\" _v-c3017c2e=\"\">Office/Headquarters phone</span>\n                    <input type=\"text\" class=\"form-control\" v-model=\"truck.phone\" _v-c3017c2e=\"\">\n                  </div>\n                </div>\n              </div>\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Address</label>\n                <span class=\"help\" _v-c3017c2e=\"\">Office/Headquarters address</span>\n                <input type=\"text\" class=\"form-control\" v-model=\"truck.address\" _v-c3017c2e=\"\">\n              </div>\n          </div>\n        </div>\n        <!-- END PANEL -->\n        <foodtrucks-admin-stats _v-c3017c2e=\"\"></foodtrucks-admin-stats>\n    </div>\n    <div class=\"col-md-6\" _v-c3017c2e=\"\">\n        <!-- START PANEL -->\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n          <div class=\"panel-heading\" _v-c3017c2e=\"\">\n            <div class=\"panel-title\" _v-c3017c2e=\"\">\n              Truck Info\n            </div>\n              <div class=\"panel-controls\" _v-c3017c2e=\"\">\n                  <ul _v-c3017c2e=\"\">\n                      <li _v-c3017c2e=\"\">\n                          <i class=\"fa fa-circle\" v-bind:style=\"{color: (truck.enabled == 1 &amp;&amp; status != 'denied' ? 'green' : 'red')}\" _v-c3017c2e=\"\"></i>&nbsp;&nbsp;<span _v-c3017c2e=\"\">{{ (truck.enabled == 1 &amp;&amp; status != 'denied' ? 'Enabled' : 'Disabled') }}</span>\n                      </li>\n                  </ul>\n              </div>\n          </div>\n          <div class=\"panel-body\" _v-c3017c2e=\"\">\n            <div class=\"row\" _v-c3017c2e=\"\">\n                <div class=\"col-lg-4 col-lg-offset-4\" _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" class=\"thumbnail highlighted_holder_sm\" style=\"margin-bottom: 10px;\" @click=\"avatarUpload\" _v-c3017c2e=\"\">\n                      <div v-if=\"truck.logo_url != ''\" class=\"highlighted_holderImage\" alt=\"Truck Logo\" style=\"height: 170px; width: 170px; margin:0 auto; display: block;\" v-bind:style=\"{ 'background-image': 'url(' + truck.logo_url + ')' }\" _v-c3017c2e=\"\"></div>\n                      <div v-if=\"truck.logo_url == ''\" class=\"highlighted_holderImage\" alt=\"Truck Logo\" style=\"height: 170px; width: 170px; margin:0 auto; display: block;\" v-bind:style=\"{ 'background-image': 'url(../../images/public/extras/200x200.gif)' }\" _v-c3017c2e=\"\"></div>\n                    </a>\n                </div>\n            </div>\n            <div class=\"row\" style=\"margin-bottom: 30px;\" _v-c3017c2e=\"\">\n                <div class=\"col-lg-12\" style=\"text-align: center;font-size: 12px;\" _v-c3017c2e=\"\">\n                    <input type=\"file\" id=\"fileInput\" v-el:fileinput=\"\" style=\"display:none;\" @change=\"avatarChanged\" accept=\"image/png, image/x-png, image/gif, image/jpeg\" _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" @click=\"avatarUpload\" _v-c3017c2e=\"\">Change logo</a><br _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" @click=\"removeAvatar\" v-if=\"truck.logo_url != ''\" _v-c3017c2e=\"\">Remove logo</a><br _v-c3017c2e=\"\">\n                    <span v-if=\"avatar_name != ''\" _v-c3017c2e=\"\">Selected file: {{ avatar_name }}</span>\n                </div>\n            </div>\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Truck Name</label>\n                <input type=\"email\" class=\"form-control\" required=\"\" v-model=\"truck.name\" _v-c3017c2e=\"\">\n              </div>\n              <div class=\"form-group form-group-default form-group-default-select2 required\" _v-c3017c2e=\"\">\n                    <label class=\"\" _v-c3017c2e=\"\">Status</label>\n                    <select id=\"status-select\" class=\"full-width\" v-model=\"truck.status\" _v-c3017c2e=\"\">\n                        <option value=\"available\" _v-c3017c2e=\"\">Available</option>\n                        <option value=\"transit\" _v-c3017c2e=\"\">Transit</option>\n                        <option value=\"unavailable\" _v-c3017c2e=\"\">Unavailable</option>\n                        <option value=\"denied\" _v-c3017c2e=\"\">Denied</option>\n                    </select>\n              </div>\n              <div class=\"form-group form-group-default form-group-default-select2 required\" _v-c3017c2e=\"\">\n                  <label class=\"\" _v-c3017c2e=\"\">Service Type</label>\n                  <select id=\"type-select\" class=\"full-width\" placeholder=\"Loading...\" _v-c3017c2e=\"\">\n                      <option value=\"{{service.slug}}\" v-for=\"service in service_types\" _v-c3017c2e=\"\">{{service.name}}</option>\n                  </select>\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                      <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Bike Delivery</label>  \n                </div>      \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"deliverybike\" id=\"deliverybike-yes\" v-model=\"truck.delivery_bike\" _v-c3017c2e=\"\">\n                  <label for=\"deliverybike-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"deliverybike\" id=\"deliverybike-no\" v-model=\"truck.delivery_bike\" _v-c3017c2e=\"\">\n                  <label for=\"deliverybike-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                  <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Motorbike Delivery</label>  \n                </div>   \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"deliverymotorcycle\" id=\"deliverymotorcycle-yes\" v-model=\"truck.delivery_motorcycle\" _v-c3017c2e=\"\">\n                  <label for=\"deliverymotorcycle-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"deliverymotorcycle\" id=\"deliverymotorcycle-no\" v-model=\"truck.delivery_motorcycle\" _v-c3017c2e=\"\">\n                  <label for=\"deliverymotorcycle-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                  <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Let's Negotiate</label>  \n                </div>   \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"lets_negotiate\" id=\"lets_negotiate-yes\" v-model=\"truck.lets_negotiate\" _v-c3017c2e=\"\">\n                  <label for=\"lets_negotiate-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"lets_negotiate\" id=\"lets_negotiate-no\" v-model=\"truck.lets_negotiate\" _v-c3017c2e=\"\">\n                  <label for=\"lets_negotiate-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>                  \n              </div>\n                \n\n\n          </div>\n        </div>\n        <!-- END PANEL -->\n        <button class=\"btn btn-lg btn-rounded btn-primary m-b-20 center-block\" @click=\"patch\" v-bind:class=\"{ 'disabled': progress }\" _v-c3017c2e=\"\">\n                <span class=\"pull-left\" _v-c3017c2e=\"\"><i class=\"pg-save\" _v-c3017c2e=\"\"></i>\n                </span>\n                <span _v-c3017c2e=\"\">Save</span>\n        </button>\n    </div>\n</div>\n<div class=\"row\" _v-c3017c2e=\"\">\n    <div class=\"col-lg-6\" _v-c3017c2e=\"\">\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n            <div class=\"panel-heading\" _v-c3017c2e=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-c3017c2e=\"\">\n                    <span _v-c3017c2e=\"\">\n                        Users\n                    </span>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-c3017c2e=\"\">\n                <div id=\"pending_trucks\" _v-c3017c2e=\"\">\n                    <v-server-table url=\"\" :columns=\"userstable_columns\" :options=\"userstable_options\" v-ref:userstable=\"\" _v-c3017c2e=\"\"></v-server-table>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-lg-6\" _v-c3017c2e=\"\">            \n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n            <div class=\"panel-heading\" _v-c3017c2e=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-c3017c2e=\"\">\n                    <span _v-c3017c2e=\"\">\n                         <h3 _v-c3017c2e=\"\">TODO// Payments List</h3>\n                    </span>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-c3017c2e=\"\">\n                <div id=\"current_trucks\" _v-c3017c2e=\"\">\n                    <v-server-table url=\"/api/admin-current-trucks\" :columns=\"trucks_current_columns\" :options=\"trucks_current_options\" v-ref:currenttable=\"\" _v-c3017c2e=\"\"></v-server-table>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div _v-c3017c2e=\"\">\n    \n\n</div>\n    <div class=\"row form-horizontal\" _v-c3017c2e=\"\">\n\n        <div class=\"col-sm-12 col-lg-6\" _v-c3017c2e=\"\">\n\n            <div class=\"form-group\" style=\"padding-top: 0;\" _v-c3017c2e=\"\">\n                <label for=\"filter\" class=\"col-sm-5 control-label\" style=\"text-align:right;\" _v-c3017c2e=\"\">Export</label>\n                <div class=\"col-sm-7\" _v-c3017c2e=\"\">\n                    <input type=\"text\" class=\"form-control\" name=\"filter\" id=\"filter\" readonly=\"true\" style=\"background-color:white !important;\" _v-c3017c2e=\"\">\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 col-lg-3\" v-show=\"export_filter.start != '0000-00-00' &amp;&amp; export_filter.end != '0000-00-00'\" _v-c3017c2e=\"\">\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xls&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XLS\" _v-c3017c2e=\"\"><i class=\"fa fa-file-excel-o\" _v-c3017c2e=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=csv&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} CSV\" _v-c3017c2e=\"\"><i class=\"fa fa-file-text-o\" _v-c3017c2e=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xml&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XML\" _v-c3017c2e=\"\"><i class=\"fa fa-file-code-o\" _v-c3017c2e=\"\"></i></a>\n        </div>\n    </div>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.action-link[_v-c3017c2e] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-c3017c2e] {\n    margin-bottom: 0;\n} \n\n.alert ul li[_v-c3017c2e]{\n    list-style: none;\n}\nbutton i[_v-c3017c2e]{\n    top: 0 !important;\n}\nbutton span[_v-c3017c2e]{\n    padding-left: 10px;\n}\n.highlighted_holderImage[_v-c3017c2e]{\n    height: 100%;\n    position:relative;\n    background-size: cover;\n    background-position: center;\n    background-repeat: no-repeat;\n    text-align: center;\n}\n\n.highlighted_holder_sm[_v-c3017c2e]{\n    width: 100%;\n    height: 180px;\n    min-height: 180px;\n    min-width: 180px;\n    max-width: 180px;\n    position: relative;\n}\n.switch-detail[_v-c3017c2e]{\n\n    line-height: 1.2;\n    font-size: 13px;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-c3017c2e", module.exports)
+  } else {
+    hotAPI.update("_v-c3017c2e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/core-js/json/stringify":1,"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],89:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    locales: {
+        //that.$t('p_category_e')
+        //Vue.t('messages.fatal_title')
+        //{{{ $t('title') }}}
+        //{{{ $t('messages.hello') }}}
+        en: {
+            export_tooltip: 'Export',
+            cal_week_su: 'Su',
+            cal_week_mo: 'Mo',
+            cal_week_tu: 'Tu',
+            cal_week_we: 'We',
+            cal_week_th: 'Th',
+            cal_week_fr: 'Fr',
+            cal_week_sa: 'Sa',
+            cal_month_ja: 'January',
+            cal_month_fe: 'February',
+            cal_month_ma: 'March',
+            cal_month_ap: 'April',
+            cal_month_may: 'May',
+            cal_month_jun: 'June',
+            cal_month_jul: 'July',
+            cal_month_au: 'August',
+            cal_month_se: 'September',
+            cal_month_oc: 'October',
+            cal_month_no: 'November',
+            cal_month_de: 'December',
+            cal_format: "DD/MM/YYYY"
+        },
+        pt_BR: {
+            export_tooltip: 'Exportar',
+            cal_week_su: 'Dom',
+            cal_week_mo: 'Seg',
+            cal_week_tu: 'Ter',
+            cal_week_we: 'Qua',
+            cal_week_th: 'Qui',
+            cal_week_fr: 'Sex',
+            cal_week_sa: 'Sab',
+            cal_month_ja: 'Janeiro',
+            cal_month_fe: 'Fevereiro',
+            cal_month_ma: 'Março',
+            cal_month_ap: 'Abril',
+            cal_month_may: 'Maio',
+            cal_month_jun: 'Junho',
+            cal_month_jul: 'Julho',
+            cal_month_au: 'Agosto',
+            cal_month_se: 'Setembro',
+            cal_month_oc: 'Outubro',
+            cal_month_no: 'Novembro',
+            cal_month_de: 'Dezembro',
+            cal_format: "DD/MM/YYYY"
+        }
+
+    },
+    data: function data() {
+        return {
+
+            export_filter: {
+                end: moment().format('YYYY-MM-DD'),
+                start: moment().subtract(1, 'months').format('YYYY-MM-DD')
+            }
+
+        };
+    },
+    ready: function ready() {
+        var that = this;
+        $('#filter').daterangepicker({
+            "singleDatePicker": false,
+            "showDropdowns": true,
+            "drops": "up",
+            "startDate": moment().subtract(1, 'months').format('DD/MM/YYYY'),
+            "endDate": moment().format('DD/MM/YYYY'),
+            "minDate": moment().subtract(5, 'years').format('DD/MM/YYYY'),
+            "locale": {
+                "format": that.$t('cal_format'),
+                "daysOfWeek": [that.$t('cal_week_su'), that.$t('cal_week_mo'), that.$t('cal_week_tu'), that.$t('cal_week_we'), that.$t('cal_week_th'), that.$t('cal_week_fr'), that.$t('cal_week_sa')],
+                "monthNames": [that.$t('cal_month_ja'), that.$t('cal_month_fe'), that.$t('cal_month_ma'), that.$t('cal_month_ap'), that.$t('cal_month_may'), that.$t('cal_month_jun'), that.$t('cal_month_jul'), that.$t('cal_month_au'), that.$t('cal_month_se'), that.$t('cal_month_oc'), that.$t('cal_month_no'), that.$t('cal_month_de')]
+            }
+        }, function (start, end, label) {
+            Vue.set(that.export_filter, 'start', start.format('YYYY-MM-DD'));
+            Vue.set(that.export_filter, 'end', end.format('YYYY-MM-DD'));
+        });
+    },
+
+
+    methods: {
+        avatarUpload: function avatarUpload() {
+            this.$els.fileinput.click();
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"widget-17 panel panel-default\">\n    <div class=\"panel-heading\">\n        <div class=\"panel-title\">\n            <i class=\"pg-charts\"></i> Truck Stats //TODO - USAR DADOS REAIS\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <div class=\"p-l-5\">\n            <div class=\"row\">\n                <div class=\"col-md-12 col-xlg-6\">\n                    <div class=\"row m-t-20\">\n                        <div class=\"col-md-5\">\n                            <h4 class=\"no-margin\">Last Active in</h4>\n\n                            <p class=\"small hint-text\">9th August 2014</p>\n                        </div>\n                        <div class=\"col-md-7\">\n                            <div class=\"pull-left\">\n                                <p class=\"small hint-text no-margin\">Current Funds</p>\n                                <h4 class=\"text-danger bold no-margin\">VALOR TOTAL\n                                    <span class=\"small\">/ VALOR SAQUE</span>\n                                </h4>\n                            </div>\n                        </div>\n                    </div>\n\n                    <p>Sales information</p>\n\n                    <div class=\"widget-17-weather\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-6 p-r-10\">\n                                <div class=\"row\">\n                                    <div class=\"col-md-12\">\n                                        <p class=\"pull-left\">Current Month Sales</p>\n\n                                        <p class=\"pull-right bold\">123</p>\n                                    </div>\n                                </div>\n                                <div class=\"row\">\n                                    <div class=\"col-md-12\">\n                                        <p class=\"pull-left\">Current Month Funds</p>\n\n                                        <p class=\"pull-right bold\">R$120,00</p>\n                                    </div>\n                                </div>\n                                <div class=\"row\">\n                                    <div class=\"col-md-12\">\n                                        <p class=\"pull-left\">Total Cloody Revenue</p>\n\n                                        <p class=\"pull-right bold\">R$120,00</p>\n                                    </div>\n                                </div>\n                                <div class=\"row\">\n                                    <div class=\"col-md-12\">\n                                        <p class=\"pull-left\">Last Promotion</p>\n\n                                        <p class=\"pull-right bold\">9th August 2014</p>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-xs-6 p-l-10\">\n                                <div class=\"row\">\n                                    <div class=\"col-md-12\">\n                                        <p class=\"pull-left\">Most Requested Menu Item<br>\n                                        <span class=\"pull-left bold\">Shrimp with olives</span></p>\n\n                                    </div>\n                                </div>\n                                <div class=\"row\">\n                                    <div class=\"col-md-12\">\n                                        <p class=\"pull-left\">Least Requested Menu Item<br>\n                                        <span class=\"pull-left bold\">Cucumber with lettuce</span></p>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"row m-t-10 timeslot\">\n                            <h2>TODO// INSERT FUNDS CHARTS</h2>\n                    </div>\n                </div>\n                <div class=\"col-xlg-6 visible-xlg\">\n                    <div class=\"row\">\n                        <div class=\"forecast-day col-md-6 text-center m-t-10 \">\n                            <div class=\"bg-master-lighter p-b-10 p-t-10\">\n                                <h4 class=\"p-t-10 no-margin\">Tuesday</h4>\n\n                                <p class=\"small hint-text m-b-20\">11th Augest 2014</p>\n                                <canvas class=\"rain\" width=\"64\" height=\"64\"></canvas>\n                                <h5 class=\"text-danger\">32°</h5>\n\n                                <p>Feels like\n                                    <span class=\"bold\">sunny</span>\n                                </p>\n\n                                <p class=\"small\">Wind\n                                    <span class=\"bold p-l-20\">11km/h</span>\n                                </p>\n\n                                <div class=\"m-t-20 block\">\n                                    <div class=\"padding-10\">\n                                        <div class=\"row\">\n                                            <div class=\"col-md-6 text-center\">\n                                                <p class=\"small\">Noon</p>\n                                                <canvas class=\"sleet\" width=\"25\" height=\"25\"></canvas>\n                                                <p class=\"text-danger bold\">30°C</p>\n                                            </div>\n                                            <div class=\"col-md-6 text-center\">\n                                                <p class=\"small\">Night</p>\n                                                <canvas class=\"wind\" width=\"25\" height=\"25\"></canvas>\n                                                <p class=\"text-danger bold\">30°C</p>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-md-6 text-center m-t-10 \">\n                            <div class=\"bg-master-lighter p-b-10 p-t-10\">\n                                <h4 class=\"p-t-10 no-margin\">Wednesday</h4>\n\n                                <p class=\"small hint-text m-b-20\">11th Augest 2014</p>\n                                <canvas class=\"rain\" width=\"64\" height=\"64\"></canvas>\n                                <h5 class=\"text-danger\">32°</h5>\n\n                                <p>Feels like\n                                    <span class=\"bold\">sunny</span>\n                                </p>\n\n                                <p class=\"small\">Wind\n                                    <span class=\"bold p-l-20\">11km/h</span>\n                                </p>\n\n                                <div class=\"m-t-20 block\">\n                                    <div class=\"padding-10\">\n                                        <div class=\"row\">\n                                            <div class=\"col-md-6 text-center\">\n                                                <p class=\"small\">Noon</p>\n                                                <canvas class=\"sleet\" width=\"25\" height=\"25\"></canvas>\n                                                <p class=\"text-danger bold\">30°C</p>\n                                            </div>\n                                            <div class=\"col-md-6 text-center\">\n                                                <p class=\"small\">Night</p>\n                                                <canvas class=\"wind\" width=\"25\" height=\"25\"></canvas>\n                                                <p class=\"text-danger bold\">30°C</p>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-27b3a250", module.exports)
+  } else {
+    hotAPI.update("_v-27b3a250", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":81,"vue-hot-reload-api":77}],90:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n\n")
 'use strict';
@@ -52535,7 +53092,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tab-pane fade no-padding\" id=\"quickview-alerts\">\n    <div class=\"view-port clearfix\" id=\"alerts\">\n        <div class=\"view bg-white\">\n            <div class=\"navbar navbar-default navbar-sm\">\n                <div class=\"navbar-inner\">\n                    <div class=\"view-heading\">\n                        Notifications\n                    </div>\n                </div>\n            </div>\n            <div data-init-list-view=\"ioslist\" class=\"list-view boreded no-top-border\">\n                <div class=\"list-view-group-container\">\n                    <div class=\"list-view-group-header text-uppercase\">\n                        Latest\n                    </div>\n\n                    <p v-if=\"error == true\">\n                        An error happened, try again clicking <a href=\"javascript:;\" @click=\"loadPage('')\">here</a>\n                    </p>\n                    <p v-if=\"tracks == undefined &amp;&amp; error == false\">\n                        No activities were tracked\n                    </p>\n                    <div v-if=\"tracks.data != undefined &amp;&amp; error == false\">\n                        <ul v-if=\"tracks.data.length > 0\">\n                            <li class=\"alert-list\" v-for=\"track in tracks.data\">\n                                <a href=\"javascript:;\" class=\"\" data-navigate=\"view\" data-view-port=\"#chat\" data-view-animation=\"push-parrallax\">\n                                    <p class=\"col-xs-height col-middle\">\n                                        <span class=\"text-warning fs-10\"><i class=\"fa fa-circle\"></i></span>\n                                    </p>\n                                    <p class=\"p-l-10 col-xs-height col-middle col-xs-9 overflow-ellipsis fs-12\">\n                                        <span class=\"text-master\" v-text=\"track.translated\"></span>\n                                        <span style=\"display:block;font-size:10px;text-align:right;\" class=\"text-master link\" v-text=\"track.created_at | moment 'DD/MM/YYYY HH:mm'\"></span>\n                                    </p>\n                                    <p class=\"p-r-10 col-xs-height col-middle fs-12 text-right\">\n                                    </p>\n                                </a>\n                            </li>\n                        </ul>\n                    </div>\n                    <div>\n\n                        <div class=\"row\" v-show=\"requesting == false\" style=\"padding:30px;\">\n                            <div class=\"col-lg-6\"><span class=\"link-style\" v-if=\"tracks.prev_page_url != null\" @click=\"loadPage('previous')\"> <i class=\"fa fa-arrow-left\"></i> </span> </div>\n                            <div class=\"col-lg-6\" style=\"text-align: right;\"> <span class=\"link-style\" v-if=\"tracks.next_page_url != null\" @click=\"loadPage('next')\"> <i class=\"fa fa-arrow-right\"></i> </span> </div>\n                        </div>\n                        <div class=\"row\" v-show=\"requesting == true\" style=\"padding:30px;\">\n                            <div class=\"col-lg-12\" style=\"text-align: center\"><i class=\"fa fa-cog fa-spin\"></i>&nbsp;&nbsp;Loading...</div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tab-pane fade no-padding\" id=\"quickview-alerts\">\n    <div class=\"view-port clearfix\" id=\"alerts\">\n        <div class=\"view bg-white\">\n            <div class=\"navbar navbar-default navbar-sm\">\n                <div class=\"navbar-inner\">\n                    <div class=\"view-heading\">\n                        Notifications\n                    </div>\n                </div>\n            </div>\n            <div data-init-list-view=\"ioslist\" class=\"list-view boreded no-top-border\">\n                <div class=\"list-view-group-container\">\n                    <div class=\"list-view-group-header text-uppercase\">\n                        Latest\n                    </div>\n\n                    <p v-if=\"error == true\">\n                        An error happened, try again clicking <a href=\"javascript:;\" @click=\"loadPage('')\">here</a>\n                    </p>\n                    <p v-if=\"tracks == undefined &amp;&amp; error == false\">\n                        No activities were tracked\n                    </p>\n                    <div v-if=\"tracks.data != undefined &amp;&amp; error == false\">\n                        <ul v-if=\"tracks.data.length > 0\">\n                            <li class=\"alert-list\" v-for=\"track in tracks.data\">\n                                <a href=\"javascript:;\" class=\"\" data-navigate=\"view\" data-view-port=\"#chat\" data-view-animation=\"push-parrallax\">\n                                    <p class=\"col-xs-height col-middle\">\n                                        <span class=\"fs-10\" v-bind:style=\"{color: track.icon_color}\"><i class=\"fa fa-2x {{ track.icon_code }}\"></i></span>\n                                    </p>\n                                    <p class=\"p-l-10 col-xs-height col-middle col-xs-9 overflow-ellipsis fs-12\">\n                                        <span class=\"text-master\" v-text=\"track.translated\"></span>\n                                        <span style=\"display:block;font-size:10px;text-align:right;\" class=\"text-master link\" v-text=\"track.created_at | moment 'DD/MM/YYYY HH:mm'\"></span>\n                                    </p>\n                                    <p class=\"p-r-10 col-xs-height col-middle fs-12 text-right\">\n                                    </p>\n                                </a>\n                            </li>\n                        </ul>\n                    </div>\n                    <div>\n\n                        <div class=\"row\" v-show=\"requesting == false\" style=\"padding:30px;\">\n                            <div class=\"col-lg-6\"><span class=\"link-style\" v-if=\"tracks.prev_page_url != null\" @click=\"loadPage('previous')\"> <i class=\"fa fa-arrow-left\"></i> </span> </div>\n                            <div class=\"col-lg-6\" style=\"text-align: right;\"> <span class=\"link-style\" v-if=\"tracks.next_page_url != null\" @click=\"loadPage('next')\"> <i class=\"fa fa-arrow-right\"></i> </span> </div>\n                        </div>\n                        <div class=\"row\" v-show=\"requesting == true\" style=\"padding:30px;\">\n                            <div class=\"col-lg-12\" style=\"text-align: center\"><i class=\"fa fa-cog fa-spin\"></i>&nbsp;&nbsp;Loading...</div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -52545,14 +53102,14 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-18467440", module.exports)
+    hotAPI.createRecord("_v-5a70e5a0", module.exports)
   } else {
-    hotAPI.update("_v-18467440", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5a70e5a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],86:[function(require,module,exports){
+},{"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],91:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7a324551] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7a324551] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7062ad91] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7062ad91] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52603,24 +53160,24 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-7a324551=\"\">\n    <div v-if=\"tokens.length > 0\" _v-7a324551=\"\">\n        <div class=\"panel panel-default\" _v-7a324551=\"\">\n            <div class=\"panel-heading\" _v-7a324551=\"\">Authorized Applications</div>\n\n            <div class=\"panel-body\" _v-7a324551=\"\">\n                <!-- Authorized Tokens -->\n                <table class=\"table table-borderless m-b-none\" _v-7a324551=\"\">\n                    <thead _v-7a324551=\"\">\n                        <tr _v-7a324551=\"\">\n                            <th _v-7a324551=\"\">Name</th>\n                            <th _v-7a324551=\"\">Scopes</th>\n                            <th _v-7a324551=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-7a324551=\"\">\n                        <tr v-for=\"token in tokens\" _v-7a324551=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-7a324551=\"\">\n                                {{ token.client.name }}\n                            </td>\n\n                            <!-- Scopes -->\n                            <td style=\"vertical-align: middle;\" _v-7a324551=\"\">\n                                <span v-if=\"token.scopes.length > 0\" _v-7a324551=\"\">\n                                    {{ token.scopes.join(', ') }}\n                                </span>\n                            </td>\n\n                            <!-- Revoke Button -->\n                            <td style=\"vertical-align: middle;\" _v-7a324551=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-7a324551=\"\">\n                                    Revoke\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-7062ad91=\"\">\n    <div v-if=\"tokens.length > 0\" _v-7062ad91=\"\">\n        <div class=\"panel panel-default\" _v-7062ad91=\"\">\n            <div class=\"panel-heading\" _v-7062ad91=\"\">Authorized Applications</div>\n\n            <div class=\"panel-body\" _v-7062ad91=\"\">\n                <!-- Authorized Tokens -->\n                <table class=\"table table-borderless m-b-none\" _v-7062ad91=\"\">\n                    <thead _v-7062ad91=\"\">\n                        <tr _v-7062ad91=\"\">\n                            <th _v-7062ad91=\"\">Name</th>\n                            <th _v-7062ad91=\"\">Scopes</th>\n                            <th _v-7062ad91=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-7062ad91=\"\">\n                        <tr v-for=\"token in tokens\" _v-7062ad91=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-7062ad91=\"\">\n                                {{ token.client.name }}\n                            </td>\n\n                            <!-- Scopes -->\n                            <td style=\"vertical-align: middle;\" _v-7062ad91=\"\">\n                                <span v-if=\"token.scopes.length > 0\" _v-7062ad91=\"\">\n                                    {{ token.scopes.join(', ') }}\n                                </span>\n                            </td>\n\n                            <!-- Revoke Button -->\n                            <td style=\"vertical-align: middle;\" _v-7062ad91=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-7062ad91=\"\">\n                                    Revoke\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-7a324551] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7a324551] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-7062ad91] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7062ad91] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7a324551", module.exports)
+    hotAPI.createRecord("_v-7062ad91", module.exports)
   } else {
-    hotAPI.update("_v-7a324551", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7062ad91", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],87:[function(require,module,exports){
+},{"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],92:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-8dc8fe28] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-8dc8fe28] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7ce5392c] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7ce5392c] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52760,24 +53317,24 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-8dc8fe28=\"\">\n    <div class=\"panel panel-default\" _v-8dc8fe28=\"\">\n        <div class=\"panel-heading\" _v-8dc8fe28=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-8dc8fe28=\"\">\n                <span _v-8dc8fe28=\"\">\n                    OAuth Clients\n                </span>\n\n                <a class=\"action-link\" @click=\"showCreateClientForm\" _v-8dc8fe28=\"\">\n                    Create New Client\n                </a>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-8dc8fe28=\"\">\n            <!-- Current Clients -->\n            <p class=\"m-b-none\" v-if=\"clients.length === 0\" _v-8dc8fe28=\"\">\n                You have not created any OAuth clients.\n            </p>\n\n            <table class=\"table table-borderless m-b-none\" v-if=\"clients.length > 0\" _v-8dc8fe28=\"\">\n                <thead _v-8dc8fe28=\"\">\n                    <tr _v-8dc8fe28=\"\">\n                        <th _v-8dc8fe28=\"\">Client ID</th>\n                        <th _v-8dc8fe28=\"\">Name</th>\n                        <th _v-8dc8fe28=\"\">Secret</th>\n                        <th _v-8dc8fe28=\"\"></th>\n                        <th _v-8dc8fe28=\"\"></th>\n                    </tr>\n                </thead>\n\n                <tbody _v-8dc8fe28=\"\">\n                    <tr v-for=\"client in clients\" _v-8dc8fe28=\"\">\n                        <!-- ID -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            {{ client.id }}\n                        </td>\n\n                        <!-- Name -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            {{ client.name }}\n                        </td>\n\n                        <!-- Secret -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            <code _v-8dc8fe28=\"\">{{ client.secret }}</code>\n                        </td>\n\n                        <!-- Edit Button -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            <a class=\"action-link\" @click=\"edit(client)\" _v-8dc8fe28=\"\">\n                                Edit\n                            </a>\n                        </td>\n\n                        <!-- Delete Button -->\n                        <td style=\"vertical-align: middle;\" _v-8dc8fe28=\"\">\n                            <a class=\"action-link text-danger\" @click=\"destroy(client)\" _v-8dc8fe28=\"\">\n                                Delete\n                            </a>\n                        </td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    </div>\n\n    <!-- Create Client Modal -->\n    <div class=\"modal fade\" id=\"modal-create-client\" tabindex=\"-1\" role=\"dialog\" _v-8dc8fe28=\"\">\n        <div class=\"modal-dialog\" _v-8dc8fe28=\"\">\n            <div class=\"modal-content\" _v-8dc8fe28=\"\">\n                <div class=\"modal-header\" _v-8dc8fe28=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-8dc8fe28=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-8dc8fe28=\"\">\n                        Create Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-8dc8fe28=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"createForm.errors.length > 0\" _v-8dc8fe28=\"\">\n                        <p _v-8dc8fe28=\"\"><strong _v-8dc8fe28=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-8dc8fe28=\"\">\n                        <ul _v-8dc8fe28=\"\">\n                            <li v-for=\"error in createForm.errors\" _v-8dc8fe28=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-8dc8fe28=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input id=\"create-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"store\" v-model=\"createForm.name\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"store\" v-model=\"createForm.redirect\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-8dc8fe28=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-8dc8fe28=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-8dc8fe28=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Edit Client Modal -->\n    <div class=\"modal fade\" id=\"modal-edit-client\" tabindex=\"-1\" role=\"dialog\" _v-8dc8fe28=\"\">\n        <div class=\"modal-dialog\" _v-8dc8fe28=\"\">\n            <div class=\"modal-content\" _v-8dc8fe28=\"\">\n                <div class=\"modal-header\" _v-8dc8fe28=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-8dc8fe28=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-8dc8fe28=\"\">\n                        Edit Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-8dc8fe28=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"editForm.errors.length > 0\" _v-8dc8fe28=\"\">\n                        <p _v-8dc8fe28=\"\"><strong _v-8dc8fe28=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-8dc8fe28=\"\">\n                        <ul _v-8dc8fe28=\"\">\n                            <li v-for=\"error in editForm.errors\" _v-8dc8fe28=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Edit Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-8dc8fe28=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input id=\"edit-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"update\" v-model=\"editForm.name\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-8dc8fe28=\"\">\n                            <label class=\"col-md-3 control-label\" _v-8dc8fe28=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-8dc8fe28=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"update\" v-model=\"editForm.redirect\" _v-8dc8fe28=\"\">\n\n                                <span class=\"help-block\" _v-8dc8fe28=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-8dc8fe28=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-8dc8fe28=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"update\" _v-8dc8fe28=\"\">\n                        Save Changes\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-7ce5392c=\"\">\n    <div class=\"panel panel-default\" _v-7ce5392c=\"\">\n        <div class=\"panel-heading\" _v-7ce5392c=\"\">\n            <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-7ce5392c=\"\">\n                <span _v-7ce5392c=\"\">\n                    OAuth Clients\n                </span>\n\n                <a class=\"action-link\" @click=\"showCreateClientForm\" _v-7ce5392c=\"\">\n                    Create New Client\n                </a>\n            </div>\n        </div>\n\n        <div class=\"panel-body\" _v-7ce5392c=\"\">\n            <!-- Current Clients -->\n            <p class=\"m-b-none\" v-if=\"clients.length === 0\" _v-7ce5392c=\"\">\n                You have not created any OAuth clients.\n            </p>\n\n            <table class=\"table table-borderless m-b-none\" v-if=\"clients.length > 0\" _v-7ce5392c=\"\">\n                <thead _v-7ce5392c=\"\">\n                    <tr _v-7ce5392c=\"\">\n                        <th _v-7ce5392c=\"\">Client ID</th>\n                        <th _v-7ce5392c=\"\">Name</th>\n                        <th _v-7ce5392c=\"\">Secret</th>\n                        <th _v-7ce5392c=\"\"></th>\n                        <th _v-7ce5392c=\"\"></th>\n                    </tr>\n                </thead>\n\n                <tbody _v-7ce5392c=\"\">\n                    <tr v-for=\"client in clients\" _v-7ce5392c=\"\">\n                        <!-- ID -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            {{ client.id }}\n                        </td>\n\n                        <!-- Name -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            {{ client.name }}\n                        </td>\n\n                        <!-- Secret -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            <code _v-7ce5392c=\"\">{{ client.secret }}</code>\n                        </td>\n\n                        <!-- Edit Button -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            <a class=\"action-link\" @click=\"edit(client)\" _v-7ce5392c=\"\">\n                                Edit\n                            </a>\n                        </td>\n\n                        <!-- Delete Button -->\n                        <td style=\"vertical-align: middle;\" _v-7ce5392c=\"\">\n                            <a class=\"action-link text-danger\" @click=\"destroy(client)\" _v-7ce5392c=\"\">\n                                Delete\n                            </a>\n                        </td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    </div>\n\n    <!-- Create Client Modal -->\n    <div class=\"modal fade\" id=\"modal-create-client\" tabindex=\"-1\" role=\"dialog\" _v-7ce5392c=\"\">\n        <div class=\"modal-dialog\" _v-7ce5392c=\"\">\n            <div class=\"modal-content\" _v-7ce5392c=\"\">\n                <div class=\"modal-header\" _v-7ce5392c=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-7ce5392c=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-7ce5392c=\"\">\n                        Create Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-7ce5392c=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"createForm.errors.length > 0\" _v-7ce5392c=\"\">\n                        <p _v-7ce5392c=\"\"><strong _v-7ce5392c=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-7ce5392c=\"\">\n                        <ul _v-7ce5392c=\"\">\n                            <li v-for=\"error in createForm.errors\" _v-7ce5392c=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-7ce5392c=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input id=\"create-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"store\" v-model=\"createForm.name\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"store\" v-model=\"createForm.redirect\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-7ce5392c=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-7ce5392c=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-7ce5392c=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Edit Client Modal -->\n    <div class=\"modal fade\" id=\"modal-edit-client\" tabindex=\"-1\" role=\"dialog\" _v-7ce5392c=\"\">\n        <div class=\"modal-dialog\" _v-7ce5392c=\"\">\n            <div class=\"modal-content\" _v-7ce5392c=\"\">\n                <div class=\"modal-header\" _v-7ce5392c=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-7ce5392c=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-7ce5392c=\"\">\n                        Edit Client\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-7ce5392c=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"editForm.errors.length > 0\" _v-7ce5392c=\"\">\n                        <p _v-7ce5392c=\"\"><strong _v-7ce5392c=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-7ce5392c=\"\">\n                        <ul _v-7ce5392c=\"\">\n                            <li v-for=\"error in editForm.errors\" _v-7ce5392c=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Edit Client Form -->\n                    <form class=\"form-horizontal\" role=\"form\" _v-7ce5392c=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Name</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input id=\"edit-client-name\" type=\"text\" class=\"form-control\" @keyup.enter=\"update\" v-model=\"editForm.name\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Something your users will recognize and trust.\n                                </span>\n                            </div>\n                        </div>\n\n                        <!-- Redirect URL -->\n                        <div class=\"form-group\" _v-7ce5392c=\"\">\n                            <label class=\"col-md-3 control-label\" _v-7ce5392c=\"\">Redirect URL</label>\n\n                            <div class=\"col-md-7\" _v-7ce5392c=\"\">\n                                <input type=\"text\" class=\"form-control\" name=\"redirect\" @keyup.enter=\"update\" v-model=\"editForm.redirect\" _v-7ce5392c=\"\">\n\n                                <span class=\"help-block\" _v-7ce5392c=\"\">\n                                    Your application's authorization callback URL.\n                                </span>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-7ce5392c=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-7ce5392c=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"update\" _v-7ce5392c=\"\">\n                        Save Changes\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-8dc8fe28] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-8dc8fe28] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-7ce5392c] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7ce5392c] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8dc8fe28", module.exports)
+    hotAPI.createRecord("_v-7ce5392c", module.exports)
   } else {
-    hotAPI.update("_v-8dc8fe28", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7ce5392c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}],88:[function(require,module,exports){
+},{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],93:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-6b11b94a] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-6b11b94a] {\n    margin-bottom: 0;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-93752dec] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-93752dec] {\n    margin-bottom: 0;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52931,21 +53488,21 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-6b11b94a=\"\">\n    <div _v-6b11b94a=\"\">\n        <div class=\"panel panel-default\" _v-6b11b94a=\"\">\n            <div class=\"panel-heading\" _v-6b11b94a=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-6b11b94a=\"\">\n                    <span _v-6b11b94a=\"\">\n                        Personal Access Tokens\n                    </span>\n\n                    <a class=\"action-link\" @click=\"showCreateTokenForm\" _v-6b11b94a=\"\">\n                        Create New Token\n                    </a>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-6b11b94a=\"\">\n                <!-- No Tokens Notice -->\n                <p class=\"m-b-none\" v-if=\"tokens.length === 0\" _v-6b11b94a=\"\">\n                    You have not created any personal access tokens.\n                </p>\n\n                <!-- Personal Access Tokens -->\n                <table class=\"table table-borderless m-b-none\" v-if=\"tokens.length > 0\" _v-6b11b94a=\"\">\n                    <thead _v-6b11b94a=\"\">\n                        <tr _v-6b11b94a=\"\">\n                            <th _v-6b11b94a=\"\">Name</th>\n                            <th _v-6b11b94a=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-6b11b94a=\"\">\n                        <tr v-for=\"token in tokens\" _v-6b11b94a=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-6b11b94a=\"\">\n                                {{ token.name }}\n                            </td>\n\n                            <!-- Delete Button -->\n                            <td style=\"vertical-align: middle;\" _v-6b11b94a=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-6b11b94a=\"\">\n                                    Delete\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n\n    <!-- Create Token Modal -->\n    <div class=\"modal fade\" id=\"modal-create-token\" tabindex=\"-1\" role=\"dialog\" _v-6b11b94a=\"\">\n        <div class=\"modal-dialog\" _v-6b11b94a=\"\">\n            <div class=\"modal-content\" _v-6b11b94a=\"\">\n                <div class=\"modal-header\" _v-6b11b94a=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-6b11b94a=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-6b11b94a=\"\">\n                        Create Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-6b11b94a=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"form.errors.length > 0\" _v-6b11b94a=\"\">\n                        <p _v-6b11b94a=\"\"><strong _v-6b11b94a=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-6b11b94a=\"\">\n                        <ul _v-6b11b94a=\"\">\n                            <li v-for=\"error in form.errors\" _v-6b11b94a=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Token Form -->\n                    <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"store\" _v-6b11b94a=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-6b11b94a=\"\">\n                            <label class=\"col-md-4 control-label\" _v-6b11b94a=\"\">Name</label>\n\n                            <div class=\"col-md-6\" _v-6b11b94a=\"\">\n                                <input id=\"create-token-name\" type=\"text\" class=\"form-control\" name=\"name\" v-model=\"form.name\" _v-6b11b94a=\"\">\n                            </div>\n                        </div>\n\n                        <!-- Scopes -->\n                        <div class=\"form-group\" v-if=\"scopes.length > 0\" _v-6b11b94a=\"\">\n                            <label class=\"col-md-4 control-label\" _v-6b11b94a=\"\">Scopes</label>\n\n                            <div class=\"col-md-6\" _v-6b11b94a=\"\">\n                                <div v-for=\"scope in scopes\" _v-6b11b94a=\"\">\n                                    <div class=\"checkbox\" _v-6b11b94a=\"\">\n                                        <label _v-6b11b94a=\"\">\n                                            <input type=\"checkbox\" @click=\"toggleScope(scope.id)\" :checked=\"scopeIsAssigned(scope.id)\" _v-6b11b94a=\"\">\n\n                                                {{ scope.id }}\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-6b11b94a=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-6b11b94a=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-6b11b94a=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Access Token Modal -->\n    <div class=\"modal fade\" id=\"modal-access-token\" tabindex=\"-1\" role=\"dialog\" _v-6b11b94a=\"\">\n        <div class=\"modal-dialog\" _v-6b11b94a=\"\">\n            <div class=\"modal-content\" _v-6b11b94a=\"\">\n                <div class=\"modal-header\" _v-6b11b94a=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-6b11b94a=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-6b11b94a=\"\">\n                        Personal Access Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-6b11b94a=\"\">\n                    <p _v-6b11b94a=\"\">\n                        Here is your new personal access token. This is the only time it will be shown so don't lose it!\n                        You may now use this token to make API requests.\n                    </p>\n\n                    <pre _v-6b11b94a=\"\"><code _v-6b11b94a=\"\">{{ accessToken }}</code></pre>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-6b11b94a=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-6b11b94a=\"\">Close</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-93752dec=\"\">\n    <div _v-93752dec=\"\">\n        <div class=\"panel panel-default\" _v-93752dec=\"\">\n            <div class=\"panel-heading\" _v-93752dec=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-93752dec=\"\">\n                    <span _v-93752dec=\"\">\n                        Personal Access Tokens\n                    </span>\n\n                    <a class=\"action-link\" @click=\"showCreateTokenForm\" _v-93752dec=\"\">\n                        Create New Token\n                    </a>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-93752dec=\"\">\n                <!-- No Tokens Notice -->\n                <p class=\"m-b-none\" v-if=\"tokens.length === 0\" _v-93752dec=\"\">\n                    You have not created any personal access tokens.\n                </p>\n\n                <!-- Personal Access Tokens -->\n                <table class=\"table table-borderless m-b-none\" v-if=\"tokens.length > 0\" _v-93752dec=\"\">\n                    <thead _v-93752dec=\"\">\n                        <tr _v-93752dec=\"\">\n                            <th _v-93752dec=\"\">Name</th>\n                            <th _v-93752dec=\"\"></th>\n                        </tr>\n                    </thead>\n\n                    <tbody _v-93752dec=\"\">\n                        <tr v-for=\"token in tokens\" _v-93752dec=\"\">\n                            <!-- Client Name -->\n                            <td style=\"vertical-align: middle;\" _v-93752dec=\"\">\n                                {{ token.name }}\n                            </td>\n\n                            <!-- Delete Button -->\n                            <td style=\"vertical-align: middle;\" _v-93752dec=\"\">\n                                <a class=\"action-link text-danger\" @click=\"revoke(token)\" _v-93752dec=\"\">\n                                    Delete\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n\n    <!-- Create Token Modal -->\n    <div class=\"modal fade\" id=\"modal-create-token\" tabindex=\"-1\" role=\"dialog\" _v-93752dec=\"\">\n        <div class=\"modal-dialog\" _v-93752dec=\"\">\n            <div class=\"modal-content\" _v-93752dec=\"\">\n                <div class=\"modal-header\" _v-93752dec=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-93752dec=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-93752dec=\"\">\n                        Create Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-93752dec=\"\">\n                    <!-- Form Errors -->\n                    <div class=\"alert alert-danger\" v-if=\"form.errors.length > 0\" _v-93752dec=\"\">\n                        <p _v-93752dec=\"\"><strong _v-93752dec=\"\">Whoops!</strong> Something went wrong!</p>\n                        <br _v-93752dec=\"\">\n                        <ul _v-93752dec=\"\">\n                            <li v-for=\"error in form.errors\" _v-93752dec=\"\">\n                                {{ error }}\n                            </li>\n                        </ul>\n                    </div>\n\n                    <!-- Create Token Form -->\n                    <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"store\" _v-93752dec=\"\">\n                        <!-- Name -->\n                        <div class=\"form-group\" _v-93752dec=\"\">\n                            <label class=\"col-md-4 control-label\" _v-93752dec=\"\">Name</label>\n\n                            <div class=\"col-md-6\" _v-93752dec=\"\">\n                                <input id=\"create-token-name\" type=\"text\" class=\"form-control\" name=\"name\" v-model=\"form.name\" _v-93752dec=\"\">\n                            </div>\n                        </div>\n\n                        <!-- Scopes -->\n                        <div class=\"form-group\" v-if=\"scopes.length > 0\" _v-93752dec=\"\">\n                            <label class=\"col-md-4 control-label\" _v-93752dec=\"\">Scopes</label>\n\n                            <div class=\"col-md-6\" _v-93752dec=\"\">\n                                <div v-for=\"scope in scopes\" _v-93752dec=\"\">\n                                    <div class=\"checkbox\" _v-93752dec=\"\">\n                                        <label _v-93752dec=\"\">\n                                            <input type=\"checkbox\" @click=\"toggleScope(scope.id)\" :checked=\"scopeIsAssigned(scope.id)\" _v-93752dec=\"\">\n\n                                                {{ scope.id }}\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-93752dec=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-93752dec=\"\">Close</button>\n\n                    <button type=\"button\" class=\"btn btn-primary\" @click=\"store\" _v-93752dec=\"\">\n                        Create\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Access Token Modal -->\n    <div class=\"modal fade\" id=\"modal-access-token\" tabindex=\"-1\" role=\"dialog\" _v-93752dec=\"\">\n        <div class=\"modal-dialog\" _v-93752dec=\"\">\n            <div class=\"modal-content\" _v-93752dec=\"\">\n                <div class=\"modal-header\" _v-93752dec=\"\">\n                    <button type=\"button \" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-93752dec=\"\">×</button>\n\n                    <h4 class=\"modal-title\" _v-93752dec=\"\">\n                        Personal Access Token\n                    </h4>\n                </div>\n\n                <div class=\"modal-body\" _v-93752dec=\"\">\n                    <p _v-93752dec=\"\">\n                        Here is your new personal access token. This is the only time it will be shown so don't lose it!\n                        You may now use this token to make API requests.\n                    </p>\n\n                    <pre _v-93752dec=\"\"><code _v-93752dec=\"\">{{ accessToken }}</code></pre>\n                </div>\n\n                <!-- Modal Actions -->\n                <div class=\"modal-footer\" _v-93752dec=\"\">\n                    <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" _v-93752dec=\"\">Close</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-6b11b94a] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-6b11b94a] {\n    margin-bottom: 0;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-93752dec] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-93752dec] {\n    margin-bottom: 0;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6b11b94a", module.exports)
+    hotAPI.createRecord("_v-93752dec", module.exports)
   } else {
-    hotAPI.update("_v-6b11b94a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-93752dec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/typeof":3,"vue":79,"vue-hot-reload-api":75,"vueify/lib/insert-css":80}]},{},[81]);
+},{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}]},{},[83]);
 
 //# sourceMappingURL=app.js.map

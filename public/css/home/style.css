@@ -1,0 +1,12 @@
+.upper-action button span i{
+	color:white;
+}
+
+.upper-action button{
+	margin-right: 50px !important;
+}
+
+.upper-action:before{
+	content: none !important;
+	padding: 0 !important;
+}

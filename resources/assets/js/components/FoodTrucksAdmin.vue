@@ -221,7 +221,7 @@
                         users: function(row) {
                             return '<a href="/profile/'+row.users[0].slug+'">'+row.users[0].name+'</a>';
                           } ,
-                        actions: "<div class='btn-group'><a href='/admin_trucks/{id}/edit'  class='btn btn-success'>"+
+                        actions: "<div class='btn-group'><a href='/admin_trucks/edit/{id}'  class='btn btn-success'>"+
                         "<i class='fa fa-edit' data-toggle='tooltip' data-original-title='Edit'></i>"+
                         "</a><a href='javascript:;' @click='$parent.destroy({id})' class='btn btn-danger'>"+
                         "<i data-toggle='tooltip' data-original-title='Cancel' class='fa fa-trash-o'></i></a></div>"
@@ -336,7 +336,7 @@
 
 
                         $('body').pgNotification({
-                            style: 'circle',
+                            style: 'flip',
                             title: 'Sucesso!',
                             message: response.data.message,
                             position: "top-right",
@@ -349,7 +349,7 @@
                             var errors = _.flatten(_.toArray(response.data));
                             $(errors).each(function( index, error ) {
                                 $('body').pgNotification({
-                                    style: 'circle',
+                                    style: 'flip',
                                     title: 'Error!',
                                     message: error,
                                     position: "top-right",
@@ -359,7 +359,7 @@
                             });
                         } else {
                             $('body').pgNotification({
-                                style: 'circle',
+                                style: 'flip',
                                 title: 'Error!',
                                 message: 'Something went wrong. Please try again.',
                                 position: "top-right",

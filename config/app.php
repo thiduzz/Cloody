@@ -169,6 +169,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
         App\Providers\TrackingServiceProvider::class,
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
 
         /*
          * Package Service Providers...

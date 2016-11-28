@@ -5,7 +5,8 @@ Truck (CRUD)
 	- Service_type
 	- Logo
 	- is_24h
-	- status (available, transit, unavailable)
+	- status (available, transit, unavailable, denied)
+	- enabled
 	- leaving_in
 
 User (CRU)

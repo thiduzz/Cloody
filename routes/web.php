@@ -30,6 +30,7 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('/admin_oauth', ['middleware'=>'admin','uses'=>'HomeController@admin_oauth']);
 Route::get('/admin_trucks', ['middleware'=>'admin','uses'=>'HomeController@admin_trucks']);
+Route::get('/admin_trucks/edit/{id}', ['middleware'=>'admin','uses'=>'HomeController@admin_trucks_edit']);
 Route::get('/admin_trucks/export/{type}',['middleware'=>['admin'], 'uses' =>  'TruckController@admin_export_trucks']);
 
 Route::get('/test',function(){

@@ -7,24 +7,15 @@ use App\Truck;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JavaScript;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth', ['except' => 'paginate_tracking']);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return view('home.pages.dashboard');
@@ -32,12 +23,25 @@ class HomeController extends Controller
 
     public function admin_oauth()
     {
-        return view('home.pages.admin_oauth');
+        return view('home.pages.admin.oauth');
     }
 
     public function admin_trucks()
     {
-        return view('home.pages.admin_trucks');
+        return view('home.pages.admin.trucks');
+    }
+
+    public function admin_trucks_edit($id)
+    {
+        $truck = Truck::with('users','service_type')->find($id);
+        if($truck){
+            JavaScript::put([
+                'truck' => $truck
+            ]);
+            return view('home.pages.admin.edit_trucks',compact('id'));
+
+        }
+        abort(404);
     }
 
     public function paginate_tracking($type, $id = 0)
@@ -47,7 +51,7 @@ class HomeController extends Controller
             switch($type)
             {
                 case 'trucks':
-                    $tracks = Track::with('user','subject')->whereIn('subject_type', ['App\Truck'])->latest()->simplePaginate(8);
+                    $tracks = Track::with('user','subject')->whereIn('subject_type', ['App\Truck'])->latest()->simplePaginate(12);
                     return new JsonResponse(['success'=>true,'tracks'=> $tracks],200);
                     break;
                 case 'truck':

@@ -25,4 +25,15 @@ class ServiceType extends Model
             ]
         ];
     }
+
+    public function scopeLookFor($query, $search)
+    {
+        if($search != '')
+        {
+            $search = str_replace('-','',str_replace('.','',$search));
+            return $query
+                ->orWhere('name','LIKE','%'.$search. '%');
+        }
+        return $query;
+    }
 }

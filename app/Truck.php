@@ -70,6 +70,7 @@ class Truck extends Model
     {
         try{
             $array = parent::toArray();
+            $array['logo_url'] = $this->getLogoUrlAttribute();
             //Carbon::setLocale('pt_BR');
             //$array['created_at'] = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d/m/Y H:i');
             return $array;
@@ -99,4 +100,21 @@ class Truck extends Model
         return $query->where('enabled',$type);
     }
 
+    public function getCreatedAtHumanAttribute()
+    {
+
+            if($this->avatar != '')
+            {
+                return "https://s3-".env('S3_REGION').".amazonaws.com/".env('S3_BUCKET').$this->logo;
+            }
+    }
+
+    public function getLogoUrlAttribute()
+    {
+            if($this->attributes['logo'] != null)
+            {
+                return "https://s3-".env('S3_REGION').".amazonaws.com/".env('S3_BUCKET').$this->attributes['logo'];
+            }
+            return "";
+    }
 }

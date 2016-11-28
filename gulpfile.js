@@ -19,7 +19,7 @@ elixir.config.sourcemaps = true;
 
 elixir(mix => {
 
-    //mix.sass('app.scss');
+    mix.sass('app.scss');
     mix.browserify('app.js');
 
     //mix.browserify('app.js');

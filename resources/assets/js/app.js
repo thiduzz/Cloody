@@ -4,6 +4,8 @@ require('./bootstrap');
 var moment = require('vue-moment');
 Vue.use(require('vue-moment'));
 
+//OAuth Functionality
+
 Vue.component(
     'passport-clients',
     require('./components/passport/Clients.vue')
@@ -19,6 +21,8 @@ Vue.component(
     require('./components/passport/PersonalAccessTokens.vue')
 );
 
+//General Functionality
+
 Vue.component(
     'foodtruck-register',
     require('./components/FoodTruckRegistration.vue')
@@ -29,8 +33,25 @@ Vue.component(
 );
 
 Vue.component(
+    'breadcrumb-action',
+    require('./components/BreadcrumbAction.vue')
+);
+
+//Admin Functionality
+
+Vue.component(
     'foodtrucks-admin',
     require('./components/FoodTrucksAdmin.vue')
+);
+
+Vue.component(
+    'foodtrucks-admin-edit',
+    require('./components/FoodTrucksAdminEdit.vue')
+);
+
+Vue.component(
+    'foodtrucks-admin-stats',
+    require('./components/FoodTrucksAdminStats.vue')
 );
 
 Vue.config.devtools = true;
@@ -56,5 +77,14 @@ Vue.use(VueTables.server, {
 });
 
 const app = new Vue({
-    el: 'body'
+    el: 'body',
+    ready(){
+        this.$on('breadcrumbSave', function (param) {
+            this.$broadcast('breadcrumbSave', param);
+        });
+
+        this.$on('breadcrumbToggleProgress', function (param) {
+            this.$broadcast('breadcrumbToggleProgress', param);
+        });
+    }
 })

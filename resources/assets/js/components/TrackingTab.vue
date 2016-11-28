@@ -26,7 +26,7 @@
                                 <li class="alert-list" v-for="track in tracks.data">
                                     <a href="javascript:;" class="" data-navigate="view" data-view-port="#chat" data-view-animation="push-parrallax">
                                         <p class="col-xs-height col-middle">
-                                            <span class="text-warning fs-10"><i class="fa fa-circle"></i></span>
+                                            <span class="fs-10" v-bind:style="{color: track.icon_color}"><i class="fa fa-2x {{ track.icon_code }}"></i></span>
                                         </p>
                                         <p class="p-l-10 col-xs-height col-middle col-xs-9 overflow-ellipsis fs-12">
                                             <span class="text-master" v-text="track.translated"></span>

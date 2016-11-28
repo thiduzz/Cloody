@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Facades\Tracking;
 use App\Http\Requests\ExportResourceRequest;
+use App\Http\Requests\UpdateTruckRequest;
 use App\Mail\TruckAccepted;
 use App\Mail\TruckDenied;
 use Carbon\Carbon;
@@ -12,8 +13,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Truck;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -80,6 +83,7 @@ class TruckController extends Controller
 
 
     /*****************ADMIN ***********************************/
+
     public function admin_delete(Request $request, $id = 0)
     {
         $truck = Truck::findOrFail($id);
@@ -87,6 +91,51 @@ class TruckController extends Controller
         {
             $truck->delete();
             return new JsonResponse(['success'=>true,'message'=> 'Truck was successfully deleted!'],200);
+        }
+        return new JsonResponse(['success'=>false,'message'=> 'Truck was not found!'],404);
+    }
+
+    public function admin_update(UpdateTruckRequest $request, $id)
+    {
+        $truck = Truck::find($id);
+        if($truck)
+        {
+            /**
+            'foodtruck_service_type_id'=>'required|exists:trucks,id',
+            'foodtruck_status' => 'required|in:available,unavailable,transit,denied',
+            'foodtruck_name'=>'required|min:2|max:255',
+            'foodtruck_phone' => 'required',
+            'foodtruck_address' => 'required|max:255',
+            'foodtruck_service_type' => 'required|max:100',
+            'foodtruck_identification' => 'required|min:18',
+            'foodtruck_formal_name' => 'required|max:100',
+            'foodtruck_lets_negotiate' => 'required',
+            'foodtruck_delivery_bike' => 'required',
+            'foodtruck_delivery_motorcycle' => 'required',
+             */
+            $data = $request->all();
+            if($request->hasFile('foodtruck_new_logo')){
+                $path = $request->file('foodtruck_new_logo')->store(
+                    '/avatars/'.Auth::user()->id, 's3'
+                );
+                Storage::disk('s3')->setVisibility($path, 'public');
+                $truck->logo = "/".$path;
+            }else if($data['foodtruck_logo'] == "" && $data['foodtruck_logo_url'] == ""){
+                $truck->logo = "";
+            }
+            $truck->service_type_id = $data['foodtruck_service_type_id'];
+            $truck->status = $data['foodtruck_status'];
+            $truck->name = $data['foodtruck_name'];
+            $truck->phone = $data['foodtruck_phone'];
+            $truck->address = $data['foodtruck_address'];
+            $truck->identification = $data['foodtruck_identification'];
+            $truck->formal_name = $data['foodtruck_formal_name'];
+            $truck->lets_negotiate = intval($data['foodtruck_lets_negotiate']);
+            $truck->delivery_bike = intval($data['foodtruck_delivery_bike']);
+            $truck->delivery_motorcycle = intval($data['foodtruck_delivery_motorcycle']);
+            $truck->save();
+
+            return new JsonResponse(['success'=>true,'message'=> 'Truck was successfully updated!'],200);
         }
         return new JsonResponse(['success'=>false,'message'=> 'Truck was not found!'],404);
     }

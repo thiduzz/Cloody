@@ -23,6 +23,7 @@
     <link href="{!! asset('/plugins/switchery/css/switchery.min.css') !!}" rel="stylesheet" type="text/css" media="screen" />
     <link href="{!! asset('/css/home/pages-icons.css') !!}" rel="stylesheet" type="text/css">
     <link class="main-stylesheet" href="{!! asset('/css/home/pages.css') !!}" rel="stylesheet" type="text/css" />
+    <link href="{!! asset('/css/home/style.css') !!}" rel="stylesheet" type="text/css" />
     <!--[if lte IE 9]>
     <link href="{!! asset('/css/home/ie9.css') !!}" rel="stylesheet" type="text/css" />
     <![endif]-->

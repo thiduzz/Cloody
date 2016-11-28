@@ -1,0 +1,14 @@
+{
+  "name": "cloody",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "https://github.com/thiduzz/Cloody",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

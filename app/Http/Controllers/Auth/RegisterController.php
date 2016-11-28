@@ -88,11 +88,11 @@ class RegisterController extends Controller
     protected function full_truck_validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            'name' => 'required|min:2|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
             'register_type' => 'required|in:trucker',
-            'foodtruck_name' => 'required|max:255',
+            'foodtruck_name' => 'required|min:2|max:255',
             'foodtruck_service_type' => 'required|max:100',
             'foodtruck_identification' => 'required|min:18',
             'foodtruck_phone' => 'required',
@@ -133,7 +133,7 @@ class RegisterController extends Controller
     protected function create_truck(Request $request, User $user)
     {
         $path = $request->file('avatar')->store(
-            'avatars/'.$user->id, 's3'
+            '/avatars/'.$user->id, 's3'
         );
         Storage::disk('s3')->setVisibility($path, 'public');
         $data = $request->all();
