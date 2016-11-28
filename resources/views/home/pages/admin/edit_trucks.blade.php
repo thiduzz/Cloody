@@ -16,6 +16,7 @@
         <a href="#" class="active">Edit Trucks</a>
     </li>
     //TODO: Adicionar botao com Fill in modal do mapa com "rastreio do truck"
+    
     <breadcrumb-action action="admin-edit-truck"></breadcrumb-action>
 @endsection
 @section('css')
