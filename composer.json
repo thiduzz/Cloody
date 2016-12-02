@@ -24,15 +24,13 @@
         "symfony/dom-crawler": "3.1.*"
     },
     "autoload": {
-        "classmap": [
-            "database",
-            "App/Classes",
-            "App/Classes/Facades"
-        ],
         "psr-4": {
             "App\\": "app/",
             "App\\Classes\\": "app/Classes/"
-        }
+        },
+        "classmap": [
+            "database"
+        ]
     },
     "autoload-dev": {
         "classmap": [
