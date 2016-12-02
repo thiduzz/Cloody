@@ -29,7 +29,9 @@
             "App\\Classes\\": "app/Classes/"
         },
         "classmap": [
-            "database"
+            "database",
+            "app/Classes",
+            "app/Classes/Facades"
         ]
     },
     "autoload-dev": {
