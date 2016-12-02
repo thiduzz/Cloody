@@ -165,7 +165,6 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Spatie\Analytics\AnalyticsServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
         App\Providers\TrackingServiceProvider::class,
