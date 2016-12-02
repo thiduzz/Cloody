@@ -73,4 +73,5 @@ Route::get('/admin-current-trucks', 'TruckController@admin_paginate_current')->m
 Route::get('/admin-trucks/export/{type}', 'TruckController@admin_export')->middleware(['auth:api'])->middleware('admin');
 Route::post('/truck-approval', 'TruckController@admin_approval')->middleware(['auth:api'])->middleware('admin');
 Route::post('/admin/truck/{id}', 'TruckController@admin_update')->middleware(['auth:api'])->middleware('admin');
+Route::get('/admin/truck/{id}/location', 'LocationController@admin_index_trucks')->middleware(['auth:api']);
 Route::delete('/truck/{id}', 'TruckController@admin_delete')->middleware(['auth:api'])->middleware('admin');

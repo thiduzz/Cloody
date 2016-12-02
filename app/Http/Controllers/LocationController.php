@@ -15,6 +15,37 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class LocationController extends Controller
 {
+    public function admin_index_trucks(Request $request, $id)
+    {
+        $limit = $request->input('limit', 5);
+        $page = $request->input('page',0);
+        $start = Carbon::parse($request->get('start'))->startOfDay();
+        $end = Carbon::parse($request->get('end'))->endOfDay();
+        if(is_numeric($id) && $id > 0)
+        {
+            $trucks = Truck::with(['locations'=>function($q) use($id,$start,$end){
+                $q->wherePivot('localizable_type','=','App\Truck');
+                $q->wherePivot('localizable_id','=', $id);
+                $q->wherePivot('created_at', '>=', $start);
+                $q->wherePivot('created_at', '<', $end);
+                $q->orderBy('created_at');
+            }])->where('id',$id)->first();
+            if($trucks)
+            {
+                $locations = $trucks->locations()->skip($page*$limit)->take($limit)->get();
+                return ['truck'=>$trucks, 'locations'=>$locations];
+            }
+            return new JsonResponse([
+                "status" => 404,
+                "userMessage" => "The requested resource was not found",
+                "errorCode" => "5001"],404);
+        }
+        return new JsonResponse([
+            "status" => 422,
+            "userMessage" => "An invalid argument was passed to the API. Make sure the ID is a numeric.",
+            "errorCode" => "5001"],422);
+    }
+
     public function index_trucks(Request $request, $id)
     {
         $limit = $request->input('limit', 5);

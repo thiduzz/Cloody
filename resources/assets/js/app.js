@@ -54,6 +54,11 @@ Vue.component(
     require('./components/FoodTrucksAdminStats.vue')
 );
 
+Vue.component(
+    'foodtrucks-admin-location',
+    require('./components/FoodTrucksAdminLocation.vue')
+);
+
 Vue.config.devtools = true;
 Vue.config.debug = true;
 

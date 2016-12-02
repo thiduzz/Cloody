@@ -15,22 +15,35 @@
     <li>
         <a href="#" class="active">Edit Trucks</a>
     </li>
-    //TODO: Adicionar botao com Fill in modal do mapa com "rastreio do truck"
-    
+    <li class="pull-right upper-action">
+        <button class="btn btn-sm btn-rounded btn-primary" data-target="#locationModal" data-toggle="modal" id="btnLocationToggler">
+                <span><i class="pg-map"></i>
+                </span>
+        </button>
+    </li>
     <breadcrumb-action action="admin-edit-truck"></breadcrumb-action>
 @endsection
 @section('css')
-    <link rel="stylesheet" type="text/css" href="/plugins/sweet-alerts/sweetalert.css" />
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" /> -->
+    <link rel="stylesheet" type="text/css" href="{!! asset('/css/home/daterange-picker-2.css') !!}" />
 @endsection
 @section('javascript_before')
 
     <script src="{!! asset('/plugins/bootstrap-select2/select2.js') !!}"></script>
     <script src="{!! asset('/plugins/sweet-alerts/sweetalert.min.js') !!}"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <!--<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script> -->
+    <script src="{!! asset('/js/home/daterange-picker-2.js') !!}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1YvebOcyhWtWsGhTiP6tHS3FX39UFYy4"></script>
 @endsection
 @section('javascript_after')
+
+    <!-- API KEY AIzaSyB1YvebOcyhWtWsGhTiP6tHS3FX39UFYy4
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1YvebOcyhWtWsGhTiP6tHS3FX39UFYy4"
+            async defer></script>
+    <script src="{!! asset('/js/home/google_map.js') !!}" type="text/javascript"></script>
+    -->
+
 @endsection
 
 @section('content')
@@ -88,4 +101,6 @@
 
     </style>
     <foodtrucks-admin-edit></foodtrucks-admin-edit>
+
+    <foodtrucks-admin-location></foodtrucks-admin-location>
 @endsection

@@ -3511,7 +3511,7 @@ Rounded buttons
   margin: 0;
   background: #fafafa;
   min-width: 50px;
-  z-index: 700 !important;
+  z-index: 10000 !important;
 }
 .dropdown-menu .divider {
   background-color: #e6e6e6;

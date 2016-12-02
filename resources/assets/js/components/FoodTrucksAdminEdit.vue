@@ -38,6 +38,9 @@
         line-height: 1.2;
         font-size: 13px;
     }
+    .modal .dropdown-menu{
+        z-index: 100000 !important;
+    }
     </style>
 
 <template>
@@ -218,28 +221,6 @@
             </div>
         </div>
     </div>
-    <div>
-        
-
-    </div>
-        <div class="row form-horizontal">
-
-            <div class="col-sm-12 col-lg-6">
-
-                <div class="form-group" style="padding-top: 0;">
-                    <label for="filter" class="col-sm-5 control-label" style="text-align:right;">Export</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" name="filter" id="filter" readonly="true" style="background-color:white !important;">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-lg-3" v-show="export_filter.start != '0000-00-00' && export_filter.end != '0000-00-00'">
-                <a target="_blank" tabindex="-1" :href="'/admin_trucks/export/list?extension=xls&start='+export_filter.start+'&end='+export_filter.end" class="btn btn-social-icon" data-toggle="tooltip" data-title="{{{ $t('export_tooltip') }}} XLS"><i class="fa fa-file-excel-o"></i></a>
-                <a target="_blank" tabindex="-1" :href="'/admin_trucks/export/list?extension=csv&start='+export_filter.start+'&end='+export_filter.end" class="btn btn-social-icon" data-toggle="tooltip" data-title="{{{ $t('export_tooltip') }}} CSV"><i class="fa fa-file-text-o"></i></a>
-                <a target="_blank" tabindex="-1" :href="'/admin_trucks/export/list?extension=xml&start='+export_filter.start+'&end='+export_filter.end" class="btn btn-social-icon" data-toggle="tooltip" data-title="{{{ $t('export_tooltip') }}} XML"><i class="fa fa-file-code-o"></i></a>
-            </div>
-        </div>
-
 </template>
 
 <script>
@@ -312,10 +293,6 @@
                 page: 0,
                 paginationStart: 0,
                 pages: [],
-                export_filter:{
-                  end:moment().format('YYYY-MM-DD'),
-                  start:moment().subtract(1, 'months').format('YYYY-MM-DD')
-                },
                 userstable_columns: ['id','name','created_at'],
                 userstable_options: {
                     perPage: 5,
@@ -451,43 +428,7 @@
                 console.log("Could not load service types. It is recommended to reload the page");
             });
 
-            $('#filter').daterangepicker({
-                "singleDatePicker": false,
-                "showDropdowns": true,
-                "drops": "up",
-                "startDate": moment().subtract(1, 'months').format('DD/MM/YYYY'),
-                "endDate": moment().format('DD/MM/YYYY'),
-                "minDate": moment().subtract(5, 'years').format('DD/MM/YYYY'),
-                "locale":{
-                    "format": that.$t('cal_format'),
-                    "daysOfWeek": [
-                        that.$t('cal_week_su'),
-                        that.$t('cal_week_mo'),
-                        that.$t('cal_week_tu'),
-                        that.$t('cal_week_we'),
-                        that.$t('cal_week_th'),
-                        that.$t('cal_week_fr'),
-                        that.$t('cal_week_sa')
-                    ],
-                    "monthNames": [
-                        that.$t('cal_month_ja'),
-                        that.$t('cal_month_fe'),
-                        that.$t('cal_month_ma'),
-                        that.$t('cal_month_ap'),
-                        that.$t('cal_month_may'),
-                        that.$t('cal_month_jun'),
-                        that.$t('cal_month_jul'),
-                        that.$t('cal_month_au'),
-                        that.$t('cal_month_se'),
-                        that.$t('cal_month_oc'),
-                        that.$t('cal_month_no'),
-                        that.$t('cal_month_de')
-                    ]
-                }
-            }, function(start, end, label) {
-                Vue.set(that.export_filter, 'start', start.format('YYYY-MM-DD'));
-                Vue.set(that.export_filter, 'end', end.format('YYYY-MM-DD'));
-            });
+           
         },
 
         methods: {

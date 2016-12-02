@@ -51852,6 +51852,8 @@ Vue.component('foodtrucks-admin-edit', require('./components/FoodTrucksAdminEdit
 
 Vue.component('foodtrucks-admin-stats', require('./components/FoodTrucksAdminStats.vue'));
 
+Vue.component('foodtrucks-admin-location', require('./components/FoodTrucksAdminLocation.vue'));
+
 Vue.config.devtools = true;
 Vue.config.debug = true;
 
@@ -51882,7 +51884,7 @@ var app = new Vue({
     }
 });
 
-},{"./bootstrap":84,"./components/BreadcrumbAction.vue":85,"./components/FoodTruckRegistration.vue":86,"./components/FoodTrucksAdmin.vue":87,"./components/FoodTrucksAdminEdit.vue":88,"./components/FoodTrucksAdminStats.vue":89,"./components/TrackingTab.vue":90,"./components/passport/AuthorizedClients.vue":91,"./components/passport/Clients.vue":92,"./components/passport/PersonalAccessTokens.vue":93,"vue-i18n":78,"vue-moment":79}],84:[function(require,module,exports){
+},{"./bootstrap":84,"./components/BreadcrumbAction.vue":85,"./components/FoodTruckRegistration.vue":86,"./components/FoodTrucksAdmin.vue":87,"./components/FoodTrucksAdminEdit.vue":88,"./components/FoodTrucksAdminLocation.vue":89,"./components/FoodTrucksAdminStats.vue":90,"./components/TrackingTab.vue":91,"./components/passport/AuthorizedClients.vue":92,"./components/passport/Clients.vue":93,"./components/passport/PersonalAccessTokens.vue":94,"vue-i18n":78,"vue-moment":79}],84:[function(require,module,exports){
 'use strict';
 
 window._ = require('lodash');
@@ -52553,7 +52555,7 @@ if (module.hot) {(function () {  module.hot.accept()
 })()}
 },{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],88:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-c3017c2e] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-c3017c2e] {\n    margin-bottom: 0;\n} \n\n.alert ul li[_v-c3017c2e]{\n    list-style: none;\n}\nbutton i[_v-c3017c2e]{\n    top: 0 !important;\n}\nbutton span[_v-c3017c2e]{\n    padding-left: 10px;\n}\n.highlighted_holderImage[_v-c3017c2e]{\n    height: 100%;\n    position:relative;\n    background-size: cover;\n    background-position: center;\n    background-repeat: no-repeat;\n    text-align: center;\n}\n\n.highlighted_holder_sm[_v-c3017c2e]{\n    width: 100%;\n    height: 180px;\n    min-height: 180px;\n    min-width: 180px;\n    max-width: 180px;\n    position: relative;\n}\n.switch-detail[_v-c3017c2e]{\n\n    line-height: 1.2;\n    font-size: 13px;\n}\n")
+var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-c3017c2e] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-c3017c2e] {\n    margin-bottom: 0;\n} \n\n.alert ul li[_v-c3017c2e]{\n    list-style: none;\n}\nbutton i[_v-c3017c2e]{\n    top: 0 !important;\n}\nbutton span[_v-c3017c2e]{\n    padding-left: 10px;\n}\n.highlighted_holderImage[_v-c3017c2e]{\n    height: 100%;\n    position:relative;\n    background-size: cover;\n    background-position: center;\n    background-repeat: no-repeat;\n    text-align: center;\n}\n\n.highlighted_holder_sm[_v-c3017c2e]{\n    width: 100%;\n    height: 180px;\n    min-height: 180px;\n    min-width: 180px;\n    max-width: 180px;\n    position: relative;\n}\n.switch-detail[_v-c3017c2e]{\n\n    line-height: 1.2;\n    font-size: 13px;\n}\n.modal .dropdown-menu[_v-c3017c2e]{\n    z-index: 100000 !important;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52639,10 +52641,6 @@ exports.default = {
             page: 0,
             paginationStart: 0,
             pages: [],
-            export_filter: {
-                end: moment().format('YYYY-MM-DD'),
-                start: moment().subtract(1, 'months').format('YYYY-MM-DD')
-            },
             userstable_columns: ['id', 'name', 'created_at'],
             userstable_options: {
                 perPage: 5,
@@ -52772,23 +52770,6 @@ exports.default = {
         }).catch(function (response) {
             console.log("Could not load service types. It is recommended to reload the page");
         });
-
-        $('#filter').daterangepicker({
-            "singleDatePicker": false,
-            "showDropdowns": true,
-            "drops": "up",
-            "startDate": moment().subtract(1, 'months').format('DD/MM/YYYY'),
-            "endDate": moment().format('DD/MM/YYYY'),
-            "minDate": moment().subtract(5, 'years').format('DD/MM/YYYY'),
-            "locale": {
-                "format": that.$t('cal_format'),
-                "daysOfWeek": [that.$t('cal_week_su'), that.$t('cal_week_mo'), that.$t('cal_week_tu'), that.$t('cal_week_we'), that.$t('cal_week_th'), that.$t('cal_week_fr'), that.$t('cal_week_sa')],
-                "monthNames": [that.$t('cal_month_ja'), that.$t('cal_month_fe'), that.$t('cal_month_ma'), that.$t('cal_month_ap'), that.$t('cal_month_may'), that.$t('cal_month_jun'), that.$t('cal_month_jul'), that.$t('cal_month_au'), that.$t('cal_month_se'), that.$t('cal_month_oc'), that.$t('cal_month_no'), that.$t('cal_month_de')]
-            }
-        }, function (start, end, label) {
-            Vue.set(that.export_filter, 'start', start.format('YYYY-MM-DD'));
-            Vue.set(that.export_filter, 'end', end.format('YYYY-MM-DD'));
-        });
     },
 
 
@@ -52912,13 +52893,13 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" _v-c3017c2e=\"\">\n    <div class=\"col-md-6\" _v-c3017c2e=\"\">\n        <!-- START PANEL -->\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n          <div class=\"panel-heading\" _v-c3017c2e=\"\">\n            <div class=\"panel-title\" _v-c3017c2e=\"\">\n              Company Info\n            </div>\n          </div>\n          <div class=\"panel-body\" _v-c3017c2e=\"\">\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Formal Name</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"truck.formal_name\" _v-c3017c2e=\"\">\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n                <div class=\"col-sm-6\" _v-c3017c2e=\"\">\n                  <div class=\"form-group\" _v-c3017c2e=\"\">\n                    <label _v-c3017c2e=\"\">Identification</label>\n                    <span class=\"help\" _v-c3017c2e=\"\">For the invoice</span>\n                    <input type=\"text\" class=\"form-control\" v-model=\"truck.identification\" _v-c3017c2e=\"\">\n                  </div>\n                </div>\n                <div class=\"col-sm-6\" _v-c3017c2e=\"\">\n                  <div class=\"form-group\" _v-c3017c2e=\"\">\n                    <label _v-c3017c2e=\"\">Phone</label>\n                    <span class=\"help\" _v-c3017c2e=\"\">Office/Headquarters phone</span>\n                    <input type=\"text\" class=\"form-control\" v-model=\"truck.phone\" _v-c3017c2e=\"\">\n                  </div>\n                </div>\n              </div>\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Address</label>\n                <span class=\"help\" _v-c3017c2e=\"\">Office/Headquarters address</span>\n                <input type=\"text\" class=\"form-control\" v-model=\"truck.address\" _v-c3017c2e=\"\">\n              </div>\n          </div>\n        </div>\n        <!-- END PANEL -->\n        <foodtrucks-admin-stats _v-c3017c2e=\"\"></foodtrucks-admin-stats>\n    </div>\n    <div class=\"col-md-6\" _v-c3017c2e=\"\">\n        <!-- START PANEL -->\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n          <div class=\"panel-heading\" _v-c3017c2e=\"\">\n            <div class=\"panel-title\" _v-c3017c2e=\"\">\n              Truck Info\n            </div>\n              <div class=\"panel-controls\" _v-c3017c2e=\"\">\n                  <ul _v-c3017c2e=\"\">\n                      <li _v-c3017c2e=\"\">\n                          <i class=\"fa fa-circle\" v-bind:style=\"{color: (truck.enabled == 1 &amp;&amp; status != 'denied' ? 'green' : 'red')}\" _v-c3017c2e=\"\"></i>&nbsp;&nbsp;<span _v-c3017c2e=\"\">{{ (truck.enabled == 1 &amp;&amp; status != 'denied' ? 'Enabled' : 'Disabled') }}</span>\n                      </li>\n                  </ul>\n              </div>\n          </div>\n          <div class=\"panel-body\" _v-c3017c2e=\"\">\n            <div class=\"row\" _v-c3017c2e=\"\">\n                <div class=\"col-lg-4 col-lg-offset-4\" _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" class=\"thumbnail highlighted_holder_sm\" style=\"margin-bottom: 10px;\" @click=\"avatarUpload\" _v-c3017c2e=\"\">\n                      <div v-if=\"truck.logo_url != ''\" class=\"highlighted_holderImage\" alt=\"Truck Logo\" style=\"height: 170px; width: 170px; margin:0 auto; display: block;\" v-bind:style=\"{ 'background-image': 'url(' + truck.logo_url + ')' }\" _v-c3017c2e=\"\"></div>\n                      <div v-if=\"truck.logo_url == ''\" class=\"highlighted_holderImage\" alt=\"Truck Logo\" style=\"height: 170px; width: 170px; margin:0 auto; display: block;\" v-bind:style=\"{ 'background-image': 'url(../../images/public/extras/200x200.gif)' }\" _v-c3017c2e=\"\"></div>\n                    </a>\n                </div>\n            </div>\n            <div class=\"row\" style=\"margin-bottom: 30px;\" _v-c3017c2e=\"\">\n                <div class=\"col-lg-12\" style=\"text-align: center;font-size: 12px;\" _v-c3017c2e=\"\">\n                    <input type=\"file\" id=\"fileInput\" v-el:fileinput=\"\" style=\"display:none;\" @change=\"avatarChanged\" accept=\"image/png, image/x-png, image/gif, image/jpeg\" _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" @click=\"avatarUpload\" _v-c3017c2e=\"\">Change logo</a><br _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" @click=\"removeAvatar\" v-if=\"truck.logo_url != ''\" _v-c3017c2e=\"\">Remove logo</a><br _v-c3017c2e=\"\">\n                    <span v-if=\"avatar_name != ''\" _v-c3017c2e=\"\">Selected file: {{ avatar_name }}</span>\n                </div>\n            </div>\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Truck Name</label>\n                <input type=\"email\" class=\"form-control\" required=\"\" v-model=\"truck.name\" _v-c3017c2e=\"\">\n              </div>\n              <div class=\"form-group form-group-default form-group-default-select2 required\" _v-c3017c2e=\"\">\n                    <label class=\"\" _v-c3017c2e=\"\">Status</label>\n                    <select id=\"status-select\" class=\"full-width\" v-model=\"truck.status\" _v-c3017c2e=\"\">\n                        <option value=\"available\" _v-c3017c2e=\"\">Available</option>\n                        <option value=\"transit\" _v-c3017c2e=\"\">Transit</option>\n                        <option value=\"unavailable\" _v-c3017c2e=\"\">Unavailable</option>\n                        <option value=\"denied\" _v-c3017c2e=\"\">Denied</option>\n                    </select>\n              </div>\n              <div class=\"form-group form-group-default form-group-default-select2 required\" _v-c3017c2e=\"\">\n                  <label class=\"\" _v-c3017c2e=\"\">Service Type</label>\n                  <select id=\"type-select\" class=\"full-width\" placeholder=\"Loading...\" _v-c3017c2e=\"\">\n                      <option value=\"{{service.slug}}\" v-for=\"service in service_types\" _v-c3017c2e=\"\">{{service.name}}</option>\n                  </select>\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                      <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Bike Delivery</label>  \n                </div>      \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"deliverybike\" id=\"deliverybike-yes\" v-model=\"truck.delivery_bike\" _v-c3017c2e=\"\">\n                  <label for=\"deliverybike-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"deliverybike\" id=\"deliverybike-no\" v-model=\"truck.delivery_bike\" _v-c3017c2e=\"\">\n                  <label for=\"deliverybike-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                  <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Motorbike Delivery</label>  \n                </div>   \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"deliverymotorcycle\" id=\"deliverymotorcycle-yes\" v-model=\"truck.delivery_motorcycle\" _v-c3017c2e=\"\">\n                  <label for=\"deliverymotorcycle-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"deliverymotorcycle\" id=\"deliverymotorcycle-no\" v-model=\"truck.delivery_motorcycle\" _v-c3017c2e=\"\">\n                  <label for=\"deliverymotorcycle-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                  <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Let's Negotiate</label>  \n                </div>   \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"lets_negotiate\" id=\"lets_negotiate-yes\" v-model=\"truck.lets_negotiate\" _v-c3017c2e=\"\">\n                  <label for=\"lets_negotiate-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"lets_negotiate\" id=\"lets_negotiate-no\" v-model=\"truck.lets_negotiate\" _v-c3017c2e=\"\">\n                  <label for=\"lets_negotiate-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>                  \n              </div>\n                \n\n\n          </div>\n        </div>\n        <!-- END PANEL -->\n        <button class=\"btn btn-lg btn-rounded btn-primary m-b-20 center-block\" @click=\"patch\" v-bind:class=\"{ 'disabled': progress }\" _v-c3017c2e=\"\">\n                <span class=\"pull-left\" _v-c3017c2e=\"\"><i class=\"pg-save\" _v-c3017c2e=\"\"></i>\n                </span>\n                <span _v-c3017c2e=\"\">Save</span>\n        </button>\n    </div>\n</div>\n<div class=\"row\" _v-c3017c2e=\"\">\n    <div class=\"col-lg-6\" _v-c3017c2e=\"\">\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n            <div class=\"panel-heading\" _v-c3017c2e=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-c3017c2e=\"\">\n                    <span _v-c3017c2e=\"\">\n                        Users\n                    </span>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-c3017c2e=\"\">\n                <div id=\"pending_trucks\" _v-c3017c2e=\"\">\n                    <v-server-table url=\"\" :columns=\"userstable_columns\" :options=\"userstable_options\" v-ref:userstable=\"\" _v-c3017c2e=\"\"></v-server-table>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-lg-6\" _v-c3017c2e=\"\">            \n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n            <div class=\"panel-heading\" _v-c3017c2e=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-c3017c2e=\"\">\n                    <span _v-c3017c2e=\"\">\n                         <h3 _v-c3017c2e=\"\">TODO// Payments List</h3>\n                    </span>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-c3017c2e=\"\">\n                <div id=\"current_trucks\" _v-c3017c2e=\"\">\n                    <v-server-table url=\"/api/admin-current-trucks\" :columns=\"trucks_current_columns\" :options=\"trucks_current_options\" v-ref:currenttable=\"\" _v-c3017c2e=\"\"></v-server-table>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div _v-c3017c2e=\"\">\n    \n\n</div>\n    <div class=\"row form-horizontal\" _v-c3017c2e=\"\">\n\n        <div class=\"col-sm-12 col-lg-6\" _v-c3017c2e=\"\">\n\n            <div class=\"form-group\" style=\"padding-top: 0;\" _v-c3017c2e=\"\">\n                <label for=\"filter\" class=\"col-sm-5 control-label\" style=\"text-align:right;\" _v-c3017c2e=\"\">Export</label>\n                <div class=\"col-sm-7\" _v-c3017c2e=\"\">\n                    <input type=\"text\" class=\"form-control\" name=\"filter\" id=\"filter\" readonly=\"true\" style=\"background-color:white !important;\" _v-c3017c2e=\"\">\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 col-lg-3\" v-show=\"export_filter.start != '0000-00-00' &amp;&amp; export_filter.end != '0000-00-00'\" _v-c3017c2e=\"\">\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xls&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XLS\" _v-c3017c2e=\"\"><i class=\"fa fa-file-excel-o\" _v-c3017c2e=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=csv&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} CSV\" _v-c3017c2e=\"\"><i class=\"fa fa-file-text-o\" _v-c3017c2e=\"\"></i></a>\n            <a target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xml&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" class=\"btn btn-social-icon\" data-toggle=\"tooltip\" data-title=\"{{{ $t('export_tooltip') }}} XML\" _v-c3017c2e=\"\"><i class=\"fa fa-file-code-o\" _v-c3017c2e=\"\"></i></a>\n        </div>\n    </div>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" _v-c3017c2e=\"\">\n    <div class=\"col-md-6\" _v-c3017c2e=\"\">\n        <!-- START PANEL -->\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n          <div class=\"panel-heading\" _v-c3017c2e=\"\">\n            <div class=\"panel-title\" _v-c3017c2e=\"\">\n              Company Info\n            </div>\n          </div>\n          <div class=\"panel-body\" _v-c3017c2e=\"\">\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Formal Name</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"truck.formal_name\" _v-c3017c2e=\"\">\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n                <div class=\"col-sm-6\" _v-c3017c2e=\"\">\n                  <div class=\"form-group\" _v-c3017c2e=\"\">\n                    <label _v-c3017c2e=\"\">Identification</label>\n                    <span class=\"help\" _v-c3017c2e=\"\">For the invoice</span>\n                    <input type=\"text\" class=\"form-control\" v-model=\"truck.identification\" _v-c3017c2e=\"\">\n                  </div>\n                </div>\n                <div class=\"col-sm-6\" _v-c3017c2e=\"\">\n                  <div class=\"form-group\" _v-c3017c2e=\"\">\n                    <label _v-c3017c2e=\"\">Phone</label>\n                    <span class=\"help\" _v-c3017c2e=\"\">Office/Headquarters phone</span>\n                    <input type=\"text\" class=\"form-control\" v-model=\"truck.phone\" _v-c3017c2e=\"\">\n                  </div>\n                </div>\n              </div>\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Address</label>\n                <span class=\"help\" _v-c3017c2e=\"\">Office/Headquarters address</span>\n                <input type=\"text\" class=\"form-control\" v-model=\"truck.address\" _v-c3017c2e=\"\">\n              </div>\n          </div>\n        </div>\n        <!-- END PANEL -->\n        <foodtrucks-admin-stats _v-c3017c2e=\"\"></foodtrucks-admin-stats>\n    </div>\n    <div class=\"col-md-6\" _v-c3017c2e=\"\">\n        <!-- START PANEL -->\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n          <div class=\"panel-heading\" _v-c3017c2e=\"\">\n            <div class=\"panel-title\" _v-c3017c2e=\"\">\n              Truck Info\n            </div>\n              <div class=\"panel-controls\" _v-c3017c2e=\"\">\n                  <ul _v-c3017c2e=\"\">\n                      <li _v-c3017c2e=\"\">\n                          <i class=\"fa fa-circle\" v-bind:style=\"{color: (truck.enabled == 1 &amp;&amp; status != 'denied' ? 'green' : 'red')}\" _v-c3017c2e=\"\"></i>&nbsp;&nbsp;<span _v-c3017c2e=\"\">{{ (truck.enabled == 1 &amp;&amp; status != 'denied' ? 'Enabled' : 'Disabled') }}</span>\n                      </li>\n                  </ul>\n              </div>\n          </div>\n          <div class=\"panel-body\" _v-c3017c2e=\"\">\n            <div class=\"row\" _v-c3017c2e=\"\">\n                <div class=\"col-lg-4 col-lg-offset-4\" _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" class=\"thumbnail highlighted_holder_sm\" style=\"margin-bottom: 10px;\" @click=\"avatarUpload\" _v-c3017c2e=\"\">\n                      <div v-if=\"truck.logo_url != ''\" class=\"highlighted_holderImage\" alt=\"Truck Logo\" style=\"height: 170px; width: 170px; margin:0 auto; display: block;\" v-bind:style=\"{ 'background-image': 'url(' + truck.logo_url + ')' }\" _v-c3017c2e=\"\"></div>\n                      <div v-if=\"truck.logo_url == ''\" class=\"highlighted_holderImage\" alt=\"Truck Logo\" style=\"height: 170px; width: 170px; margin:0 auto; display: block;\" v-bind:style=\"{ 'background-image': 'url(../../images/public/extras/200x200.gif)' }\" _v-c3017c2e=\"\"></div>\n                    </a>\n                </div>\n            </div>\n            <div class=\"row\" style=\"margin-bottom: 30px;\" _v-c3017c2e=\"\">\n                <div class=\"col-lg-12\" style=\"text-align: center;font-size: 12px;\" _v-c3017c2e=\"\">\n                    <input type=\"file\" id=\"fileInput\" v-el:fileinput=\"\" style=\"display:none;\" @change=\"avatarChanged\" accept=\"image/png, image/x-png, image/gif, image/jpeg\" _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" @click=\"avatarUpload\" _v-c3017c2e=\"\">Change logo</a><br _v-c3017c2e=\"\">\n                    <a href=\"javascript:;\" @click=\"removeAvatar\" v-if=\"truck.logo_url != ''\" _v-c3017c2e=\"\">Remove logo</a><br _v-c3017c2e=\"\">\n                    <span v-if=\"avatar_name != ''\" _v-c3017c2e=\"\">Selected file: {{ avatar_name }}</span>\n                </div>\n            </div>\n              <div class=\"form-group\" _v-c3017c2e=\"\">\n                <label _v-c3017c2e=\"\">Truck Name</label>\n                <input type=\"email\" class=\"form-control\" required=\"\" v-model=\"truck.name\" _v-c3017c2e=\"\">\n              </div>\n              <div class=\"form-group form-group-default form-group-default-select2 required\" _v-c3017c2e=\"\">\n                    <label class=\"\" _v-c3017c2e=\"\">Status</label>\n                    <select id=\"status-select\" class=\"full-width\" v-model=\"truck.status\" _v-c3017c2e=\"\">\n                        <option value=\"available\" _v-c3017c2e=\"\">Available</option>\n                        <option value=\"transit\" _v-c3017c2e=\"\">Transit</option>\n                        <option value=\"unavailable\" _v-c3017c2e=\"\">Unavailable</option>\n                        <option value=\"denied\" _v-c3017c2e=\"\">Denied</option>\n                    </select>\n              </div>\n              <div class=\"form-group form-group-default form-group-default-select2 required\" _v-c3017c2e=\"\">\n                  <label class=\"\" _v-c3017c2e=\"\">Service Type</label>\n                  <select id=\"type-select\" class=\"full-width\" placeholder=\"Loading...\" _v-c3017c2e=\"\">\n                      <option value=\"{{service.slug}}\" v-for=\"service in service_types\" _v-c3017c2e=\"\">{{service.name}}</option>\n                  </select>\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                      <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Bike Delivery</label>  \n                </div>      \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"deliverybike\" id=\"deliverybike-yes\" v-model=\"truck.delivery_bike\" _v-c3017c2e=\"\">\n                  <label for=\"deliverybike-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"deliverybike\" id=\"deliverybike-no\" v-model=\"truck.delivery_bike\" _v-c3017c2e=\"\">\n                  <label for=\"deliverybike-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                  <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Motorbike Delivery</label>  \n                </div>   \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"deliverymotorcycle\" id=\"deliverymotorcycle-yes\" v-model=\"truck.delivery_motorcycle\" _v-c3017c2e=\"\">\n                  <label for=\"deliverymotorcycle-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"deliverymotorcycle\" id=\"deliverymotorcycle-no\" v-model=\"truck.delivery_motorcycle\" _v-c3017c2e=\"\">\n                  <label for=\"deliverymotorcycle-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>\n              </div>\n              <div class=\"row\" _v-c3017c2e=\"\">\n              <div class=\"col-lg-6 col-md-6 col-sm-12\" _v-c3017c2e=\"\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">\n                  <label style=\"margin-bottom: 0;\" _v-c3017c2e=\"\">Let's Negotiate</label>  \n                </div>   \n                <div class=\"radio radio-success\" _v-c3017c2e=\"\">\n                  <input type=\"radio\" value=\"1\" name=\"lets_negotiate\" id=\"lets_negotiate-yes\" v-model=\"truck.lets_negotiate\" _v-c3017c2e=\"\">\n                  <label for=\"lets_negotiate-yes\" _v-c3017c2e=\"\">Enabled</label>\n                  <input type=\"radio\" value=\"0\" name=\"lets_negotiate\" id=\"lets_negotiate-no\" v-model=\"truck.lets_negotiate\" _v-c3017c2e=\"\">\n                  <label for=\"lets_negotiate-no\" _v-c3017c2e=\"\">Disabled</label>\n                </div>\n              </div>                  \n              </div>\n                \n\n\n          </div>\n        </div>\n        <!-- END PANEL -->\n        <button class=\"btn btn-lg btn-rounded btn-primary m-b-20 center-block\" @click=\"patch\" v-bind:class=\"{ 'disabled': progress }\" _v-c3017c2e=\"\">\n                <span class=\"pull-left\" _v-c3017c2e=\"\"><i class=\"pg-save\" _v-c3017c2e=\"\"></i>\n                </span>\n                <span _v-c3017c2e=\"\">Save</span>\n        </button>\n    </div>\n</div>\n<div class=\"row\" _v-c3017c2e=\"\">\n    <div class=\"col-lg-6\" _v-c3017c2e=\"\">\n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n            <div class=\"panel-heading\" _v-c3017c2e=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-c3017c2e=\"\">\n                    <span _v-c3017c2e=\"\">\n                        Users\n                    </span>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-c3017c2e=\"\">\n                <div id=\"pending_trucks\" _v-c3017c2e=\"\">\n                    <v-server-table url=\"\" :columns=\"userstable_columns\" :options=\"userstable_options\" v-ref:userstable=\"\" _v-c3017c2e=\"\"></v-server-table>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-lg-6\" _v-c3017c2e=\"\">            \n        <div class=\"panel panel-default\" _v-c3017c2e=\"\">\n            <div class=\"panel-heading\" _v-c3017c2e=\"\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center;\" _v-c3017c2e=\"\">\n                    <span _v-c3017c2e=\"\">\n                         <h3 _v-c3017c2e=\"\">TODO// Payments List</h3>\n                    </span>\n                </div>\n            </div>\n\n            <div class=\"panel-body\" _v-c3017c2e=\"\">\n                <div id=\"current_trucks\" _v-c3017c2e=\"\">\n                    <v-server-table url=\"/api/admin-current-trucks\" :columns=\"trucks_current_columns\" :options=\"trucks_current_options\" v-ref:currenttable=\"\" _v-c3017c2e=\"\"></v-server-table>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.action-link[_v-c3017c2e] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-c3017c2e] {\n    margin-bottom: 0;\n} \n\n.alert ul li[_v-c3017c2e]{\n    list-style: none;\n}\nbutton i[_v-c3017c2e]{\n    top: 0 !important;\n}\nbutton span[_v-c3017c2e]{\n    padding-left: 10px;\n}\n.highlighted_holderImage[_v-c3017c2e]{\n    height: 100%;\n    position:relative;\n    background-size: cover;\n    background-position: center;\n    background-repeat: no-repeat;\n    text-align: center;\n}\n\n.highlighted_holder_sm[_v-c3017c2e]{\n    width: 100%;\n    height: 180px;\n    min-height: 180px;\n    min-width: 180px;\n    max-width: 180px;\n    position: relative;\n}\n.switch-detail[_v-c3017c2e]{\n\n    line-height: 1.2;\n    font-size: 13px;\n}\n"] = false
+    __vueify_insert__.cache["\n.action-link[_v-c3017c2e] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-c3017c2e] {\n    margin-bottom: 0;\n} \n\n.alert ul li[_v-c3017c2e]{\n    list-style: none;\n}\nbutton i[_v-c3017c2e]{\n    top: 0 !important;\n}\nbutton span[_v-c3017c2e]{\n    padding-left: 10px;\n}\n.highlighted_holderImage[_v-c3017c2e]{\n    height: 100%;\n    position:relative;\n    background-size: cover;\n    background-position: center;\n    background-repeat: no-repeat;\n    text-align: center;\n}\n\n.highlighted_holder_sm[_v-c3017c2e]{\n    width: 100%;\n    height: 180px;\n    min-height: 180px;\n    min-width: 180px;\n    max-width: 180px;\n    position: relative;\n}\n.switch-detail[_v-c3017c2e]{\n\n    line-height: 1.2;\n    font-size: 13px;\n}\n.modal .dropdown-menu[_v-c3017c2e]{\n    z-index: 100000 !important;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -52928,6 +52909,290 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],89:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.modal.fill-in[_v-76e62a94]{\n  background-color: #fff !important;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    /*
+     * The component's data.
+     */
+    locales: {
+        //that.$t('p_category_e')
+        //Vue.t('messages.fatal_title')
+        //{{{ $t('title') }}}
+        //{{{ $t('messages.hello') }}}
+        en: {
+            export_tooltip: 'Export',
+            cal_week_su: 'Su',
+            cal_week_mo: 'Mo',
+            cal_week_tu: 'Tu',
+            cal_week_we: 'We',
+            cal_week_th: 'Th',
+            cal_week_fr: 'Fr',
+            cal_week_sa: 'Sa',
+            cal_month_ja: 'January',
+            cal_month_fe: 'February',
+            cal_month_ma: 'March',
+            cal_month_ap: 'April',
+            cal_month_may: 'May',
+            cal_month_jun: 'June',
+            cal_month_jul: 'July',
+            cal_month_au: 'August',
+            cal_month_se: 'September',
+            cal_month_oc: 'October',
+            cal_month_no: 'November',
+            cal_month_de: 'December',
+            cal_format: "DD/MM/YYYY"
+        },
+        pt_BR: {
+            export_tooltip: 'Exportar',
+            cal_week_su: 'Dom',
+            cal_week_mo: 'Seg',
+            cal_week_tu: 'Ter',
+            cal_week_we: 'Qua',
+            cal_week_th: 'Qui',
+            cal_week_fr: 'Sex',
+            cal_week_sa: 'Sab',
+            cal_month_ja: 'Janeiro',
+            cal_month_fe: 'Fevereiro',
+            cal_month_ma: 'Março',
+            cal_month_ap: 'Abril',
+            cal_month_may: 'Maio',
+            cal_month_jun: 'Junho',
+            cal_month_jul: 'Julho',
+            cal_month_au: 'Agosto',
+            cal_month_se: 'Setembro',
+            cal_month_oc: 'Outubro',
+            cal_month_no: 'Novembro',
+            cal_month_de: 'Dezembro',
+            cal_format: "DD/MM/YYYY"
+        }
+
+    },
+    data: function data() {
+        return {
+            map: null,
+            markers: [],
+            export_filter: {
+                end: moment().subtract(1, 'days').startOf('day').format('YYYY-MM-DD'),
+                start: moment().endOf('day').format('YYYY-MM-DD')
+            }
+        };
+    },
+    ready: function ready() {
+        var that = this;
+        $('#locationModal').on('shown.bs.modal', function () {
+            google.maps.event.trigger(that.map, "resize");
+            var reCenter = new google.maps.LatLng(-25.414014, -49.262028);
+            that.map.setCenter(reCenter);
+
+            /**
+              var bounds = new google.maps.LatLngBounds();
+              for (var i = 0; i < markers.length; i++) {
+               bounds.extend(that.markers[i].getPosition());
+              }
+              that.map.fitBounds(bounds);
+            **/
+        });
+        $('#location-filter').daterangepicker({
+            "singleDatePicker": false,
+            "showDropdowns": true,
+            "drops": "up",
+            "startDate": moment().subtract(1, 'days').startOf('day').format('DD/MM/YYYY'),
+            "endDate": moment().endOf('day').format('DD/MM/YYYY'),
+            "minDate": moment().subtract(5, 'years').format('DD/MM/YYYY'),
+            "locale": {
+                "format": that.$t('cal_format'),
+                "daysOfWeek": [that.$t('cal_week_su'), that.$t('cal_week_mo'), that.$t('cal_week_tu'), that.$t('cal_week_we'), that.$t('cal_week_th'), that.$t('cal_week_fr'), that.$t('cal_week_sa')],
+                "monthNames": [that.$t('cal_month_ja'), that.$t('cal_month_fe'), that.$t('cal_month_ma'), that.$t('cal_month_ap'), that.$t('cal_month_may'), that.$t('cal_month_jun'), that.$t('cal_month_jul'), that.$t('cal_month_au'), that.$t('cal_month_se'), that.$t('cal_month_oc'), that.$t('cal_month_no'), that.$t('cal_month_de')]
+            }
+        }, function (start, end, label) {
+            Vue.set(that.export_filter, 'start', start.format('YYYY-MM-DD'));
+            Vue.set(that.export_filter, 'end', end.format('YYYY-MM-DD'));
+        });
+
+        that.$http.post('/api/truck-approval', { truck_id: id, type: type, message: user_message }).then(function (response) {
+            if (response.data.success) {
+                $(response.data.results).each(function (index, error) {
+                    //Create markers
+                    that.markers.push();
+                });
+                this.initMap();
+            }
+        }).catch(function (response) {
+            if ((0, _typeof3.default)(response.data) === 'object') {
+                var errors = _.flatten(_.toArray(response.data));
+                $(errors).each(function (index, error) {
+                    $('body').pgNotification({
+                        style: 'flip',
+                        title: 'Error!',
+                        message: error,
+                        position: "top-right",
+                        timeout: 5000,
+                        type: "danger"
+                    }).show();
+                });
+            } else {
+                $('body').pgNotification({
+                    style: 'flip',
+                    title: 'Error!',
+                    message: 'Something went wrong when requesting truck locations. Please try again.',
+                    position: "top-right",
+                    timeout: 5000,
+                    type: "danger"
+                }).show();
+            }
+        }).bind(that);
+    },
+
+
+    methods: {
+        initMap: function initMap() {
+            this.map = new google.maps.Map(document.getElementById('google-map'), {
+                center: new google.maps.LatLng(-25.414014, -49.262028), // New York
+                zoom: 11,
+                disableDefaultUI: true,
+                styles: [{
+                    featureType: 'water',
+                    elementType: 'all',
+                    stylers: [{
+                        hue: '#e9ebed'
+                    }, {
+                        saturation: -78
+                    }, {
+                        lightness: 67
+                    }, {
+                        visibility: 'simplified'
+                    }]
+                }, {
+                    featureType: 'landscape',
+                    elementType: 'all',
+                    stylers: [{
+                        hue: '#ffffff'
+                    }, {
+                        saturation: -100
+                    }, {
+                        lightness: 100
+                    }, {
+                        visibility: 'simplified'
+                    }]
+                }, {
+                    featureType: 'road',
+                    elementType: 'geometry',
+                    stylers: [{
+                        hue: '#bbc0c4'
+                    }, {
+                        saturation: -93
+                    }, {
+                        lightness: 31
+                    }, {
+                        visibility: 'simplified'
+                    }]
+                }, {
+                    featureType: 'poi',
+                    elementType: 'all',
+                    stylers: [{
+                        hue: '#ffffff'
+                    }, {
+                        saturation: -100
+                    }, {
+                        lightness: 100
+                    }, {
+                        visibility: 'off'
+                    }]
+                }, {
+                    featureType: 'road.local',
+                    elementType: 'geometry',
+                    stylers: [{
+                        hue: '#e9ebed'
+                    }, {
+                        saturation: -90
+                    }, {
+                        lightness: -8
+                    }, {
+                        visibility: 'simplified'
+                    }]
+                }, {
+                    featureType: 'transit',
+                    elementType: 'all',
+                    stylers: [{
+                        hue: '#e9ebed'
+                    }, {
+                        saturation: 10
+                    }, {
+                        lightness: 69
+                    }, {
+                        visibility: 'on'
+                    }]
+                }, {
+                    featureType: 'administrative.locality',
+                    elementType: 'all',
+                    stylers: [{
+                        hue: '#2c2e33'
+                    }, {
+                        saturation: 7
+                    }, {
+                        lightness: 19
+                    }, {
+                        visibility: 'on'
+                    }]
+                }, {
+                    featureType: 'road',
+                    elementType: 'labels',
+                    stylers: [{
+                        hue: '#bbc0c4'
+                    }, {
+                        saturation: -93
+                    }, {
+                        lightness: 31
+                    }, {
+                        visibility: 'on'
+                    }]
+                }, {
+                    featureType: 'road.arterial',
+                    elementType: 'labels',
+                    stylers: [{
+                        hue: '#bbc0c4'
+                    }, {
+                        saturation: -93
+                    }, {
+                        lightness: -2
+                    }, {
+                        visibility: 'simplified'
+                    }]
+                }]
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyB1YvebOcyhWtWsGhTiP6tHS3FX39UFYy4\" async=\"\" defer=\"\" _v-76e62a94=\"\"></script>\n\n<div class=\"modal fade fill-in\" id=\"locationModal\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" _v-76e62a94=\"\">\n    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\" _v-76e62a94=\"\">\n        <i class=\"pg-close\" _v-76e62a94=\"\"></i>\n    </button>\n    <div class=\"modal-dialog full-width full-height\" style=\"padding-top: 0;\" _v-76e62a94=\"\">\n        <div class=\"modal-content\" style=\"padding-top: 0;vertical-align: top;\" _v-76e62a94=\"\">\n            <div class=\"modal-header\" style=\"padding-top: 0;\" _v-76e62a94=\"\">\n                <h5 class=\"text-left p-b-5\" _v-76e62a94=\"\">Truck <span class=\"semi-bold\" _v-76e62a94=\"\">Location</span></h5>\n            </div>\n            <div class=\"modal-body\" _v-76e62a94=\"\">\n                <!-- START CONTENT INNER -->\n                <div class=\"map-controls\" _v-76e62a94=\"\">\n                  <div class=\"pull-left\" _v-76e62a94=\"\">\n                    <div class=\"btn-group btn-group-vertical\" data-toggle=\"buttons-radio\" _v-76e62a94=\"\">\n                      <button id=\"map-zoom-in\" class=\"btn btn-success btn-xs\" _v-76e62a94=\"\"><i class=\"fa fa-plus\" _v-76e62a94=\"\"></i>\n                      </button>\n                      <button id=\"map-zoom-out\" class=\"btn btn-success btn-xs\" _v-76e62a94=\"\"><i class=\"fa fa-minus\" _v-76e62a94=\"\"></i>\n                      </button>\n                    </div>\n                  </div>\n                </div>\n                <!-- Map -->\n                <div class=\"map-container full-width full-height\" _v-76e62a94=\"\">\n                  <div id=\"google-map\" class=\"full-width full-height\" style=\"min-height: 500px;\" _v-76e62a94=\"\"></div>\n                </div>\n                <!-- END CONTENT INNER -->\n            </div>\n            <div class=\"modal-footer\" _v-76e62a94=\"\">\n              <div class=\"row form-horizontal\" _v-76e62a94=\"\">\n                <div class=\"col-sm-12 col-lg-offset-4 col-lg-4\" _v-76e62a94=\"\">\n\n                    <div class=\"form-group\" style=\"padding-top: 0;\" _v-76e62a94=\"\">\n                        <label for=\"filter\" class=\"col-sm-5 control-label\" style=\"text-align:right;\" _v-76e62a94=\"\">Filter</label>\n                        <div class=\"input-group\" _v-76e62a94=\"\">\n                          <input type=\"text\" class=\"form-control\" name=\"location-filter\" id=\"location-filter\" readonly=\"true\" style=\"background-color:white !important;\" _v-76e62a94=\"\">\n                          <span class=\"input-group-addon primary\" v-show=\"export_filter.start != '0000-00-00' &amp;&amp; export_filter.end != '0000-00-00'\" target=\"_blank\" tabindex=\"-1\" :href=\"'/admin_trucks/export/list?extension=xls&amp;start='+export_filter.start+'&amp;end='+export_filter.end\" data-toggle=\"tooltip\" data-title=\"Filter\" _v-76e62a94=\"\">\n                                    \n                                    <i class=\"fa fa-align-justify\" _v-76e62a94=\"\"></i> \n                          </span>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"col-sm-12 col-lg-3\" _v-76e62a94=\"\">\n                </div>\n              </div>\n            </div>\n        </div>\n        <!-- /.modal-content -->\n    </div>\n    <!-- /.modal-dialog -->\n</div>\n\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.modal.fill-in[_v-76e62a94]{\n  background-color: #fff !important;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-76e62a94", module.exports)
+  } else {
+    hotAPI.update("_v-76e62a94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],90:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53036,7 +53301,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-27b3a250", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":81,"vue-hot-reload-api":77}],90:[function(require,module,exports){
+},{"vue":81,"vue-hot-reload-api":77}],91:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n\n")
 'use strict';
@@ -53107,7 +53372,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5a70e5a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],91:[function(require,module,exports){
+},{"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],92:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7062ad91] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7062ad91] {\n    margin-bottom: 0;\n}\n")
 'use strict';
@@ -53175,7 +53440,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7062ad91", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],92:[function(require,module,exports){
+},{"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],93:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-7ce5392c] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-7ce5392c] {\n    margin-bottom: 0;\n}\n")
 'use strict';
@@ -53332,7 +53597,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7ce5392c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],93:[function(require,module,exports){
+},{"babel-runtime/helpers/typeof":4,"vue":81,"vue-hot-reload-api":77,"vueify/lib/insert-css":82}],94:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.action-link[_v-93752dec] {\n    cursor: pointer;\n}\n\n.m-b-none[_v-93752dec] {\n    margin-bottom: 0;\n}\n")
 'use strict';
