@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            'League\OAuth2\Server\Repositories\UserRepositoryInterface',
+            'App\Repositories\SocialUserRepository'
+        );
     }
 }

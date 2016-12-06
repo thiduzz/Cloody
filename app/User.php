@@ -100,4 +100,14 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function findForPassport($username)
+    {
+        $user = $this->where('email', $username)->first();
+        if(!$user)
+        {
+            $user = $this->where('social_network_id', $username)->first();
+        }
+        return $user;
+    }
 }
