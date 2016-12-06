@@ -14,7 +14,7 @@ class AddColumnUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function ($table) {
-            $table->string('social_network_id');
+            $table->string('social_network_id')->nullable();
             $table->enum('provider', ['internal', 'facebook', 'twitter','google'])->default('internal');
         });
     }
