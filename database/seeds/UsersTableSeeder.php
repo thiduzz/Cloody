@@ -44,7 +44,11 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         $this->clients->create(
-            $user->id, 'Web Client', 'http://localhost',false, true
+            $user->id, 'Web Client', env('APP_URL'),false, true
+        )->makeVisible('secret');
+
+        $this->clients->create(
+            $user->id, 'Mobile Client', env('APP_URL'),true, true
         )->makeVisible('secret');
 
 
