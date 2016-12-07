@@ -31,15 +31,15 @@ class FacebookController extends Controller
     public function handleProviderCallback(Request $request)
     {
         $user = Socialite::driver('facebook')->user();
-        $db_user = User::where('social_network_id', $user->getId())->first();
-        if($db_user)
+        $db_user = User::where('social_network_id','=', $user->getId())->where('provider','=','facebook')->first();
+        if($db_user != null)
         {
-            $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getAvatar()]);
+            $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->getRaw()['original_avatar']]);
         }else{
-            $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getAvatar()]);
+            $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getRaw()['original_avatar']]);
         }
         Auth::login($db_user, true);
-        redirect('/home');
+        return redirect('/home');
         // $user->token;
     }
 
