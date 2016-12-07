@@ -34,9 +34,9 @@ class FacebookController extends Controller
         $db_user = User::where('social_network_id','=', $user->getId())->where('provider','=','facebook')->first();
         if($db_user != null)
         {
-            $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->getRaw()['original_avatar']]);
+            $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->getRaw()['avatar_original']]);
         }else{
-            $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getRaw()['original_avatar']]);
+            $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getRaw()['avatar_original']]);
         }
         Auth::login($db_user, true);
         return redirect('/home');
