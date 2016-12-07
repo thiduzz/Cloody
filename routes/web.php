@@ -18,6 +18,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('auth/facebook', 'Auth\FacebookController@redirectToProvider');
+Route::get('auth/facebook/callback', 'Auth\FacebookController@handleProviderCallback');
+
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get('/register-foodtruck', '\App\Http\Controllers\Auth\RegisterController@showFoodtruckRegistrationForm');
 Route::post('/register-foodtruck/validate', '\App\Http\Controllers\Auth\RegisterController@foodtruckAccountValidate');
