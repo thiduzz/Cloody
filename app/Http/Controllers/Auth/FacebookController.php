@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -29,13 +30,14 @@ class FacebookController extends Controller
     public function handleProviderCallback()
     {
         $user = Socialite::driver('facebook')->user();
-        $db_user = User::findForPassport($user->getId());
+        $db_user = User::where('social_network_id', $user->getId())->first();
         if($db_user)
         {
             $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getAvatar()]);
         }else{
-            $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getAvatar()]);
+            $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->getAvatar()]);
         }
+        Auth::login($db_user, true);
         redirect('/home');
         // $user->token;
     }
@@ -51,6 +53,7 @@ class FacebookController extends Controller
             'provider' => 'facebook',
         ]);
         $user->attachRole(Role::where('name','customer')->first());
+        return $user;
     }
 
     public function refreshUser(User $user, array $data){
