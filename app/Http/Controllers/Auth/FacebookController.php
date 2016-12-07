@@ -31,7 +31,9 @@ class FacebookController extends Controller
     public function handleProviderCallback(Request $request)
     {
         $user = Socialite::driver('facebook')->user();
+        var_dump("User ID".$user->getId());
         $db_user = User::where('social_network_id','=', $user->getId())->where('provider','=','facebook')->first();
+        var_dump($db_user);
         if($db_user != null)
         {
             $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->avatar_original]);
