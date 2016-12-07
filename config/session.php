@@ -148,7 +148,7 @@ return [
     |
     */
 
-    'domain' => env('APP_URL', 'http://localhost'),
+    'domain' => env('SESSION_DOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------
