@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Laravel\Socialite\Facades\Socialite;
@@ -27,7 +28,7 @@ class FacebookController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(Request $request)
     {
         $user = Socialite::driver('facebook')->user();
         $db_user = User::where('social_network_id', $user->getId())->first();
