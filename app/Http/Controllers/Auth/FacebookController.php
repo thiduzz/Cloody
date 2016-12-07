@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Redirect;
 use Laravel\Socialite\Facades\Socialite;
 
 class FacebookController extends Controller
@@ -34,12 +35,12 @@ class FacebookController extends Controller
         $db_user = User::where('social_network_id','=', $user->getId())->where('provider','=','facebook')->first();
         if($db_user != null)
         {
-            $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->avatar_original, 'link'=> $user->profileUrl]);
+            $db_user = $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->avatar_original, 'link'=> $user->profileUrl]);
         }else{
             $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(), 'avatar'=>$user->avatar_original, 'link'=> $user->profileUrl]);
         }
-        Auth::login($db_user, true);
-        return redirect()->intended('home');
+        Auth::login($db_user);
+        return Redirect::to('home');
         // $user->token;
     }
 
@@ -64,6 +65,7 @@ class FacebookController extends Controller
         $user->social_network_email = $data['email'];
         $user->social_network_link = $data['link'];
         $user->avatar = $data['avatar'];
+        return $user;
     }
 
 }
