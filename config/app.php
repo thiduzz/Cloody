@@ -169,7 +169,7 @@ return [
         App\Providers\HelperServiceProvider::class,
         App\Providers\TrackingServiceProvider::class,
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
-
+        Laravel\Socialite\SocialiteServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -233,7 +233,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Tracking' => App\Classes\Facades\Tracking::class
+        'Tracking' => App\Classes\Facades\Tracking::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

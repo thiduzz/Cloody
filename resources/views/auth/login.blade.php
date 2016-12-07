@@ -55,6 +55,11 @@
                             <button class="button button-3d nomargin" type="submit" id="login-form-submit" name="login-form-submit" value="login">Login</button>
                             <a href="{{ url('/password/reset') }}" class="fright">Forgot Password?</a>
                         </div>
+                        <div class="line line-sm"></div>
+                        <div class="center">
+                            <h4 style="margin-bottom: 15px;">or Login with:</h4>
+                            <a href="{{ url('/auth/facebook') }}" class="button button-rounded si-facebook si-colored">Facebook</a>
+                        </div>
 
                     </form>
                 </div>

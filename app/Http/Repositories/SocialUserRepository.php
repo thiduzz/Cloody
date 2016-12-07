@@ -9,6 +9,7 @@
 namespace App\Repositories;
 
 use Laravel\Passport\Bridge\User;
+use Laravel\Socialite\Facades\Socialite;
 use RuntimeException;
 use Illuminate\Contracts\Hashing\Hasher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -48,12 +49,17 @@ class SocialUserRepository implements UserRepositoryInterface
 		} else {
 			$user = (new $model)->where('email', $username)->first();
 		}
-
-		if (! $user || $user->provider == "internal") {
-			if(! $this->hasher->check($password, $user->password))
-			{
-				return;
-			}
+		if(!$user)
+		{
+			//user not found on the database
+			return;
+		}
+		else if ($user->provider == "internal" && !$this->hasher->check($password, $user->password)) {
+			//if is internal login and password does not check
+			return;
+		}else if($user->provider != "internal" && !Socialite::driver($user->provider)->userFromToken($password)) {
+			//if is social login and provider token does not check
+			return;
 		}
 
 		return new User($user->getAuthIdentifier());
