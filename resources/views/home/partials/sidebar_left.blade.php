@@ -30,6 +30,7 @@
                 </a>
                 <span class="icon-thumbnail "><i class="pg-social"></i></span>
             </li>
+            @if(Auth::user()->hasRole('admin'))
             <li class="">
                 <a href="javascript:;">
                     <span class="title">Admin</span>
@@ -67,6 +68,7 @@
                     </li>
                 </ul>
             </li>
+            @endif
         </ul>
         <div class="clearfix"></div>
     </div>
