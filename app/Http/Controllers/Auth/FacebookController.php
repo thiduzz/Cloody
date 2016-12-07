@@ -31,14 +31,12 @@ class FacebookController extends Controller
     public function handleProviderCallback(Request $request)
     {
         $user = Socialite::driver('facebook')->user();
-        var_dump("User ID".$user->getId());
         $db_user = User::where('social_network_id','=', $user->getId())->where('provider','=','facebook')->first();
-        var_dump($db_user);
         if($db_user != null)
         {
-            $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->avatar_original]);
+            $this->refreshUser($db_user,['name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=> $user->avatar_original, 'link'=> $user->profileUrl]);
         }else{
-            $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->avatar_original]);
+            $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(), 'avatar'=>$user->avatar_original, 'link'=> $user->profileUrl]);
         }
         Auth::login($db_user, true);
         return redirect()->intended('home');
@@ -53,6 +51,8 @@ class FacebookController extends Controller
             'avatar' => $data['avatar'],
             'slug'=>$slug,
             'social_network_id' => $data['id'],
+            'social_network_email'=>$data['email'],
+            'social_network_link'=>$data['link'],
             'provider' => 'facebook',
         ]);
         $user->attachRole(Role::where('name','customer')->first());
@@ -61,7 +61,8 @@ class FacebookController extends Controller
 
     public function refreshUser(User $user, array $data){
         $user->name = $data['name'];
-        $user->email = $data['email'];
+        $user->social_network_email = $data['email'];
+        $user->social_network_link = $data['link'];
         $user->avatar = $data['avatar'];
     }
 

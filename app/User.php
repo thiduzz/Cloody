@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','hometown', 'type', 'age', 'avatar', 'preferences','slug', 'provider', 'social_network_id'
+        'name', 'email', 'password','hometown', 'type', 'age', 'avatar', 'preferences','slug', 'provider', 'social_network_id', 'social_network_email', 'social_network_link'
     ];
 
     public function sluggable()
