@@ -41,7 +41,7 @@ class FacebookController extends Controller
             $db_user = $this->registerUser(['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'avatar'=>$user->avatar_original]);
         }
         Auth::login($db_user, true);
-        return redirect('/home');
+        return redirect()->intended('home');
         // $user->token;
     }
 
