@@ -31,7 +31,7 @@ class FacebookController extends Controller
      */
     public function handleProviderCallback(Request $request)
     {
-        $user = Socialite::driver('facebook')->user();
+        $user = Socialite::driver('facebook')->stateless()->user();
         $db_user = User::where('social_network_id','=', $user->getId())->where('provider','=','facebook')->first();
         if($db_user != null)
         {
