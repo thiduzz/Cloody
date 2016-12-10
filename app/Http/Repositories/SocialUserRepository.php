@@ -57,9 +57,16 @@ class SocialUserRepository implements UserRepositoryInterface
 		else if ($user->provider == "internal" && !$this->hasher->check($password, $user->password)) {
 			//if is internal login and password does not check
 			return;
-		}else if($user->provider != "internal" && !Socialite::driver($user->provider)->userFromToken($password)) {
+		}else if($user->provider != "internal") {
 			//if is social login and provider token does not check
-			return;
+			$social_user = Socialite::driver($user->provider)->userFromToken($password);
+			if(!$social_user)
+			{
+				return;
+			}else if($social_user->getId() != $username)
+			{
+				return;
+			}
 		}
 
 		return new User($user->getAuthIdentifier());
