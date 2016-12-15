@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\SocialUserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
     }
 
     /**
@@ -24,8 +25,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            'League\OAuth2\Server\Repositories\UserRepositoryInterface',
-            'App\Repositories\SocialUserRepository'
+            \Laravel\Passport\Bridge\UserRepository::class,
+            SocialUserRepository::class
         );
+
     }
 }

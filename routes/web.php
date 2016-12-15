@@ -12,6 +12,7 @@
 */
 
 use App\Classes\Facades\Tracking;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', function () {
     return view('public.pages.main');
@@ -37,7 +38,9 @@ Route::get('/admin_trucks/edit/{id}', ['middleware'=>'admin','uses'=>'HomeContro
 Route::get('/admin_trucks/export/{type}',['middleware'=>['admin'], 'uses' =>  'TruckController@admin_export_trucks']);
 
 Route::get('/test',function(){
-    $truck = \App\Truck::find(1);
-    $track = Tracking::registerTrack($truck, 'approved');
-    return $track->translated;
+    //$truck = \App\Truck::find(1);
+    //$track = Tracking::registerTrack($truck, 'approved');
+    //return $track->translated;
+    $user = Socialite::driver('facebook')->stateless()->user();
+    var_dump($user);
 });
